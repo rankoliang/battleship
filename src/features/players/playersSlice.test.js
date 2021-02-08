@@ -5,7 +5,6 @@ import reducer, {
   turnEnded,
   selectPlayers,
   selectCurrentPlayer,
-  createSelectPlayer,
 } from './playersSlice';
 
 describe('playersSlice', () => {
@@ -16,23 +15,22 @@ describe('playersSlice', () => {
 
   describe('initialState', () => {
     it('has two players', () => {
-      expect(selectPlayers(store.getState())).toHaveLength(2);
+      expect(Object.entries(selectPlayers(store.getState()))).toHaveLength(2);
     });
   });
 
   describe('nameChanged', () => {
     it("changes a player's name", () => {
       store.dispatch(nameChanged(1, 'John'));
-      const selectPlayerOne = createSelectPlayer(1);
 
-      expect(selectPlayerOne(store.getState()).name).toBe('John');
+      expect(selectPlayers(store.getState())[1].name).toBe('John');
     });
   });
 
   describe('turnEnded', () => {
     it('changes the current player', () => {
       const initialPlayer = selectCurrentPlayer(store.getState());
-      const nextPlayer = createSelectPlayer(2)(store.getState());
+      const nextPlayer = selectPlayers(store.getState())[2];
 
       store.dispatch(turnEnded());
 
