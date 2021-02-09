@@ -15,7 +15,10 @@ describe('playersSlice', () => {
 
   describe('initialState', () => {
     it('has two players', () => {
-      expect(Object.entries(selectPlayers(store.getState()))).toHaveLength(2);
+      expect(selectPlayers(store.getState())).toMatchObject({
+        1: expect.objectContaining({ name: expect.any(String) }),
+        2: expect.objectContaining({ name: expect.any(String) }),
+      });
     });
   });
 
