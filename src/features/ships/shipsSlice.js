@@ -3,11 +3,7 @@ import {
   createSlice,
   createSelector,
 } from '@reduxjs/toolkit';
-
-// returns an array with its value updated at arr[index]
-const updateArrayAtIndex = (arr, index, value) => {
-  return [...arr.slice(0, index), value, ...arr.slice(index + 1)];
-};
+import { updateArrayAtIndex } from '../../helpers';
 
 const shipsAdapter = createEntityAdapter();
 
