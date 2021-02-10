@@ -4,6 +4,7 @@ import {
   createSelector,
 } from '@reduxjs/toolkit';
 import { updateArrayAtIndex } from '../../helpers';
+import shipFactory from './shipFactory';
 
 const shipsAdapter = createEntityAdapter();
 
@@ -12,12 +13,7 @@ export const shipsSlice = createSlice({
   initialState: shipsAdapter.getInitialState(),
   reducers: {
     shipCreated: (state, action) => {
-      const ship = action.payload;
-
-      shipsAdapter.addOne(state, {
-        ...ship,
-        hit: Array(ship.length).fill(false),
-      });
+      shipsAdapter.addOne(state, shipFactory(action.payload));
     },
     shipHit: {
       reducer: (state, action) => {

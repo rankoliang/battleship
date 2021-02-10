@@ -38,31 +38,25 @@ describe('shipsSlice', () => {
 
   describe('shipHit', () => {
     let shipId;
+    let getShip;
 
     beforeEach(() => {
       shipId = nanoid();
       store.dispatch(shipCreated({ player: 1, id: shipId, length: 3 }));
+      getShip = () => selectShipById(store.getState(), shipId);
     });
 
     it('hits the designated location', () => {
       store.dispatch(shipHit(shipId, 0));
 
-      expect(selectShipById(store.getState(), shipId).hit).toStrictEqual([
-        true,
-        false,
-        false,
-      ]);
+      expect(getShip().hit).toStrictEqual([true, false, false]);
     });
 
     describe('when the location is negative', () => {
       it('does not add a new entry', () => {
         store.dispatch(shipHit(shipId, -1));
 
-        expect(selectShipById(store.getState(), shipId).hit).toStrictEqual([
-          false,
-          false,
-          false,
-        ]);
+        expect(getShip().hit).toStrictEqual([false, false, false]);
       });
     });
 
@@ -70,11 +64,7 @@ describe('shipsSlice', () => {
       it('does not add a new entry', () => {
         store.dispatch(shipHit(shipId, 3));
 
-        expect(selectShipById(store.getState(), shipId).hit).toStrictEqual([
-          false,
-          false,
-          false,
-        ]);
+        expect(getShip().hit).toStrictEqual([false, false, false]);
       });
     });
   });
