@@ -9,4 +9,8 @@ const updateArrayAtIndex = (arr, index, value) => {
   return [...arr.slice(0, index), value, ...arr.slice(index + 1)];
 };
 
-export { emptySquareArray, updateArrayAtIndex };
+const toRads = (degrees) => {
+  return (Math.PI * degrees) / 180;
+};
+
+export { emptySquareArray, updateArrayAtIndex, toRads };

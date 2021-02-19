@@ -1,23 +1,36 @@
 import {
   createSlice,
-  createAsyncThunk,
+  createAsyncThunk as createThunk,
   createSelector,
 } from '@reduxjs/toolkit';
-import { emptySquareArray } from '../../helpers';
+import boardFactory from './boardFactory';
+import { shipCreated } from '../ships/shipsSlice';
+
+export const placeShip = createThunk(
+  'boards/placeShipStatus',
+  (ship, { dispatch, rejectWithValue }) => {
+    if (selectIsValidPlacement(ship)) {
+      dispatch(shipCreated(ship));
+      return ship;
+    } else {
+      return rejectWithValue('Ship cannot be placed');
+    }
+  }
+);
 
 export const boardsSlice = createSlice({
   name: 'boards',
   initialState: {
     ids: [1, 2],
     entities: {
-      1: {
-        player: 1,
-        state: emptySquareArray(8),
-      },
-      2: {
-        player: 2,
-        state: emptySquareArray(8),
-      },
+      1: boardFactory({ player: 1, size: 10 }),
+      2: boardFactory({ player: 2, size: 10 }),
+    },
+  },
+  extraReducers: {
+    // TODO Update the tiles on the board
+    [placeShip.fulfilled]: (state, action) => {
+      return state;
     },
   },
 });
@@ -31,5 +44,11 @@ export const selectAllBoards = createSelector(
   selectBoardEntities,
   (ids, entities) => ids.map((id) => entities[id])
 );
+
+// TODO adjust for ship out of bounds
+// TODO adjust for ships that are already placed
+export const selectIsValidPlacement = (state) => {
+  return true;
+};
 
 export default boardsSlice.reducer;

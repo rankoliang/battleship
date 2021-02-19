@@ -6,6 +6,7 @@ import reducer, {
   shipCreated,
   selectShipById,
   selectShipIsSunk,
+  selectShipCoordinates,
 } from './shipsSlice';
 
 describe('shipsSlice', () => {
@@ -23,14 +24,24 @@ describe('shipsSlice', () => {
   describe('shipCreated', () => {
     it('creates a ship', () => {
       let shipId = nanoid();
-      store.dispatch(shipCreated({ player: 1, id: shipId, length: 4 }));
+      store.dispatch(
+        shipCreated({
+          id: shipId,
+          player: 1,
+          length: 4,
+          orientation: 0,
+          anchor: [0, 0],
+        })
+      );
 
       expect(selectShips(store.getState())).toStrictEqual([
         {
           id: shipId,
           length: 4,
-          hit: [false, false, false, false],
           player: 1,
+          orientation: 0,
+          anchor: [0, 0],
+          hit: [false, false, false, false],
         },
       ]);
     });
@@ -88,6 +99,113 @@ describe('shipsSlice', () => {
     describe('when every location is not hit', () => {
       it('returns false', () => {
         expect(selectShipIsSunk(store.getState(), shipId)).toBe(false);
+      });
+    });
+  });
+
+  describe('selectShipCoordinates', () => {
+    describe('when the orientation is 0', () => {
+      it('returns a ship along the x axis', () => {
+        const shipId = nanoid();
+        store.dispatch(
+          shipCreated({
+            player: 1,
+            id: shipId,
+            length: 3,
+            orientation: 0,
+            anchor: [0, 0],
+          })
+        );
+
+        expect(selectShipCoordinates(store.getState(), shipId)).toStrictEqual([
+          [0, 0],
+          [1, 0],
+          [2, 0],
+        ]);
+      });
+    });
+
+    describe('when the orientation is 90', () => {
+      it('returns a ship along the x axis', () => {
+        const shipId = nanoid();
+        store.dispatch(
+          shipCreated({
+            player: 1,
+            id: shipId,
+            length: 3,
+            orientation: 90,
+            anchor: [0, 0],
+          })
+        );
+
+        expect(selectShipCoordinates(store.getState(), shipId)).toStrictEqual([
+          [0, 0],
+          [0, 1],
+          [0, 2],
+        ]);
+      });
+    });
+
+    describe('when the orientation is 180', () => {
+      it('returns a ship along the x axis', () => {
+        const shipId = nanoid();
+        store.dispatch(
+          shipCreated({
+            player: 1,
+            id: shipId,
+            length: 3,
+            orientation: 180,
+            anchor: [0, 0],
+          })
+        );
+
+        expect(selectShipCoordinates(store.getState(), shipId)).toStrictEqual([
+          [0, 0],
+          [-1, 0],
+          [-2, 0],
+        ]);
+      });
+    });
+
+    describe('when the orientation is 270', () => {
+      it('returns a ship along the x axis', () => {
+        const shipId = nanoid();
+        store.dispatch(
+          shipCreated({
+            player: 1,
+            id: shipId,
+            length: 3,
+            orientation: 270,
+            anchor: [0, 0],
+          })
+        );
+
+        expect(selectShipCoordinates(store.getState(), shipId)).toStrictEqual([
+          [0, 0],
+          [0, -1],
+          [0, -2],
+        ]);
+      });
+    });
+
+    describe('when the anchor is shifted', () => {
+      it('returns offset coordinates', () => {
+        const shipId = nanoid();
+        store.dispatch(
+          shipCreated({
+            player: 1,
+            id: shipId,
+            length: 3,
+            orientation: 0,
+            anchor: [3, 3],
+          })
+        );
+
+        expect(selectShipCoordinates(store.getState(), shipId)).toStrictEqual([
+          [3, 3],
+          [4, 3],
+          [5, 3],
+        ]);
       });
     });
   });
