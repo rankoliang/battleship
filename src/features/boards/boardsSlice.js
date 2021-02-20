@@ -5,6 +5,8 @@ import {
 } from '@reduxjs/toolkit';
 import boardFactory from './boardFactory';
 import { shipCreated } from '../ships/shipsSlice';
+import { shipCoordinates } from '../ships/shipFactory';
+import { outOfBounds } from '../../helpers';
 
 export const placeShip = createThunk(
   'boards/placeShipStatus',
@@ -38,17 +40,22 @@ export const boardsSlice = createSlice({
 // Selectors
 const selectBoardEntities = (state) => state.boards.entities;
 export const selectBoardIds = (state) => state.boards.ids;
-export const selectBoardById = (state, id) => state.boards.entities[id];
+export const selectBoardById = (state, id) => state.boards.entities[id].state;
 export const selectAllBoards = createSelector(
   selectBoardIds,
   selectBoardEntities,
   (ids, entities) => ids.map((id) => entities[id])
 );
 
-// TODO adjust for ship out of bounds
 // TODO adjust for ships that are already placed
-export const selectIsValidPlacement = (state) => {
-  return true;
+export const selectIsValidPlacement = (state, ship) => {
+  const { player } = ship;
+  const board = selectBoardById(state, player);
+
+  const coordinates = shipCoordinates(ship);
+  return coordinates.some((coordinate) => {
+    outOfBounds(coordinate, board);
+  });
 };
 
 export default boardsSlice.reducer;

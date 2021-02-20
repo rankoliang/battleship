@@ -18,7 +18,7 @@ describe('boardsSlice', () => {
   });
 
   describe('initialState', () => {
-    it('has two 8x8 boards', () => {
+    it('has two boards', () => {
       expect(selectAllBoards(store.getState())).toHaveLength(2);
     });
   });
@@ -51,6 +51,20 @@ describe('boardsSlice', () => {
         };
 
         expect(selectIsValidPlacement(store.getState(), ship)).toBe(true);
+      });
+    });
+
+    describe('when the ship is out of bounds in the x direction', () => {
+      it('returns true', () => {
+        const ship = {
+          id: nanoid(),
+          player: 1,
+          length: 4,
+          orientation: 180,
+          anchor: [0, 0],
+        };
+
+        expect(selectIsValidPlacement(store.getState(), ship)).toBe(false);
       });
     });
   });

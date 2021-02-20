@@ -13,4 +13,13 @@ const toRads = (degrees) => {
   return (Math.PI * degrees) / 180;
 };
 
-export { emptySquareArray, updateArrayAtIndex, toRads };
+const outOfBounds = (coordinate, board) => {
+  const board_length = board[0].length;
+  const board_height = board.length;
+
+  const [x, y] = coordinate;
+
+  return x < 0 || x >= board_length || y < 0 || y >= board_height;
+};
+
+export { emptySquareArray, updateArrayAtIndex, toRads, outOfBounds };
