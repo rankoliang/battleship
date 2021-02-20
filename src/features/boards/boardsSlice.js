@@ -10,8 +10,8 @@ import { outOfBounds } from '../../helpers';
 
 export const placeShip = createThunk(
   'boards/placeShipStatus',
-  (ship, { dispatch, rejectWithValue }) => {
-    if (selectIsValidPlacement(ship)) {
+  async (ship, { dispatch, getState, rejectWithValue }) => {
+    if (selectIsValidPlacement(getState(), ship)) {
       dispatch(shipCreated(ship));
       return ship;
     } else {
@@ -47,14 +47,14 @@ export const selectAllBoards = createSelector(
   (ids, entities) => ids.map((id) => entities[id])
 );
 
-// TODO adjust for ships that are already placed
 export const selectIsValidPlacement = (state, ship) => {
   const { player } = ship;
   const board = selectBoardById(state, player);
 
-  const coordinates = shipCoordinates(ship);
-  return coordinates.some((coordinate) => {
-    outOfBounds(coordinate, board);
+  // true if none of the coordinates are out of bounds
+  return !shipCoordinates(ship).some((coordinate) => {
+    // TODO also check if the square on the board is occupied
+    return outOfBounds(coordinate, board);
   });
 };
 

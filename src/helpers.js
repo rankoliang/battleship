@@ -1,5 +1,5 @@
 const emptySquareArray = (size) => {
-  return Array(8)
+  return Array(size)
     .fill(undefined)
     .map(() => Array(size).fill(null));
 };
