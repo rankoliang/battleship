@@ -1,10 +1,10 @@
-import { emptySquareArray, outOfBounds, arrayWith } from './helpers';
+import { arrayWith, outOfBounds } from './helpers';
 
 describe('helpers', () => {
   describe('outOfBounds', () => {
     let board;
     beforeEach(() => {
-      board = emptySquareArray(10);
+      board = arrayWith(10, () => arrayWith(10));
     });
 
     describe('when the x coordinate is less than 0', () => {

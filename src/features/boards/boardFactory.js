@@ -1,9 +1,9 @@
-import { emptySquareArray } from '../../helpers';
+import { arrayWith } from '../../helpers';
 
 const boardFactory = ({ player, size = 10 }) => {
   return {
     player,
-    state: emptySquareArray(size),
+    state: arrayWith(size, () => arrayWith(size)),
     ships: [],
   };
 };

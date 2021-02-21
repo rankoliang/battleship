@@ -1,9 +1,3 @@
-const emptySquareArray = (size) => {
-  return Array(size)
-    .fill(undefined)
-    .map(() => Array(size).fill(null));
-};
-
 const arrayWith = (size, callback = () => null) => {
   const arr = Array(size);
 
@@ -32,4 +26,4 @@ const outOfBounds = (coordinate, board) => {
   return x < 0 || x >= board_length || y < 0 || y >= board_height;
 };
 
-export { emptySquareArray, updateArrayAtIndex, toRads, outOfBounds, arrayWith };
+export { updateArrayAtIndex, toRads, outOfBounds, arrayWith };
