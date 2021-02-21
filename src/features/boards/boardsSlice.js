@@ -50,8 +50,21 @@ export const boardsSlice = createSlice({
     },
   },
   extraReducers: {
-    // TODO Update the tiles on the board
-    [shipPlaced.fulfilled]: (state, action) => {},
+    [shipPlaced.fulfilled]: (state, action) => {
+      const ship = action.payload;
+      const coordinates = shipCoordinates(ship);
+
+      const board = state.entities[ship.player].state;
+
+      coordinates.forEach(([x, y], i) => {
+        board[y][x] = {
+          ...board[y][x],
+          shipId: ship.id,
+          hitIndex: i,
+          occupied: true,
+        };
+      });
+    },
   },
 });
 

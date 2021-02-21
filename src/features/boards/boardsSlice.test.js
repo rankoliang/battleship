@@ -7,6 +7,7 @@ import reducer, {
   selectIsValidPlacement,
 } from './boardsSlice';
 import shipsReducer, { selectShipTotal } from '../ships/shipsSlice';
+import { shipCoordinates } from '../ships/shipFactory';
 
 describe('boardsSlice', () => {
   let store;
@@ -38,6 +39,24 @@ describe('boardsSlice', () => {
       );
 
       expect(selectShipTotal(store.getState())).toBe(1);
+    });
+
+    it('places the ship', async () => {
+      const ship = {
+        id: nanoid(),
+        player: 1,
+        length: 3,
+        orientation: 0,
+        anchor: [0, 0],
+      };
+      await store.dispatch(shipPlaced(ship));
+
+      const board = selectBoardById(store.getState(), 1);
+
+      shipCoordinates(ship).forEach(([x, y], i) => {
+        expect(board[y][x].shipId).toBe(ship.id);
+        expect(board[y][x].hitIndex).toBe(i);
+      });
     });
   });
 
