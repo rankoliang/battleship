@@ -53,8 +53,9 @@ export const selectIsValidPlacement = (state, ship) => {
 
   // true if none of the coordinates are out of bounds
   return !shipCoordinates(ship).some((coordinate) => {
+    const [x, y] = coordinate;
     // TODO also check if the square on the board is occupied
-    return outOfBounds(coordinate, board);
+    return outOfBounds(coordinate, board) || board[y][x];
   });
 };
 

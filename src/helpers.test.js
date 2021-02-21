@@ -1,4 +1,4 @@
-import { emptySquareArray, outOfBounds } from './helpers';
+import { emptySquareArray, outOfBounds, arrayWith } from './helpers';
 
 describe('helpers', () => {
   describe('outOfBounds', () => {
@@ -35,6 +35,20 @@ describe('helpers', () => {
       it('returns true', () => {
         expect(outOfBounds([9, 9], board)).toBe(false);
       });
+    });
+  });
+
+  describe('arrayWith', () => {
+    it('creates an empty array initialized with null', () => {
+      expect(arrayWith(2)).toEqual([null, null]);
+    });
+
+    it('creates an initialized with the result of the callback', () => {
+      expect(arrayWith(3, () => 1)).toEqual([1, 1, 1]);
+      expect(arrayWith(2, () => arrayWith(2))).toEqual([
+        [null, null],
+        [null, null],
+      ]);
     });
   });
 });
