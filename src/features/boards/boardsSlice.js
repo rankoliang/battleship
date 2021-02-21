@@ -29,13 +29,26 @@ export const boardsSlice = createSlice({
       2: boardFactory({ player: 2, size: 10 }),
     },
   },
-  extraReducers: {
-    // TODO Update the tiles on the board
-    [placeShip.fulfilled]: (state, action) => {
-      return state;
+  reducers: {
+    tileSet: (state, action) => {
+      const {
+        player,
+        coordinates: [x, y],
+        ...props
+      } = action.payload;
+
+      const board = state.entities[player].state;
+
+      board[y][x] = { ...board[y][x], ...props, occupied: true };
     },
   },
+  extraReducers: {
+    // TODO Update the tiles on the board
+    [placeShip.fulfilled]: (state, action) => {},
+  },
 });
+
+export const { tileSet } = boardsSlice.actions;
 
 // Selectors
 const selectBoardEntities = (state) => state.boards.entities;
@@ -51,11 +64,10 @@ export const selectIsValidPlacement = (state, ship) => {
   const { player } = ship;
   const board = selectBoardById(state, player);
 
-  // true if none of the coordinates are out of bounds
+  // true if none of the coordinates are out of bounds or occupied
   return !shipCoordinates(ship).some((coordinate) => {
     const [x, y] = coordinate;
-    // TODO also check if the square on the board is occupied
-    return outOfBounds(coordinate, board) || board[y][x];
+    return outOfBounds(coordinate, board) || board[y][x].occupied;
   });
 };
 
