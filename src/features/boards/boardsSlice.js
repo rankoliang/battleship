@@ -8,8 +8,8 @@ import { shipCreated } from '../ships/shipsSlice';
 import { shipCoordinates } from '../ships/shipFactory';
 import { outOfBounds } from '../../helpers';
 
-export const placeShip = createThunk(
-  'boards/placeShipStatus',
+export const shipPlaced = createThunk(
+  'boards/shipPlacedStatus',
   async (ship, { dispatch, getState, rejectWithValue }) => {
     if (selectIsValidPlacement(getState(), ship)) {
       dispatch(shipCreated(ship));
@@ -51,7 +51,7 @@ export const boardsSlice = createSlice({
   },
   extraReducers: {
     // TODO Update the tiles on the board
-    [placeShip.fulfilled]: (state, action) => {},
+    [shipPlaced.fulfilled]: (state, action) => {},
   },
 });
 

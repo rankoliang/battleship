@@ -1,7 +1,7 @@
 import { configureStore, nanoid } from '@reduxjs/toolkit';
 import reducer, {
   tileSet,
-  placeShip,
+  shipPlaced,
   selectBoardById,
   selectAllBoards,
   selectIsValidPlacement,
@@ -25,10 +25,10 @@ describe('boardsSlice', () => {
     });
   });
 
-  describe('placeShip', () => {
+  describe('shipPlaced', () => {
     it('creates a ship', () => {
       store.dispatch(
-        placeShip({
+        shipPlaced({
           id: nanoid(),
           player: 1,
           length: 4,
