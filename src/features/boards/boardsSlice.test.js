@@ -67,9 +67,7 @@ describe('boardsSlice', () => {
         };
 
         store.dispatch(
-          tileSet({
-            player: 1,
-            coordinates: [0, 0],
+          tileSet(1, [0, 0], {
             shipId: ship.id,
             shipLocation: 0,
           })
@@ -96,20 +94,13 @@ describe('boardsSlice', () => {
 
   describe('tileSet', () => {
     it('occupies the tile', () => {
-      store.dispatch(tileSet({ player: 1, coordinates: [0, 0], value: 1 }));
+      store.dispatch(tileSet(1, [0, 0], { value: 1 }));
 
       expect(selectBoardById(store.getState(), 1)[0][0].occupied).toBe(true);
     });
 
     it('sets given properties to their values', () => {
-      store.dispatch(
-        tileSet({
-          player: 1,
-          coordinates: [0, 0],
-          property: 'value',
-          value: 'value',
-        })
-      );
+      store.dispatch(tileSet(1, [0, 0], { property: 'value', value: 'value' }));
 
       expect(selectBoardById(store.getState(), 1)[0][0].value).toBe('value');
       expect(selectBoardById(store.getState(), 1)[0][0].property).toBe('value');

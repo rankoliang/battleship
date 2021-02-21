@@ -30,16 +30,23 @@ export const boardsSlice = createSlice({
     },
   },
   reducers: {
-    tileSet: (state, action) => {
-      const {
-        player,
-        coordinates: [x, y],
-        ...props
-      } = action.payload;
+    tileSet: {
+      reducer: (state, action) => {
+        const {
+          player,
+          coordinates: [x, y],
+          props,
+        } = action.payload;
 
-      const board = state.entities[player].state;
+        const board = state.entities[player].state;
 
-      board[y][x] = { ...board[y][x], ...props, occupied: true };
+        board[y][x] = { ...board[y][x], ...props, occupied: true };
+      },
+      prepare: (player, coordinates, props) => {
+        return {
+          payload: { player, coordinates, props },
+        };
+      },
     },
   },
   extraReducers: {
