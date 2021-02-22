@@ -7,6 +7,7 @@ const boardFactory = ({ player, size = 10 }) => {
       arrayWith(size, () => ({ occupied: false, hit: false }))
     ),
     ships: [],
+    preview: null,
   };
 };
 

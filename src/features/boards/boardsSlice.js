@@ -105,17 +105,23 @@ export const { tileSet } = boardsSlice.actions;
 
 // Selectors
 const selectBoardEntities = (state) => state.boards.entities;
+
 export const selectBoardIds = (state) => state.boards.ids;
+
 export const selectBoardById = (state, id) => state.boards.entities[id].state;
+
 export const selectAllBoards = createSelector(
   selectBoardIds,
   selectBoardEntities,
   (ids, entities) => ids.map((id) => entities[id])
 );
-export const selectBoardShips = (state, player) => {
-  return state.boards.entities[player].ships.map((shipId) =>
+export const selectBoardShips = (state, id) => {
+  return state.boards.entities[id].ships.map((shipId) =>
     selectShipById(state, shipId)
   );
+};
+export const selectBoardPreview = (state, id) => {
+  return state.boards.entities[id].preview;
 };
 
 export const selectIsValidPlacement = (state, ship) => {

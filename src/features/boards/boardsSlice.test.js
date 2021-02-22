@@ -7,6 +7,7 @@ import reducer, {
   selectAllBoards,
   selectIsValidPlacement,
   selectBoardShips,
+  selectBoardPreview,
 } from './boardsSlice';
 import shipsReducer, {
   selectShipTotal,
@@ -79,6 +80,14 @@ describe('boardsSlice', () => {
       await store.dispatch(shipPlaced(ship));
 
       expect(selectBoardShips(store.getState(), 1)).toHaveLength(1);
+    });
+  });
+
+  describe('preview', () => {
+    it('is initially null', () => {
+      const preview = selectBoardPreview(store.getState(), 1);
+
+      expect(preview).toBe(null);
     });
   });
 
