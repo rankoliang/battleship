@@ -1,8 +1,13 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { nanoid } from '@reduxjs/toolkit';
-import { shipPlaced, previewSet, selectIsValidPlacement } from '../boardsSlice';
+import {
+  shipPlaced,
+  previewSet,
+  previewRemoved,
+  selectIsValidPlacement,
+} from '../boardsSlice';
 
 const StyledElement = styled.button`
   background-color: ${({ states: { occupied, previewing } }) => {
@@ -17,8 +22,15 @@ const StyledElement = styled.button`
   width: 100px;
   height: 100px;
   border: 1px solid black;
-  margin: 2px;
-  cursor: pointer;
+  margin: 1px;
+  outline-color: orange;
+  ${({ isValid }) => {
+    if (isValid) {
+      return css`
+        cursor: pointer;
+      `;
+    }
+  }}
 `;
 
 const Element = ({ xIndex, yIndex, element }) => {
@@ -26,7 +38,7 @@ const Element = ({ xIndex, yIndex, element }) => {
   const [ship, setShip] = useState({
     id: nanoid(),
     player: 1,
-    length: 5,
+    length: 3,
     orientation: 0,
     anchor: [xIndex, yIndex],
   });
@@ -36,22 +48,41 @@ const Element = ({ xIndex, yIndex, element }) => {
   );
 
   const placeShip = () => {
-    isValidPlacement && dispatch(shipPlaced(ship));
+    dispatch(shipPlaced(ship));
   };
 
   const setPreview = () => {
-    isValidPlacement && dispatch(previewSet(ship));
+    dispatch(previewSet(ship));
   };
 
-  return (
-    <StyledElement
-      onMouseEnter={setPreview}
-      onClick={placeShip}
-      xIndex={xIndex}
-      yIndex={yIndex}
-      states={element}
-    />
-  );
+  const removePreview = () => {
+    dispatch(previewRemoved(1));
+  };
+
+  if (isValidPlacement) {
+    return (
+      <StyledElement
+        onFocus={setPreview}
+        onBlur={removePreview}
+        onMouseEnter={setPreview}
+        onMouseLeave={removePreview}
+        onClick={placeShip}
+        xIndex={xIndex}
+        yIndex={yIndex}
+        states={element}
+        isValid={isValidPlacement}
+      />
+    );
+  } else {
+    return (
+      <StyledElement
+        xIndex={xIndex}
+        yIndex={yIndex}
+        states={element}
+        tabIndex="-1"
+      />
+    );
+  }
 };
 
 export default Element;

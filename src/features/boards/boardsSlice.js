@@ -86,6 +86,17 @@ export const boardsSlice = createSlice({
         state.entities[player].state[y][x].previewing = true;
       });
     },
+    previewRemoved: (state, action) => {
+      const player = action.payload;
+      const prevCoords = state.entities[player].previewCoordinates;
+
+      prevCoords?.forEach(([x, y]) => {
+        state.entities[player].state[y][x].previewing = false;
+      });
+
+      state.entities[player].preview = null;
+      state.entities[player].previewCoordinates = null;
+    },
   },
   extraReducers: {
     [shipPlaced.fulfilled]: (state, action) => {
@@ -117,7 +128,7 @@ export const boardsSlice = createSlice({
   },
 });
 
-export const { tileSet, previewSet } = boardsSlice.actions;
+export const { tileSet, previewSet, previewRemoved } = boardsSlice.actions;
 
 // Selectors
 const selectBoardEntities = (state) => state.boards.entities;

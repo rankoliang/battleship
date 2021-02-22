@@ -4,12 +4,12 @@ import reducer, {
   attackReceived,
   shipPlaced,
   previewSet,
+  previewRemoved,
   selectBoardById,
   selectAllBoards,
   selectIsValidPlacement,
   selectBoardShips,
   selectBoardPreview,
-  selectBoardPreviewCoordinates,
 } from './boardsSlice';
 import shipsReducer, {
   selectShipTotal,
@@ -150,6 +150,33 @@ describe('boardsSlice', () => {
 
       expect(selectBoardPreview(store.getState(), 1)).toEqual(nextShip);
 
+      shipCoordinates(ship).forEach(([x, y]) => {
+        expect(board[y][x].previewing).toEqual(false);
+      });
+    });
+  });
+
+  describe('previewReset', () => {
+    let ship, board;
+    beforeEach(() => {
+      ship = {
+        id: nanoid(),
+        player: 1,
+        length: 3,
+        orientation: 0,
+        anchor: [0, 0],
+      };
+      store.dispatch(previewSet(ship));
+      store.dispatch(previewRemoved(1));
+
+      board = selectBoardById(store.getState(), 1);
+    });
+
+    it('sets the preview to null', () => {
+      expect(selectBoardPreview(store.getState(), 1)).toEqual(null);
+    });
+
+    it('sets previous previewing squares to false', () => {
       shipCoordinates(ship).forEach(([x, y]) => {
         expect(board[y][x].previewing).toEqual(false);
       });
