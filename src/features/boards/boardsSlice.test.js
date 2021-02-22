@@ -1,13 +1,18 @@
 import { configureStore, nanoid } from '@reduxjs/toolkit';
 import reducer, {
   tileSet,
+  attackReceived,
   shipPlaced,
   selectBoardById,
   selectAllBoards,
   selectIsValidPlacement,
 } from './boardsSlice';
-import shipsReducer, { selectShipTotal } from '../ships/shipsSlice';
+import shipsReducer, {
+  selectShipTotal,
+  selectShipById,
+} from '../ships/shipsSlice';
 import { shipCoordinates } from '../ships/shipFactory';
+import playersReducer from '../players/playersSlice';
 
 describe('boardsSlice', () => {
   let store;
@@ -16,6 +21,7 @@ describe('boardsSlice', () => {
       reducer: {
         boards: reducer,
         ships: shipsReducer,
+        players: playersReducer,
       },
     });
   });
@@ -49,6 +55,7 @@ describe('boardsSlice', () => {
         orientation: 0,
         anchor: [0, 0],
       };
+
       await store.dispatch(shipPlaced(ship));
 
       const board = selectBoardById(store.getState(), 1);
@@ -57,6 +64,44 @@ describe('boardsSlice', () => {
         expect(board[y][x].shipId).toBe(ship.id);
         expect(board[y][x].hitIndex).toBe(i);
       });
+    });
+  });
+
+  describe('attackReceived', () => {
+    it('sets the tile to hit', async () => {
+      const ship = {
+        id: nanoid(),
+        player: 1,
+        length: 3,
+        orientation: 0,
+        anchor: [0, 0],
+      };
+
+      await store.dispatch(shipPlaced(ship));
+
+      expect(selectBoardById(store.getState(), 1)[0][0].hit).toBe(false);
+
+      await store.dispatch(attackReceived(1, [0, 0]));
+
+      expect(selectBoardById(store.getState(), 1)[0][0].hit).toBe(true);
+    });
+
+    it('hits the ship', async () => {
+      const ship = {
+        id: nanoid(),
+        player: 1,
+        length: 3,
+        orientation: 0,
+        anchor: [0, 0],
+      };
+
+      await store.dispatch(shipPlaced(ship));
+
+      expect(selectShipById(store.getState(), ship.id).hit[0]).toBe(false);
+
+      await store.dispatch(attackReceived(1, [0, 0]));
+
+      expect(selectShipById(store.getState(), ship.id).hit[0]).toBe(true);
     });
   });
 

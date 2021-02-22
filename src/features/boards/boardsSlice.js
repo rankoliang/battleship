@@ -4,13 +4,13 @@ import {
   createSelector,
 } from '@reduxjs/toolkit';
 import boardFactory from './boardFactory';
-import { shipCreated } from '../ships/shipsSlice';
+import { shipCreated, shipHit } from '../ships/shipsSlice';
 import { shipCoordinates } from '../ships/shipFactory';
 import { outOfBounds } from '../../helpers';
 
 export const shipPlaced = createThunk(
   'boards/shipPlacedStatus',
-  async (ship, { dispatch, getState, rejectWithValue }) => {
+  (ship, { dispatch, getState, rejectWithValue }) => {
     if (selectIsValidPlacement(getState(), ship)) {
       dispatch(shipCreated(ship));
       return ship;
@@ -19,6 +19,28 @@ export const shipPlaced = createThunk(
     }
   }
 );
+
+const attackRecieved = createThunk(
+  'boards/attackRecievedStatus',
+  (
+    { player, coordinate, coordinate: [x, y] },
+    { dispatch, getState, rejectWithValue }
+  ) => {
+    const board = selectBoardById(getState(), player);
+    if (outOfBounds(coordinate, board) || !board[y][x].occupied) {
+      return rejectWithValue(`No ship on coordinates (${x}, ${y})`);
+    } else {
+      const { shipId, hitIndex } = board[y][x];
+      dispatch(shipHit(shipId, hitIndex));
+      return { player, coordinate };
+    }
+  }
+);
+
+const prepareAttackReceived = (player, coordinate) =>
+  attackRecieved({ player, coordinate });
+
+export { prepareAttackReceived as attackReceived };
 
 export const boardsSlice = createSlice({
   name: 'boards',
@@ -64,6 +86,16 @@ export const boardsSlice = createSlice({
           occupied: true,
         };
       });
+    },
+    [attackRecieved.fulfilled]: (state, action) => {
+      const {
+        player,
+        coordinate: [x, y],
+      } = action.payload;
+
+      const board = state.entities[player].state;
+
+      board[y][x].hit = true;
     },
   },
 });

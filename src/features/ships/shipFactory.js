@@ -1,4 +1,4 @@
-import { toRads } from '../../helpers';
+import { toRads, arrayWith } from '../../helpers';
 
 const shipFactory = ({
   id,
@@ -28,13 +28,10 @@ const shipFactory = ({
 export default shipFactory;
 
 export const shipCoordinates = (ship) => {
-  return Array(ship.length)
-    .fill(undefined)
-    .map((_, i) => {
-      const [x, y] = ship.anchor;
-      return [
-        Math.floor(x + i * Math.cos(toRads(ship.orientation)) + 0.5),
-        Math.floor(y + i * Math.sin(toRads(ship.orientation)) + 0.5),
-      ];
-    });
+  const [x, y] = ship.anchor;
+
+  return arrayWith(ship.length, (i) => [
+    Math.floor(x + i * Math.cos(toRads(ship.orientation)) + 0.5),
+    Math.floor(y + i * Math.sin(toRads(ship.orientation)) + 0.5),
+  ]);
 };
