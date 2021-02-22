@@ -1,10 +1,19 @@
 import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
+import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { nanoid } from '@reduxjs/toolkit';
-import { shipPlaced } from '../boardsSlice';
+import { shipPlaced, previewSet, selectIsValidPlacement } from '../boardsSlice';
 
 const StyledElement = styled.button`
-  background-color: ${({ occupied }) => (occupied ? 'lightgray' : 'white')};
+  background-color: ${({ states: { occupied, previewing } }) => {
+    if (occupied) {
+      return 'black';
+    } else if (previewing) {
+      return 'lightgray';
+    } else {
+      return 'white';
+    }
+  }};
   width: 100px;
   height: 100px;
   border: 1px solid black;
@@ -14,23 +23,33 @@ const StyledElement = styled.button`
 
 const Element = ({ xIndex, yIndex, element }) => {
   const dispatch = useDispatch();
+  const [ship, setShip] = useState({
+    id: nanoid(),
+    player: 1,
+    length: 5,
+    orientation: 0,
+    anchor: [xIndex, yIndex],
+  });
+
+  const isValidPlacement = useSelector((state) =>
+    selectIsValidPlacement(state, ship)
+  );
+
   const placeShip = () => {
-    dispatch(
-      shipPlaced({
-        id: nanoid(),
-        player: 1,
-        length: 2,
-        orientation: 0,
-        anchor: [xIndex, yIndex],
-      })
-    );
+    isValidPlacement && dispatch(shipPlaced(ship));
   };
+
+  const setPreview = () => {
+    isValidPlacement && dispatch(previewSet(ship));
+  };
+
   return (
     <StyledElement
+      onMouseEnter={setPreview}
       onClick={placeShip}
       xIndex={xIndex}
       yIndex={yIndex}
-      occupied={element.occupied}
+      states={element}
     />
   );
 };
