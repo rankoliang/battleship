@@ -70,6 +70,22 @@ export const boardsSlice = createSlice({
         };
       },
     },
+    previewSet: (state, action) => {
+      const ship = action.payload;
+      const { player } = ship;
+      const coords = shipCoordinates(ship);
+      const prevCoords = state.entities[player].previewCoordinates;
+
+      prevCoords?.forEach(([x, y]) => {
+        state.entities[player].state[y][x].previewing = false;
+      });
+
+      state.entities[player].preview = ship;
+      state.entities[player].previewCoordinates = coords;
+      coords.forEach(([x, y]) => {
+        state.entities[player].state[y][x].previewing = true;
+      });
+    },
   },
   extraReducers: {
     [shipPlaced.fulfilled]: (state, action) => {
@@ -101,7 +117,7 @@ export const boardsSlice = createSlice({
   },
 });
 
-export const { tileSet } = boardsSlice.actions;
+export const { tileSet, previewSet } = boardsSlice.actions;
 
 // Selectors
 const selectBoardEntities = (state) => state.boards.entities;
@@ -115,13 +131,19 @@ export const selectAllBoards = createSelector(
   selectBoardEntities,
   (ids, entities) => ids.map((id) => entities[id])
 );
+
 export const selectBoardShips = (state, id) => {
   return state.boards.entities[id].ships.map((shipId) =>
     selectShipById(state, shipId)
   );
 };
+
 export const selectBoardPreview = (state, id) => {
   return state.boards.entities[id].preview;
+};
+
+export const selectBoardPreviewCoordinates = (state, id) => {
+  return state.boards.entities[id].previewCoordinates;
 };
 
 export const selectIsValidPlacement = (state, ship) => {

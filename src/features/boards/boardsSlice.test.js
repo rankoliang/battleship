@@ -3,11 +3,13 @@ import reducer, {
   tileSet,
   attackReceived,
   shipPlaced,
+  previewSet,
   selectBoardById,
   selectAllBoards,
   selectIsValidPlacement,
   selectBoardShips,
   selectBoardPreview,
+  selectBoardPreviewCoordinates,
 } from './boardsSlice';
 import shipsReducer, {
   selectShipTotal,
@@ -88,6 +90,69 @@ describe('boardsSlice', () => {
       const preview = selectBoardPreview(store.getState(), 1);
 
       expect(preview).toBe(null);
+    });
+  });
+
+  describe('previewSet', () => {
+    it('sets the preview', () => {
+      const ship = {
+        id: nanoid(),
+        player: 1,
+        length: 3,
+        orientation: 0,
+        anchor: [0, 0],
+      };
+
+      store.dispatch(previewSet(ship));
+
+      const preview = selectBoardPreview(store.getState(), 1);
+
+      expect(preview).toEqual(ship);
+    });
+
+    it('sets the preview coordinates', () => {
+      const ship = {
+        id: nanoid(),
+        player: 1,
+        length: 3,
+        orientation: 0,
+        anchor: [0, 0],
+      };
+
+      store.dispatch(previewSet(ship));
+
+      const board = selectBoardById(store.getState(), 1);
+
+      shipCoordinates(ship).forEach(([x, y]) => {
+        expect(board[y][x].previewing).toEqual(true);
+      });
+    });
+
+    it('overrides the old preview', () => {
+      const ship = {
+        id: nanoid(),
+        player: 1,
+        length: 3,
+        orientation: 0,
+        anchor: [0, 0],
+      };
+      const nextShip = {
+        id: nanoid(),
+        player: 1,
+        length: 1,
+        orientation: 0,
+        anchor: [5, 5],
+      };
+      store.dispatch(previewSet(ship));
+      store.dispatch(previewSet(nextShip));
+
+      const board = selectBoardById(store.getState(), 1);
+
+      expect(selectBoardPreview(store.getState(), 1)).toEqual(nextShip);
+
+      shipCoordinates(ship).forEach(([x, y]) => {
+        expect(board[y][x].previewing).toEqual(false);
+      });
     });
   });
 
