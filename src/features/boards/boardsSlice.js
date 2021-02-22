@@ -4,7 +4,7 @@ import {
   createSelector,
 } from '@reduxjs/toolkit';
 import boardFactory from './boardFactory';
-import { shipCreated, shipHit } from '../ships/shipsSlice';
+import { shipCreated, shipHit, selectShipById } from '../ships/shipsSlice';
 import { shipCoordinates } from '../ships/shipFactory';
 import { outOfBounds } from '../../helpers';
 
@@ -86,6 +86,7 @@ export const boardsSlice = createSlice({
           occupied: true,
         };
       });
+      state.entities[ship.player].ships.push(ship.id);
     },
     [attackRecieved.fulfilled]: (state, action) => {
       const {
@@ -111,6 +112,11 @@ export const selectAllBoards = createSelector(
   selectBoardEntities,
   (ids, entities) => ids.map((id) => entities[id])
 );
+export const selectBoardShips = (state, player) => {
+  return state.boards.entities[player].ships.map((shipId) =>
+    selectShipById(state, shipId)
+  );
+};
 
 export const selectIsValidPlacement = (state, ship) => {
   const { player } = ship;

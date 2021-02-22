@@ -6,6 +6,7 @@ import reducer, {
   selectBoardById,
   selectAllBoards,
   selectIsValidPlacement,
+  selectBoardShips,
 } from './boardsSlice';
 import shipsReducer, {
   selectShipTotal,
@@ -64,6 +65,20 @@ describe('boardsSlice', () => {
         expect(board[y][x].shipId).toBe(ship.id);
         expect(board[y][x].hitIndex).toBe(i);
       });
+    });
+
+    it('adds the ship to the board', async () => {
+      const ship = {
+        id: nanoid(),
+        player: 1,
+        length: 3,
+        orientation: 0,
+        anchor: [0, 0],
+      };
+
+      await store.dispatch(shipPlaced(ship));
+
+      expect(selectBoardShips(store.getState(), 1)).toHaveLength(1);
     });
   });
 

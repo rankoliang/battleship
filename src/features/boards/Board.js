@@ -4,9 +4,10 @@ import Row from './components/Row';
 import styled from 'styled-components';
 
 const StyledBoard = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding: 0;
-  margin: 20px;
-  width: 100%;
 `;
 
 const Board = ({ player }) => {
