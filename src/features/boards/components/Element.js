@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { nanoid } from '@reduxjs/toolkit';
 import {
@@ -8,6 +8,7 @@ import {
   previewRemoved,
   selectIsValidPlacement,
 } from '../boardsSlice';
+import PlayerContext from '../../players/PlayerContext';
 
 const StyledElement = styled.button`
   background-color: ${({ states: { occupied, previewing } }) => {
@@ -35,9 +36,10 @@ const StyledElement = styled.button`
 
 const Element = ({ xIndex, yIndex, element }) => {
   const dispatch = useDispatch();
+  const player = useContext(PlayerContext);
   const [ship, setShip] = useState({
     id: nanoid(),
-    player: 1,
+    player: player.id,
     length: 3,
     orientation: 0,
     anchor: [xIndex, yIndex],
@@ -56,10 +58,10 @@ const Element = ({ xIndex, yIndex, element }) => {
   };
 
   const removePreview = () => {
-    dispatch(previewRemoved(1));
+    dispatch(previewRemoved(player.id));
   };
 
-  if (isValidPlacement) {
+  if (isValidPlacement && !player.computer) {
     return (
       <StyledElement
         onFocus={setPreview}

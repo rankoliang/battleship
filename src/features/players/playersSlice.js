@@ -5,8 +5,8 @@ export const playersSlice = createSlice({
   initialState: {
     current: 1,
     entities: {
-      1: { name: 'Player 1' },
-      2: { name: 'Player 2' },
+      1: { id: 1, name: 'Player 1', computer: false, opponentId: 2 },
+      2: { id: 2, name: 'Player 2', computer: true, opponentId: 1 },
     },
   },
   reducers: {
@@ -28,7 +28,7 @@ export const playersSlice = createSlice({
 
 export const { turnEnded, nameChanged } = playersSlice.actions;
 
-export const selectPlayers = (state) => state.players.entities;
+export const selectPlayers = (state) => Object.values(state.players.entities);
 export const selectCurrentPlayer = (state) =>
   state.players.entities[state.players.current];
 

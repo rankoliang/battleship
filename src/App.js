@@ -1,12 +1,18 @@
 import React from 'react';
-import Board from './features/boards/Board'
+import { useSelector } from 'react-redux';
+import { selectPlayers } from './features/players/playersSlice';
+import Board from './features/boards/Board';
 import './App.css';
 
 function App() {
+  const players = useSelector(selectPlayers);
+
   return (
     <div className="App">
       <h1>Battleship</h1>
-      <Board player={1} />
+      {players.map((player) => (
+        <Board player={player} key={player.id} />
+      ))}
     </div>
   );
 }

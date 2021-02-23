@@ -15,10 +15,18 @@ describe('playersSlice', () => {
 
   describe('initialState', () => {
     it('has two players', () => {
-      expect(selectPlayers(store.getState())).toMatchObject({
-        1: expect.objectContaining({ name: expect.any(String) }),
-        2: expect.objectContaining({ name: expect.any(String) }),
-      });
+      expect(selectPlayers(store.getState())).toEqual([
+        expect.objectContaining({
+          id: expect.any(Number),
+          name: expect.any(String),
+          computer: false,
+        }),
+        expect.objectContaining({
+          id: expect.any(Number),
+          name: expect.any(String),
+          computer: true,
+        }),
+      ]);
     });
   });
 
@@ -26,14 +34,14 @@ describe('playersSlice', () => {
     it("changes a player's name", () => {
       store.dispatch(nameChanged(1, 'John'));
 
-      expect(selectPlayers(store.getState())[1].name).toBe('John');
+      expect(selectPlayers(store.getState())[0].name).toBe('John');
     });
   });
 
   describe('turnEnded', () => {
     it('changes the current player', () => {
       const initialPlayer = selectCurrentPlayer(store.getState());
-      const nextPlayer = selectPlayers(store.getState())[2];
+      const nextPlayer = selectPlayers(store.getState())[1];
 
       store.dispatch(turnEnded());
 

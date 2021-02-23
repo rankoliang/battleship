@@ -2,6 +2,7 @@ import { useSelector } from 'react-redux';
 import { selectBoardById } from './boardsSlice';
 import Row from './components/Row';
 import styled from 'styled-components';
+import PlayerContext from '../players/PlayerContext';
 
 const StyledBoard = styled.div`
   display: flex;
@@ -11,14 +12,17 @@ const StyledBoard = styled.div`
 `;
 
 const Board = ({ player }) => {
-  const board = useSelector((state) => selectBoardById(state, player));
+  const board = useSelector((state) => selectBoardById(state, player.id));
 
   return (
-    <StyledBoard>
-      {board.map((row, yIndex) => (
-        <Row row={row} yIndex={yIndex} key={yIndex} />
-      ))}
-    </StyledBoard>
+    <PlayerContext.Provider value={player}>
+      <h2>{player.name}</h2>
+      <StyledBoard>
+        {board.map((row, yIndex) => (
+          <Row row={row} yIndex={yIndex} key={yIndex} />
+        ))}
+      </StyledBoard>
+    </PlayerContext.Provider>
   );
 };
 
