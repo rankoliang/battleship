@@ -25,6 +25,8 @@ const Board = ({ player }) => {
   const dispatch = useDispatch();
 
   const board = useSelector((state) => selectBoardById(state, player.id));
+const useRotation = (player) => {
+  const dispatch = useDispatch();
   const currentPreview = useSelector((state) =>
     selectBoardPreview(state, player.id)
   );
@@ -39,10 +41,22 @@ const Board = ({ player }) => {
     nextPreview = currentPreview;
   }
 
-  const handleKeyPress = (event) => {
-    if (event.key === 'r' && nextPreview) {
+  return () => {
+    if (nextPreview) {
       dispatch(orientationUpdated(1));
       dispatch(previewSet(nextPreview));
+    }
+  };
+};
+
+const Board = ({ player }) => {
+  const board = useSelector((state) => selectBoardById(state, player.id));
+
+  const rotate = useRotation(player);
+
+  const handleKeyPress = (event) => {
+    if (event.key === 'r') {
+      rotate();
     }
   };
 
