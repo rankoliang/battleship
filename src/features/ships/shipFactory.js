@@ -35,3 +35,7 @@ export const shipCoordinates = (ship) => {
     Math.floor(y + i * Math.sin(toRads(ship.orientation)) + 0.5),
   ]);
 };
+
+export const nextRotation = (orientation, offset = 90) => {
+  return (orientation + offset) % 360;
+};

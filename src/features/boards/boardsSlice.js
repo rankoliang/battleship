@@ -5,7 +5,7 @@ import {
 } from '@reduxjs/toolkit';
 import boardFactory from './boardFactory';
 import { shipCreated, shipHit, selectShipById } from '../ships/shipsSlice';
-import { shipCoordinates } from '../ships/shipFactory';
+import { shipCoordinates, nextRotation } from '../ships/shipFactory';
 import { outOfBounds } from '../../helpers';
 
 export const shipPlaced = createThunk(
@@ -104,7 +104,7 @@ export const boardsSlice = createSlice({
       const player = action.payload;
       const orientation = state.entities[player].orientation;
 
-      state.entities[player].orientation = (orientation + 90) % 360;
+      state.entities[player].orientation = nextRotation(orientation);
     },
   },
   extraReducers: {

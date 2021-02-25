@@ -1,11 +1,11 @@
 import { useSelector, useDispatch } from 'react-redux';
 import {
   selectBoardById,
-  selectOrientation,
   selectBoardPreview,
   orientationUpdated,
   previewSet,
 } from './boardsSlice';
+import { nextRotation } from '.././ships/shipFactory';
 import Row from './components/Row';
 import styled from 'styled-components';
 import PlayerContext from '../players/PlayerContext';
@@ -29,24 +29,25 @@ const Board = ({ player }) => {
     selectBoardPreview(state, player.id)
   );
 
-  const handleHover = (event) => {
-    event.target.focus();
-  };
-
-  const currentOrientation = useSelector((state) =>
-    selectOrientation(state, player.id)
-  );
-
-  const nextPreview =
-    currentPreview === null
-      ? null
-      : { ...currentPreview, orientation: (currentOrientation + 90) % 360 };
+  let nextPreview;
+  if (currentPreview) {
+    nextPreview = {
+      ...currentPreview,
+      orientation: nextRotation(currentPreview.orientation),
+    };
+  } else {
+    nextPreview = currentPreview;
+  }
 
   const handleKeyPress = (event) => {
-    if (event.key === 'r' && currentPreview) {
+    if (event.key === 'r' && nextPreview) {
       dispatch(orientationUpdated(1));
       dispatch(previewSet(nextPreview));
     }
+  };
+
+  const handleHover = (event) => {
+    event.target.focus();
   };
 
   return (
@@ -55,7 +56,7 @@ const Board = ({ player }) => {
       <StyledBoard
         onMouseEnter={handleHover}
         onKeyPress={handleKeyPress}
-        tabIndex="0"
+        tabIndex={player.computer ? '-1' : '0'}
       >
         {board.map((row, yIndex) => (
           <Row row={row} yIndex={yIndex} key={yIndex} />
