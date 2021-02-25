@@ -10,6 +10,8 @@ const boardFactory = ({ player, size = 10 }) => {
         previewing: false,
       }))
     ),
+    // orientation of the next ship
+    orientation: 0,
     ships: [],
     preview: null,
     previewCoordinates: null,

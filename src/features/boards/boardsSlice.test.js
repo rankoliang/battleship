@@ -5,6 +5,8 @@ import reducer, {
   shipPlaced,
   previewSet,
   previewRemoved,
+  orientationUpdated,
+  selectOrientation,
   selectBoardById,
   selectAllBoards,
   selectIsValidPlacement,
@@ -284,6 +286,25 @@ describe('boardsSlice', () => {
 
       expect(selectBoardById(store.getState(), 1)[0][0].value).toBe('value');
       expect(selectBoardById(store.getState(), 1)[0][0].property).toBe('value');
+    });
+  });
+
+  describe('orientationUpdated', () => {
+    it('adds 90 degrees the orientation', () => {
+      store.dispatch(orientationUpdated(1));
+
+      expect(selectOrientation(store.getState(), 1)).toBe(90);
+    });
+
+    describe('when the orientation will be 360', () => {
+      it('sets the orientation to 0', () => {
+        store.dispatch(orientationUpdated(1));
+        store.dispatch(orientationUpdated(1));
+        store.dispatch(orientationUpdated(1));
+        store.dispatch(orientationUpdated(1));
+
+        expect(selectOrientation(store.getState(), 1)).toBe(0);
+      });
     });
   });
 });

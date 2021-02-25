@@ -97,6 +97,12 @@ export const boardsSlice = createSlice({
       state.entities[player].preview = null;
       state.entities[player].previewCoordinates = null;
     },
+    orientationUpdated: (state, action) => {
+      const player = action.payload;
+      const orientation = state.entities[player].orientation;
+
+      state.entities[player].orientation = (orientation + 90) % 360;
+    },
   },
   extraReducers: {
     [shipPlaced.fulfilled]: (state, action) => {
@@ -128,7 +134,12 @@ export const boardsSlice = createSlice({
   },
 });
 
-export const { tileSet, previewSet, previewRemoved } = boardsSlice.actions;
+export const {
+  tileSet,
+  previewSet,
+  previewRemoved,
+  orientationUpdated,
+} = boardsSlice.actions;
 
 // Selectors
 const selectBoardEntities = (state) => state.boards.entities;
@@ -167,5 +178,8 @@ export const selectIsValidPlacement = (state, ship) => {
     return outOfBounds(coordinate, board) || board[y][x].occupied;
   });
 };
+
+export const selectOrientation = (state, id) =>
+  state.boards.entities[id].orientation;
 
 export default boardsSlice.reducer;
