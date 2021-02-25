@@ -272,6 +272,12 @@ describe('boardsSlice', () => {
         expect(selectIsValidPlacement(store.getState(), ship)).toBe(false);
       });
     });
+
+    describe('when the ship is null', () => {
+      it('returns false', () => {
+        expect(selectIsValidPlacement(store.getState(), null)).toBe(false);
+      });
+    });
   });
 
   describe('tileSet', () => {

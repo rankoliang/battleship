@@ -73,7 +73,10 @@ export const boardsSlice = createSlice({
     previewSet: (state, action) => {
       const ship = action.payload;
       const { player } = ship;
-      const coords = shipCoordinates(ship);
+      // filters out of bound coordinates
+      const coords = shipCoordinates(ship).filter(
+        (coordinate) => !outOfBounds(coordinate, state.entities[player].state)
+      );
       const prevCoords = state.entities[player].previewCoordinates;
 
       prevCoords?.forEach(([x, y]) => {
@@ -169,6 +172,8 @@ export const selectBoardPreviewCoordinates = (state, id) => {
 };
 
 export const selectIsValidPlacement = (state, ship) => {
+  if (ship === null) return false;
+
   const { player } = ship;
   const board = selectBoardById(state, player);
 
