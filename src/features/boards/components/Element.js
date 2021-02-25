@@ -30,8 +30,18 @@ const StyledElement = styled.button`
       return css`
         cursor: pointer;
       `;
+    } else {
+      return css`
+        &:hover {
+          border: 2px solid red;
+        }
+      `;
     }
   }}
+
+  &:focus {
+    outline: none;
+  }
 `;
 
 const Element = ({ xIndex, yIndex, element }) => {
@@ -81,6 +91,7 @@ const Element = ({ xIndex, yIndex, element }) => {
         xIndex={xIndex}
         yIndex={yIndex}
         states={element}
+        isValid={false}
         tabIndex="-1"
       />
     );
