@@ -14,6 +14,7 @@ import reducer, {
   selectBoardShips,
   selectBoardPreview,
   selectRemainingShips,
+  selectShipsToBePlaced,
   makeSelectValidPlacements,
   selectNextShip,
 } from './boardsSlice';
@@ -399,11 +400,19 @@ describe('boardsSlice', () => {
 
     describe('when the quantity becomes 0', () => {
       it('updates the nextShip', async () => {
-        const { name, length, quantity } = selectNextShip(store.getState(), 1);
-
         await store.dispatch(nextShipPlaced(1, [0, 0], 0));
 
         expect(selectNextShip(store.getState(), 1).quantity).toBeGreaterThan(0);
+      });
+    });
+
+    describe('when there are no next ships remaining', () => {
+      it('updates the nextShip', async () => {
+        while (selectShipsToBePlaced(store.getState(), 1) > 0) {
+          await store.dispatch(nextShipPlaced(1, [0, 0], 0));
+        }
+
+        expect(selectNextShip(store.getState(), 1)).toBe(null);
       });
     });
   });

@@ -139,7 +139,11 @@ const extraReducers = {
         return quantity > 0;
       });
 
-      state.entities[id].selectedShip = availableShips[0].name;
+      if (availableShips.length === 0) {
+        state.entities[id].selectedShip = null;
+      } else {
+        state.entities[id].selectedShip = availableShips[0].name;
+      }
     }
   },
 };

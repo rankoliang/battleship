@@ -75,9 +75,23 @@ export const makeSelectValidPlacements = (player, length) => (state) => {
 export const selectNextShip = (state, id) => {
   const { selectedShip, shipsToPlace } = state.boards.entities[id];
 
-  return shipsToPlace[selectedShip];
+  if (selectedShip === null) {
+    return null;
+  } else {
+    return shipsToPlace[selectedShip];
+  }
 };
 
 export const selectRemainingShips = (state, id) => {
   return state.boards.entities[id].shipsToPlace;
 };
+
+export const selectShipsToBePlaced = createSelector(
+  (state, id) => state.boards.entities[id],
+  (board) => {
+    return Object.values(board.shipsToPlace).reduce(
+      (sum, { quantity }) => sum + quantity,
+      0
+    );
+  }
+);
