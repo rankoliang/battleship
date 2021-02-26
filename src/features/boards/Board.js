@@ -1,16 +1,9 @@
-import { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import {
-  selectBoardById,
-  selectBoardPreview,
-  orientationUpdated,
-  previewSet,
-  randomShipsPlaced,
-} from './boardsSlice';
-import { nextRotation } from '.././ships/shipFactory';
+import { useSelector } from 'react-redux';
+import { selectBoardById } from './boardsSlice';
 import Row from './components/Row';
 import styled from 'styled-components';
 import PlayerContext from '../players/PlayerContext';
+import { useRandomPlacement, useRotation } from './boardHooks';
 
 const StyledBoard = styled.div`
   display: flex;
@@ -23,44 +16,10 @@ const StyledBoard = styled.div`
   }
 `;
 
-const useRandomPlacement = (player) => {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (player.computer) {
-      dispatch(randomShipsPlaced({ player }));
-    }
-  }, [dispatch, player]);
-};
-
-const useRotation = (player) => {
-  const dispatch = useDispatch();
-  const currentPreview = useSelector((state) =>
-    selectBoardPreview(state, player.id)
-  );
-
-  let nextPreview;
-  if (currentPreview) {
-    nextPreview = {
-      ...currentPreview,
-      orientation: nextRotation(currentPreview.orientation),
-    };
-  } else {
-    nextPreview = currentPreview;
-  }
-
-  return () => {
-    if (nextPreview) {
-      dispatch(orientationUpdated(1));
-      dispatch(previewSet(nextPreview));
-    }
-  };
-};
-
 const Board = ({ player }) => {
   const board = useSelector((state) => selectBoardById(state, player.id));
 
-  useRandomPlacement(player);
+  useRandomPlacement(player, player.computer);
 
   const rotate = useRotation(player);
 
