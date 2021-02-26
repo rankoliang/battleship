@@ -49,11 +49,9 @@ export const makeSelectValidPlacements = (player, length) => (state) => {
   const board = selectBoardById(state, player);
 
   const orientations = [0, 90, 180, 270];
-  const placements = {};
+  const placements = [];
 
   orientations.forEach((orientation) => {
-    placements[orientation] = [];
-
     board.forEach((row, yIndex) => {
       row.forEach((_, xIndex) => {
         const coordinate = [xIndex, yIndex];
@@ -65,7 +63,7 @@ export const makeSelectValidPlacements = (player, length) => (state) => {
         };
 
         if (selectIsValidPlacement(state, ship)) {
-          placements[orientation].push(coordinate);
+          placements.push([coordinate, orientation]);
         }
       });
     });

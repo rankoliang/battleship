@@ -57,13 +57,7 @@ export const randomShipsPlaced = createThunk(
 
       const validPlacements = selectValidPlacements(getState());
 
-      const validOrientations = Object.keys(validPlacements).filter(
-        (orientation) => validPlacements[orientation].length > 0
-      );
-
-      const orientation = shuffle.pick(validOrientations);
-
-      const anchors = validPlacements[orientation];
+      const [anchor, orientation] = shuffle.pick(validPlacements);
 
       await dispatch(
         shipPlaced({
@@ -71,7 +65,7 @@ export const randomShipsPlaced = createThunk(
           orientation,
           id: nanoid(),
           player: player.id,
-          anchor: shuffle.pick(anchors),
+          anchor,
         })
       );
     }
