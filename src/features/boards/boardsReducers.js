@@ -1,7 +1,7 @@
 import { shipCoordinates, nextRotation } from '../ships/shipFactory';
 import { outOfBounds } from '../../helpers';
 
-export default {
+const reducer = {
   tileSet: {
     reducer: (state, action) => {
       const {
@@ -57,3 +57,5 @@ export default {
     state.entities[player].orientation = nextRotation(orientation);
   },
 };
+
+export default reducer;

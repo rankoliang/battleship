@@ -78,7 +78,7 @@ export const randomShipsPlaced = createThunk(
   }
 );
 
-export default {
+const extraReducers = {
   [shipPlaced.fulfilled]: (state, action) => {
     const ship = action.payload;
     const coordinates = shipCoordinates(ship);
@@ -106,3 +106,5 @@ export default {
     board[y][x].hit = true;
   },
 };
+
+export default extraReducers;
