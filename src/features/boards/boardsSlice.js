@@ -6,7 +6,9 @@ import {
 import boardFactory from './boardFactory';
 import { shipCreated, shipHit, selectShipById } from '../ships/shipsSlice';
 import { shipCoordinates, nextRotation } from '../ships/shipFactory';
-import { outOfBounds } from '../../helpers';
+import { outOfBounds, randomFromArray } from '../../helpers';
+import { nanoid } from '@reduxjs/toolkit';
+import shuffle from 'shuffle-array';
 
 export const shipPlaced = createThunk(
   'boards/shipPlacedStatus',
@@ -33,6 +35,40 @@ const attackRecieved = createThunk(
       const { shipId, hitIndex } = board[y][x];
       dispatch(shipHit(shipId, hitIndex));
       return { player, coordinate };
+    }
+  }
+);
+
+export const randomShipsPlaced = createThunk(
+  'boards/randomShipsPlacedStatus',
+  async ({ player, lengths = [5, 4, 3, 3, 2] }, { dispatch, getState }) => {
+    const shuffledLengths = shuffle(lengths, { copy: true });
+
+    for (const length of shuffledLengths) {
+      const selectValidPlacements = makeSelectValidPlacements(
+        player.id,
+        length
+      );
+
+      const validPlacements = selectValidPlacements(getState());
+
+      const validOrientations = Object.keys(validPlacements).filter(
+        (orientation) => validPlacements[orientation].length > 0
+      );
+
+      const orientation = shuffle.pick(validOrientations);
+
+      const anchors = validPlacements[orientation];
+
+      await dispatch(
+        shipPlaced({
+          length,
+          orientation,
+          id: nanoid(),
+          player: player.id,
+          anchor: randomFromArray(anchors),
+        })
+      );
     }
   }
 );
@@ -186,5 +222,34 @@ export const selectIsValidPlacement = (state, ship) => {
 
 export const selectOrientation = (state, id) =>
   state.boards.entities[id].orientation;
+
+export const makeSelectValidPlacements = (player, length) => (state) => {
+  const board = selectBoardById(state, player);
+
+  const orientations = [0, 90, 180, 270];
+  const placements = {};
+
+  orientations.forEach((orientation) => {
+    placements[orientation] = [];
+
+    board.forEach((row, yIndex) => {
+      row.forEach((_, xIndex) => {
+        const coordinate = [xIndex, yIndex];
+        const ship = {
+          player,
+          length,
+          orientation,
+          anchor: coordinate,
+        };
+
+        if (selectIsValidPlacement(state, ship)) {
+          placements[orientation].push(coordinate);
+        }
+      });
+    });
+  });
+
+  return placements;
+};
 
 export default boardsSlice.reducer;

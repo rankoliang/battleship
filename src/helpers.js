@@ -26,4 +26,8 @@ const outOfBounds = (coordinate, board) => {
   return x < 0 || x >= board_length || y < 0 || y >= board_height;
 };
 
-export { updateArrayAtIndex, toRads, outOfBounds, arrayWith };
+const randomFromArray = (arr) => {
+  return arr[Math.floor(Math.random() * arr.length)];
+};
+
+export { updateArrayAtIndex, toRads, outOfBounds, arrayWith, randomFromArray };

@@ -12,6 +12,7 @@ import reducer, {
   selectIsValidPlacement,
   selectBoardShips,
   selectBoardPreview,
+  makeSelectValidPlacements,
 } from './boardsSlice';
 import shipsReducer, {
   selectShipTotal,
@@ -310,6 +311,61 @@ describe('boardsSlice', () => {
         store.dispatch(orientationUpdated(1));
 
         expect(selectOrientation(store.getState(), 1)).toBe(0);
+      });
+    });
+  });
+
+  describe('selectValidPlacements', () => {
+    it('returns valid placement coordinates', () => {
+      expect(makeSelectValidPlacements(2, 10)(store.getState())).toEqual({
+        0: [
+          [0, 0],
+          [0, 1],
+          [0, 2],
+          [0, 3],
+          [0, 4],
+          [0, 5],
+          [0, 6],
+          [0, 7],
+          [0, 8],
+          [0, 9],
+        ],
+        90: [
+          [0, 0],
+          [1, 0],
+          [2, 0],
+          [3, 0],
+          [4, 0],
+          [5, 0],
+          [6, 0],
+          [7, 0],
+          [8, 0],
+          [9, 0],
+        ],
+        180: [
+          [9, 0],
+          [9, 1],
+          [9, 2],
+          [9, 3],
+          [9, 4],
+          [9, 5],
+          [9, 6],
+          [9, 7],
+          [9, 8],
+          [9, 9],
+        ],
+        270: [
+          [0, 9],
+          [1, 9],
+          [2, 9],
+          [3, 9],
+          [4, 9],
+          [5, 9],
+          [6, 9],
+          [7, 9],
+          [8, 9],
+          [9, 9],
+        ],
       });
     });
   });

@@ -1,9 +1,11 @@
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   selectBoardById,
   selectBoardPreview,
   orientationUpdated,
   previewSet,
+  randomShipsPlaced,
 } from './boardsSlice';
 import { nextRotation } from '.././ships/shipFactory';
 import Row from './components/Row';
@@ -21,10 +23,16 @@ const StyledBoard = styled.div`
   }
 `;
 
-const Board = ({ player }) => {
+const useRandomPlacement = (player) => {
   const dispatch = useDispatch();
 
-  const board = useSelector((state) => selectBoardById(state, player.id));
+  useEffect(() => {
+    if (player.computer) {
+      dispatch(randomShipsPlaced({ player }));
+    }
+  }, [dispatch, player]);
+};
+
 const useRotation = (player) => {
   const dispatch = useDispatch();
   const currentPreview = useSelector((state) =>
@@ -51,6 +59,8 @@ const useRotation = (player) => {
 
 const Board = ({ player }) => {
   const board = useSelector((state) => selectBoardById(state, player.id));
+
+  useRandomPlacement(player);
 
   const rotate = useRotation(player);
 
