@@ -3,6 +3,7 @@ import {
   makeSelectValidPlacements,
   selectIsValidPlacement,
   selectBoardById,
+  selectNextShip,
 } from './boardsSlice';
 import { shipCoordinates } from '../ships/shipFactory';
 import { shipCreated, shipHit } from '../ships/shipsSlice';
@@ -72,6 +73,30 @@ export const randomShipsPlaced = createThunk(
   }
 );
 
+const nextShipPlaced = createThunk(
+  'boards/nextShipPlacedStatus',
+  async ({ id, anchor, orientation }, { dispatch, getState }) => {
+    const nextShip = selectNextShip(getState(), id);
+
+    const ship = {
+      id: nanoid(),
+      length: nextShip.length,
+      anchor,
+      orientation,
+      player: id,
+    };
+
+    await dispatch(shipPlaced(ship));
+
+    return [nextShip, id];
+  }
+);
+
+const prepareNextShipPlaced = (id, anchor, orientation) =>
+  nextShipPlaced({ id, anchor, orientation });
+
+export { prepareNextShipPlaced as nextShipPlaced };
+
 const extraReducers = {
   [shipPlaced.fulfilled]: (state, action) => {
     const ship = action.payload;
@@ -98,6 +123,24 @@ const extraReducers = {
     const board = state.entities[player].state;
 
     board[y][x].hit = true;
+  },
+  [nextShipPlaced.fulfilled]: (state, action) => {
+    const [{ name }, id] = action.payload;
+
+    const { shipsToPlace } = state.entities[id];
+
+    const ship = shipsToPlace[name];
+
+    ship.quantity = ship.quantity - 1;
+
+    if (ship.quantity === 0) {
+      const shipEntries = Object.values(shipsToPlace);
+      const availableShips = shipEntries.filter(({ quantity }) => {
+        return quantity > 0;
+      });
+
+      state.entities[id].selectedShip = availableShips[0].name;
+    }
   },
 };
 

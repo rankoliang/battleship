@@ -6,13 +6,16 @@ import reducer, {
   previewSet,
   previewRemoved,
   orientationUpdated,
+  nextShipPlaced,
   selectOrientation,
   selectBoardById,
   selectAllBoards,
   selectIsValidPlacement,
   selectBoardShips,
   selectBoardPreview,
+  selectRemainingShips,
   makeSelectValidPlacements,
+  selectNextShip,
 } from './boardsSlice';
 import shipsReducer, {
   selectShipTotal,
@@ -359,6 +362,49 @@ describe('boardsSlice', () => {
         [[8, 9], 270],
         [[9, 9], 270],
       ]);
+    });
+  });
+
+  describe('nextShipPlaced', () => {
+    it('places the ship', async () => {
+      const { length } = selectNextShip(store.getState(), 1);
+
+      const ship = {
+        length,
+        orientation: 0,
+        anchor: [0, 0],
+      };
+
+      await store.dispatch(nextShipPlaced(1, ship.anchor, ship.orientation));
+
+      const board = selectBoardById(store.getState(), 1);
+
+      shipCoordinates(ship).forEach(([x, y], i) => {
+        expect(board[y][x].occupied).toBe(true);
+        expect(board[y][x].hitIndex).toBe(i);
+      });
+    });
+
+    it('decrements the quantity by 1', async () => {
+      const { name, length, quantity } = selectNextShip(store.getState(), 1);
+
+      expect(quantity).toEqual(1);
+
+      await store.dispatch(nextShipPlaced(1, [0, 0], 0));
+
+      const remainingShips = selectRemainingShips(store.getState(), 1);
+
+      expect(remainingShips[name].quantity).toEqual(0);
+    });
+
+    describe('when the quantity becomes 0', () => {
+      it('updates the nextShip', async () => {
+        const { name, length, quantity } = selectNextShip(store.getState(), 1);
+
+        await store.dispatch(nextShipPlaced(1, [0, 0], 0));
+
+        expect(selectNextShip(store.getState(), 1).quantity).toBeGreaterThan(0);
+      });
     });
   });
 });

@@ -71,3 +71,13 @@ export const makeSelectValidPlacements = (player, length) => (state) => {
 
   return placements;
 };
+
+export const selectNextShip = (state, id) => {
+  const { selectedShip, shipsToPlace } = state.boards.entities[id];
+
+  return shipsToPlace[selectedShip];
+};
+
+export const selectRemainingShips = (state, id) => {
+  return state.boards.entities[id].shipsToPlace;
+};
