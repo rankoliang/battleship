@@ -4,6 +4,7 @@ import {
   selectIsValidPlacement,
   selectBoardById,
   selectNextShip,
+  selectShipsToBePlaced,
 } from './boardsSlice';
 import { shipCoordinates } from '../ships/shipFactory';
 import { shipCreated, shipHit } from '../ships/shipsSlice';
@@ -47,36 +48,35 @@ export { prepareAttackReceived as attackReceived };
 
 export const randomShipsPlaced = createThunk(
   'boards/randomShipsPlacedStatus',
-  async ({ player, lengths = [5, 4, 3, 3, 2] }, { dispatch, getState }) => {
-    const shuffledLengths = shuffle(lengths, { copy: true });
+  async ({ player: { id } }, { dispatch, getState }) => {
+    while (selectShipsToBePlaced(getState(), id) > 0) {
+      const { length } = selectNextShip(getState(), id);
 
-    for (const length of shuffledLengths) {
-      const selectValidPlacements = makeSelectValidPlacements(
-        player.id,
-        length
-      );
+      const selectValidPlacements = makeSelectValidPlacements(id, length);
 
       const validPlacements = selectValidPlacements(getState());
 
       const [anchor, orientation] = shuffle.pick(validPlacements);
 
-      await dispatch(
-        shipPlaced({
-          length,
-          orientation,
-          id: nanoid(),
-          player: player.id,
-          anchor,
-        })
-      );
+      await dispatch(nextShipPlaced({ id, anchor, orientation }));
     }
+  },
+  {
+    condition: ({ player: { id } }, { getState }) => {
+      return selectShipsToBePlaced(getState(), id) > 0;
+    },
   }
 );
 
 const nextShipPlaced = createThunk(
   'boards/nextShipPlacedStatus',
-  async ({ id, anchor, orientation }, { dispatch, getState }) => {
+  async (
+    { id, anchor, orientation },
+    { dispatch, getState, rejectWithValue }
+  ) => {
     const nextShip = selectNextShip(getState(), id);
+    if (nextShip.quantity <= 0)
+      return rejectWithValue('Not enough ships remaining');
 
     const ship = {
       id: nanoid(),
@@ -131,14 +131,15 @@ const extraReducers = {
 
     const ship = shipsToPlace[name];
 
-    ship.quantity = ship.quantity - 1;
+    if (ship.quantity > 0) {
+      ship.quantity = ship.quantity - 1;
+    }
 
     if (ship.quantity === 0) {
       const shipEntries = Object.values(shipsToPlace);
       const availableShips = shipEntries.filter(({ quantity }) => {
         return quantity > 0;
       });
-
       if (availableShips.length === 0) {
         state.entities[id].selectedShip = null;
       } else {

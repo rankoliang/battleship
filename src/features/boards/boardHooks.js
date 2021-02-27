@@ -6,16 +6,20 @@ import {
   orientationUpdated,
   previewSet,
   selectBoardPreview,
+  selectShipsToBePlaced,
 } from './boardsSlice';
 
 const useRandomPlacement = (player, condition) => {
   const dispatch = useDispatch();
+  const shipsRemaining = useSelector((state) =>
+    selectShipsToBePlaced(state, player.id)
+  );
 
   useEffect(() => {
-    if (condition) {
+    if (shipsRemaining > 0 && condition) {
       dispatch(randomShipsPlaced({ player }));
     }
-  }, [dispatch, condition, player]);
+  }, []);
 };
 
 const useRotation = (player) => {
