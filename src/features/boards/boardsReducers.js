@@ -1,18 +1,42 @@
 import { shipCoordinates, nextRotation } from '../ships/shipFactory';
 import { outOfBounds } from '../../helpers';
 
+// Private functions
+const inBoundCoords = (ship, board) => {
+  return shipCoordinates(ship).filter(
+    (coordinate) => !outOfBounds(coordinate, board)
+  );
+};
+
+const resetPreview = (boardEntity) => {
+  const { previewCoordinates, state: board } = boardEntity;
+
+  previewCoordinates?.forEach(([x, y]) => {
+    board[y][x].previewing = false;
+  });
+};
+
+const setPreview = (boardEntity) => {
+  const { previewCoordinates, state: board } = boardEntity;
+
+  previewCoordinates?.forEach(([x, y]) => {
+    board[y][x].previewing = true;
+  });
+};
+
+const occupyBoard = (board, props, [x, y]) => {
+  board[y][x] = { ...board[y][x], ...props, occupied: true };
+};
+
+// Default export
 const reducer = {
   tileSet: {
     reducer: (state, action) => {
-      const {
-        player,
-        coordinates: [x, y],
-        props,
-      } = action.payload;
+      const { player, coordinates, props } = action.payload;
 
       const board = state.entities[player].state;
 
-      board[y][x] = { ...board[y][x], ...props, occupied: true };
+      occupyBoard(board, props, coordinates);
     },
     prepare: (player, coordinates, props) => {
       return {
@@ -22,39 +46,31 @@ const reducer = {
   },
   previewSet: (state, action) => {
     const ship = action.payload;
-    const { player } = ship;
-    // filters out of bound coordinates
-    const coords = shipCoordinates(ship).filter(
-      (coordinate) => !outOfBounds(coordinate, state.entities[player].state)
-    );
-    const prevCoords = state.entities[player].previewCoordinates;
+    const { player: id } = ship;
+    const boardEntity = state.entities[id];
 
-    prevCoords?.forEach(([x, y]) => {
-      state.entities[player].state[y][x].previewing = false;
-    });
+    resetPreview(boardEntity);
 
-    state.entities[player].preview = ship;
-    state.entities[player].previewCoordinates = coords;
-    coords.forEach(([x, y]) => {
-      state.entities[player].state[y][x].previewing = true;
-    });
+    boardEntity.preview = ship;
+    boardEntity.previewCoordinates = inBoundCoords(ship, boardEntity.state);
+
+    setPreview(boardEntity);
   },
   previewRemoved: (state, action) => {
-    const player = action.payload;
-    const prevCoords = state.entities[player].previewCoordinates;
+    const id = action.payload;
+    const boardEntity = state.entities[id];
 
-    prevCoords?.forEach(([x, y]) => {
-      state.entities[player].state[y][x].previewing = false;
-    });
+    resetPreview(boardEntity);
 
-    state.entities[player].preview = null;
-    state.entities[player].previewCoordinates = null;
+    boardEntity.preview = null;
+    boardEntity.previewCoordinates = null;
   },
   orientationUpdated: (state, action) => {
-    const player = action.payload;
-    const orientation = state.entities[player].orientation;
+    const id = action.payload;
+    const boardEntity = state.entities[id];
+    const orientation = state.entities[id].orientation;
 
-    state.entities[player].orientation = nextRotation(orientation);
+    boardEntity.orientation = nextRotation(orientation);
   },
 };
 
