@@ -1,0 +1,27 @@
+.element {
+  background-color: white;
+  width: 100px;
+  height: 100px;
+  border: 1px solid black;
+  margin: 1px;
+}
+
+.element:focus {
+  outline: none;
+}
+
+.element__previewing {
+  background-color: lightgray;
+}
+
+.element__previewing--invalid {
+  border: 2px solid red;
+}
+
+.element__occupied {
+  background-color: black;
+}
+
+.element--valid-placement {
+  cursor: pointer;
+}

@@ -24,7 +24,7 @@ const useRandomPlacement = (player, condition) => {
     if (shipsRemaining > 0 && condition) {
       dispatch(randomShipsPlaced({ player }));
     }
-  }, []);
+  }, [dispatch, condition, player]);
 };
 
 const useRotation = (player) => {
@@ -43,7 +43,7 @@ const useRotation = (player) => {
     nextPreview = currentPreview;
   }
 
-  return () => {
+  return function rotate() {
     if (nextPreview) {
       dispatch(orientationUpdated(1));
       dispatch(previewSet(nextPreview));

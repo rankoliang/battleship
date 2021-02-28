@@ -10,8 +10,8 @@ const StyledRow = styled.div`
 const Row = ({ row, yIndex }) => {
   return (
     <StyledRow>
-      {row.map((element, xIndex) => (
-        <Element coordinate={[xIndex, yIndex]} element={element} key={xIndex} />
+      {row.map((states, xIndex) => (
+        <Element coordinate={[xIndex, yIndex]} states={states} key={xIndex} />
       ))}
     </StyledRow>
   );
