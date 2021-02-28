@@ -50,13 +50,8 @@ export const randomShipsPlaced = createThunk(
   'boards/randomShipsPlacedStatus',
   async ({ player: { id } }, { dispatch, getState }) => {
     while (selectShipsToBePlaced(getState(), id) > 0) {
-      const { length } = selectNextShip(getState(), id);
-
-      const selectValidPlacements = makeSelectValidPlacements(id, length);
-
-      const validPlacements = selectValidPlacements(getState());
-
-      const [anchor, orientation] = shuffle.pick(validPlacements);
+      const nextShip = selectNextShip(getState(), id);
+      const [anchor, orientation] = randomPlacement(getState(), id, nextShip);
 
       await dispatch(nextShipPlaced({ id, anchor, orientation }));
     }
@@ -75,8 +70,9 @@ const nextShipPlaced = createThunk(
     { dispatch, getState, rejectWithValue }
   ) => {
     const nextShip = selectNextShip(getState(), id);
-    if (nextShip.quantity <= 0)
+    if (nextShip.quantity <= 0) {
       return rejectWithValue('Not enough ships remaining');
+    }
 
     const ship = {
       id: nanoid(),
@@ -97,21 +93,53 @@ const prepareNextShipPlaced = (id, anchor, orientation) =>
 
 export { prepareNextShipPlaced as nextShipPlaced };
 
+// Private functions
+const updateNextSelectedShip = (state, id) => {
+  const { shipsToPlace } = state.entities[id];
+  const availableShips = availableShipsFor(shipsToPlace);
+
+  if (availableShips.length === 0) {
+    state.entities[id].selectedShip = null;
+  } else {
+    state.entities[id].selectedShip = availableShips[0].name;
+  }
+};
+
+const availableShipsFor = (shipsToPlace) => {
+  const shipEntries = Object.values(shipsToPlace);
+
+  return shipEntries.filter(({ quantity }) => {
+    return quantity > 0;
+  });
+};
+
+const randomPlacement = (state, id, ship) => {
+  const { length } = ship;
+  const selectValidPlacements = makeSelectValidPlacements(id, length);
+  const validPlacements = selectValidPlacements(state);
+  const [anchor, orientation] = shuffle.pick(validPlacements);
+
+  return [anchor, orientation];
+};
+
+const placeShipOnBoard = (board, ship) => {
+  shipCoordinates(ship).forEach(([x, y], i) => {
+    board[y][x] = {
+      ...board[y][x],
+      shipId: ship.id,
+      hitIndex: i,
+      occupied: true,
+    };
+  });
+};
+
+// Default export
 const extraReducers = {
   [shipPlaced.fulfilled]: (state, action) => {
     const ship = action.payload;
-    const coordinates = shipCoordinates(ship);
-
     const board = state.entities[ship.player].state;
 
-    coordinates.forEach(([x, y], i) => {
-      board[y][x] = {
-        ...board[y][x],
-        shipId: ship.id,
-        hitIndex: i,
-        occupied: true,
-      };
-    });
+    placeShipOnBoard(board, ship);
     state.entities[ship.player].ships.push(ship.id);
   },
   [attackReceived.fulfilled]: (state, action) => {
@@ -126,9 +154,7 @@ const extraReducers = {
   },
   [nextShipPlaced.fulfilled]: (state, action) => {
     const [{ name }, id] = action.payload;
-
     const { shipsToPlace } = state.entities[id];
-
     const ship = shipsToPlace[name];
 
     if (ship.quantity > 0) {
@@ -136,15 +162,7 @@ const extraReducers = {
     }
 
     if (ship.quantity === 0) {
-      const shipEntries = Object.values(shipsToPlace);
-      const availableShips = shipEntries.filter(({ quantity }) => {
-        return quantity > 0;
-      });
-      if (availableShips.length === 0) {
-        state.entities[id].selectedShip = null;
-      } else {
-        state.entities[id].selectedShip = availableShips[0].name;
-      }
+      updateNextSelectedShip(state, id);
     }
   },
 };
