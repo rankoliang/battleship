@@ -11,12 +11,7 @@ const Row = ({ row, yIndex }) => {
   return (
     <StyledRow>
       {row.map((element, xIndex) => (
-        <Element
-          xIndex={xIndex}
-          yIndex={yIndex}
-          element={element}
-          key={xIndex}
-        />
+        <Element coordinate={[xIndex, yIndex]} element={element} key={xIndex} />
       ))}
     </StyledRow>
   );
