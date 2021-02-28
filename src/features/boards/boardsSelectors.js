@@ -5,9 +5,14 @@ import { outOfBounds } from '../../helpers';
 
 const selectBoardEntities = (state) => state.boards.entities;
 
+const selectBoardEntityById = (state, id) => state.boards.entities[id];
+
 export const selectBoardIds = (state) => state.boards.ids;
 
-export const selectBoardById = (state, id) => state.boards.entities[id].state;
+export const selectBoardById = createSelector(
+  selectBoardEntityById,
+  ({ state }) => state
+);
 
 export const selectAllBoards = createSelector(
   selectBoardIds,
@@ -21,13 +26,15 @@ export const selectBoardShips = (state, id) => {
   );
 };
 
-export const selectBoardPreview = (state, id) => {
-  return state.boards.entities[id].preview;
-};
+export const selectBoardPreview = createSelector(
+  selectBoardEntityById,
+  (boardEntity) => boardEntity.preview
+);
 
-export const selectBoardPreviewCoordinates = (state, id) => {
-  return state.boards.entities[id].previewCoordinates;
-};
+export const selectBoardPreviewCoordinates = createSelector(
+  selectBoardEntityById,
+  (boardEntity) => boardEntity.previewCoordinates
+);
 
 export const selectIsValidPlacement = (state, ship) => {
   if (ship === null) return false;
@@ -42,11 +49,13 @@ export const selectIsValidPlacement = (state, ship) => {
   });
 };
 
-export const selectOrientation = (state, id) =>
-  state.boards.entities[id].orientation;
+export const selectOrientation = createSelector(
+  selectBoardEntityById,
+  (boardEntity) => boardEntity.orientation
+);
 
-export const makeSelectValidPlacements = (player, length) => (state) => {
-  const board = selectBoardById(state, player);
+export const makeSelectValidPlacements = (id, length) => (state) => {
+  const board = selectBoardById(state, id);
 
   const orientations = [0, 90, 180, 270];
   const placements = [];
@@ -56,7 +65,7 @@ export const makeSelectValidPlacements = (player, length) => (state) => {
       row.forEach((_, xIndex) => {
         const coordinate = [xIndex, yIndex];
         const ship = {
-          player,
+          player: id,
           length,
           orientation,
           anchor: coordinate,
@@ -72,24 +81,28 @@ export const makeSelectValidPlacements = (player, length) => (state) => {
   return placements;
 };
 
-export const selectNextShip = (state, id) => {
-  const { selectedShip, shipsToPlace } = state.boards.entities[id];
-
-  if (selectedShip === null) {
-    return null;
-  } else {
-    return shipsToPlace[selectedShip];
+export const selectNextShip = createSelector(
+  selectBoardEntityById,
+  ({ selectedShip, shipsToPlace }) => {
+    if (selectedShip === null) {
+      return null;
+    } else {
+      return shipsToPlace[selectedShip];
+    }
   }
-};
+);
 
-export const selectRemainingShips = (state, id) => {
-  return state.boards.entities[id].shipsToPlace;
-};
+export const selectRemainingShips = createSelector(
+  selectBoardEntityById,
+  ({ shipsToPlace }) => {
+    return shipsToPlace;
+  }
+);
 
 export const selectShipsToBePlaced = createSelector(
-  (state, id) => state.boards.entities[id],
-  (board) => {
-    return Object.values(board.shipsToPlace).reduce(
+  selectBoardEntityById,
+  ({ shipsToPlace }) => {
+    return Object.values(shipsToPlace).reduce(
       (sum, { quantity }) => sum + quantity,
       0
     );
