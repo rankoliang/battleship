@@ -22,11 +22,11 @@ const Container = styled.div`
 `;
 
 const Board = ({ player }) => {
-  const board = useSelector((state) => selectBoardById(state, player.id));
+  const board = useSelector((state) => selectBoardById(state, player.boardId));
 
   useRandomPlacement(player.boardId, player.computer);
 
-  const rotate = useRotation(player);
+  const rotate = useRotation(player.boardId);
 
   useKeypress('r', () => rotate());
 

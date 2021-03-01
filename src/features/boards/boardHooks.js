@@ -29,10 +29,10 @@ const useRandomPlacement = (boardId, condition) => {
   /* eslint-enable */
 };
 
-const useRotation = (player) => {
+const useRotation = (boardId) => {
   const dispatch = useDispatch();
   const currentPreview = useSelector((state) =>
-    selectBoardPreview(state, player.id)
+    selectBoardPreview(state, boardId)
   );
 
   let nextPreview;
