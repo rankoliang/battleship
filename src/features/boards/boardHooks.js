@@ -14,18 +14,18 @@ import {
   selectNextShip,
 } from './boardsSlice';
 
-const useRandomPlacement = (player, condition) => {
+const useRandomPlacement = (boardId, condition) => {
   const dispatch = useDispatch();
   const shipsRemaining = useSelector((state) =>
-    selectShipsToBePlaced(state, player.id)
+    selectShipsToBePlaced(state, boardId)
   );
 
   /* eslint-disable */
   useEffect(() => {
     if (shipsRemaining > 0 && condition) {
-      dispatch(randomShipsPlaced({ player }));
+      dispatch(randomShipsPlaced({ boardId }));
     }
-  }, [dispatch, condition, player]);
+  }, [dispatch, condition, boardId]);
   /* eslint-enable */
 };
 
@@ -53,15 +53,16 @@ const useRotation = (player) => {
   };
 };
 
-const useShip = ({ id }, [xIndex, yIndex]) => {
+const useShip = ({ boardId, id: playerId }, [xIndex, yIndex]) => {
   const dispatch = useDispatch();
 
-  const nextShip = useSelector((state) => selectNextShip(state, id));
+  const nextShip = useSelector((state) => selectNextShip(state, boardId));
 
   const [ship, setShip] = useState({
     ...nextShip,
     id: nanoid(),
-    player: id,
+    boardId,
+    playerId,
     anchor: [xIndex, yIndex],
   });
 
@@ -75,7 +76,7 @@ const useShip = ({ id }, [xIndex, yIndex]) => {
 
   const placeShip = () => {
     if (ship) {
-      dispatch(nextShipPlaced(id, ship.anchor, ship.orientation));
+      dispatch(nextShipPlaced(boardId, ship.anchor, ship.orientation));
     }
   };
 
@@ -88,9 +89,11 @@ const useShip = ({ id }, [xIndex, yIndex]) => {
 
 const useShipPreview = (ship) => {
   const dispatch = useDispatch();
-  const id = ship?.player;
+  const boardId = ship?.boardId;
 
-  const previewShip = useSelector((state) => selectBoardPreview(state, id));
+  const previewShip = useSelector((state) =>
+    selectBoardPreview(state, boardId)
+  );
 
   const isPreviewValid = useSelector((state) =>
     selectIsValidPlacement(state, previewShip)
@@ -101,7 +104,7 @@ const useShipPreview = (ship) => {
   };
 
   const removePreview = () => {
-    ship && dispatch(previewRemoved(id));
+    ship && dispatch(previewRemoved(boardId));
   };
 
   return { isPreviewValid, setPreview, removePreview };

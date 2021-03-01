@@ -24,7 +24,7 @@ const Container = styled.div`
 const Board = ({ player }) => {
   const board = useSelector((state) => selectBoardById(state, player.id));
 
-  useRandomPlacement(player, player.computer);
+  useRandomPlacement(player.boardId, player.computer);
 
   const rotate = useRotation(player);
 

@@ -32,22 +32,22 @@ const occupyBoard = (board, props, [x, y]) => {
 const reducer = {
   tileSet: {
     reducer: (state, action) => {
-      const { player, coordinates, props } = action.payload;
+      const { boardId, coordinates, props } = action.payload;
 
-      const board = state.entities[player].state;
+      const board = state.entities[boardId].state;
 
       occupyBoard(board, props, coordinates);
     },
-    prepare: (player, coordinates, props) => {
+    prepare: (boardId, coordinates, props) => {
       return {
-        payload: { player, coordinates, props },
+        payload: { boardId, coordinates, props },
       };
     },
   },
   previewSet: (state, action) => {
     const ship = action.payload;
-    const { player: id } = ship;
-    const boardEntity = state.entities[id];
+    const { boardId } = ship;
+    const boardEntity = state.entities[boardId];
 
     resetPreview(boardEntity);
 

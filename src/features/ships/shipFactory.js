@@ -2,14 +2,16 @@ import { toRads, arrayWith } from '../../helpers';
 
 const shipFactory = ({
   id,
-  player,
+  playerId,
+  boardId,
   length,
   anchor = [0, 0],
   orientation = 0,
 }) => {
   return {
     id,
-    player,
+    playerId,
+    boardId,
     length,
     /* 
      The ship is oriented according to the polar coordinate system in degrees.

@@ -27,7 +27,8 @@ describe('shipsSlice', () => {
       store.dispatch(
         shipCreated({
           id: shipId,
-          player: 1,
+          playerId: 1,
+          boardId: 1,
           length: 4,
           orientation: 0,
           anchor: [0, 0],
@@ -38,7 +39,8 @@ describe('shipsSlice', () => {
         {
           id: shipId,
           length: 4,
-          player: 1,
+          playerId: 1,
+          boardId: 1,
           orientation: 0,
           anchor: [0, 0],
           hit: [false, false, false, false],
@@ -53,7 +55,9 @@ describe('shipsSlice', () => {
 
     beforeEach(() => {
       shipId = nanoid();
-      store.dispatch(shipCreated({ player: 1, id: shipId, length: 3 }));
+      store.dispatch(
+        shipCreated({ playerId: 1, boardId: 1, id: shipId, length: 3 })
+      );
       getShip = () => selectShipById(store.getState(), shipId);
     });
 
@@ -85,7 +89,9 @@ describe('shipsSlice', () => {
 
     beforeEach(() => {
       shipId = nanoid();
-      store.dispatch(shipCreated({ player: 1, id: shipId, length: 1 }));
+      store.dispatch(
+        shipCreated({ playerId: 1, boardId: 1, id: shipId, length: 1 })
+      );
     });
 
     describe('when every location is hit', () => {
@@ -109,7 +115,8 @@ describe('shipsSlice', () => {
         const shipId = nanoid();
         store.dispatch(
           shipCreated({
-            player: 1,
+            playerId: 1,
+            boardId: 1,
             id: shipId,
             length: 3,
             orientation: 0,
@@ -172,7 +179,8 @@ describe('shipsSlice', () => {
         const shipId = nanoid();
         store.dispatch(
           shipCreated({
-            player: 1,
+            playerId: 1,
+            boardId: 1,
             id: shipId,
             length: 3,
             orientation: 270,
@@ -193,7 +201,8 @@ describe('shipsSlice', () => {
         const shipId = nanoid();
         store.dispatch(
           shipCreated({
-            player: 1,
+            playerId: 1,
+            boardId: 1,
             id: shipId,
             length: 3,
             orientation: 0,

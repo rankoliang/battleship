@@ -1,8 +1,8 @@
 import { arrayWith } from '../../helpers';
 
-const boardFactory = ({ player, size = 10 }) => {
+const boardFactory = ({ playerId, size = 10 }) => {
   return {
-    player,
+    playerId: playerId,
     state: arrayWith(size, () =>
       arrayWith(size, () => ({
         occupied: false,

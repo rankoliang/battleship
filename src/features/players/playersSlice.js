@@ -5,8 +5,20 @@ export const playersSlice = createSlice({
   initialState: {
     current: 1,
     entities: {
-      1: { id: 1, name: 'Player 1', computer: false, opponentId: 2 },
-      2: { id: 2, name: 'Player 2', computer: true, opponentId: 1 },
+      1: {
+        id: 1,
+        name: 'Player 1',
+        computer: false,
+        opponentId: 2,
+        boardId: 1,
+      },
+      2: {
+        id: 2,
+        name: 'Player 2',
+        computer: true,
+        opponentId: 1,
+        boardId: 1,
+      },
     },
   },
   reducers: {

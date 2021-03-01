@@ -48,7 +48,8 @@ describe('boardsSlice', () => {
       store.dispatch(
         shipPlaced({
           id: nanoid(),
-          player: 1,
+          playerId: 1,
+          boardId: 1,
           length: 4,
           orientation: 0,
           anchor: [0, 0],
@@ -61,7 +62,8 @@ describe('boardsSlice', () => {
     it('places the ship', async () => {
       const ship = {
         id: nanoid(),
-        player: 1,
+        playerId: 1,
+        boardId: 1,
         length: 3,
         orientation: 0,
         anchor: [0, 0],
@@ -80,7 +82,8 @@ describe('boardsSlice', () => {
     it('adds the ship to the board', async () => {
       const ship = {
         id: nanoid(),
-        player: 1,
+        playerId: 1,
+        boardId: 1,
         length: 3,
         orientation: 0,
         anchor: [0, 0],
@@ -104,7 +107,8 @@ describe('boardsSlice', () => {
     it('sets the preview', () => {
       const ship = {
         id: nanoid(),
-        player: 1,
+        boardId: 1,
+        playerId: 1,
         length: 3,
         orientation: 0,
         anchor: [0, 0],
@@ -120,7 +124,8 @@ describe('boardsSlice', () => {
     it('sets the preview coordinates', () => {
       const ship = {
         id: nanoid(),
-        player: 1,
+        boardId: 1,
+        playerId: 1,
         length: 3,
         orientation: 0,
         anchor: [0, 0],
@@ -138,14 +143,16 @@ describe('boardsSlice', () => {
     it('overrides the old preview', () => {
       const ship = {
         id: nanoid(),
-        player: 1,
+        boardId: 1,
+        playerId: 1,
         length: 3,
         orientation: 0,
         anchor: [0, 0],
       };
       const nextShip = {
         id: nanoid(),
-        player: 1,
+        boardId: 1,
+        playerId: 1,
         length: 1,
         orientation: 0,
         anchor: [5, 5],
@@ -168,7 +175,8 @@ describe('boardsSlice', () => {
     beforeEach(() => {
       ship = {
         id: nanoid(),
-        player: 1,
+        boardId: 1,
+        playerId: 1,
         length: 3,
         orientation: 0,
         anchor: [0, 0],
@@ -194,7 +202,8 @@ describe('boardsSlice', () => {
     it('sets the tile to hit', async () => {
       const ship = {
         id: nanoid(),
-        player: 1,
+        boardId: 1,
+        playerId: 1,
         length: 3,
         orientation: 0,
         anchor: [0, 0],
@@ -212,7 +221,8 @@ describe('boardsSlice', () => {
     it('hits the ship', async () => {
       const ship = {
         id: nanoid(),
-        player: 1,
+        boardId: 1,
+        playerId: 1,
         length: 3,
         orientation: 0,
         anchor: [0, 0],
@@ -233,7 +243,8 @@ describe('boardsSlice', () => {
       it('returns true', () => {
         const ship = {
           id: nanoid(),
-          player: 1,
+          boardId: 1,
+          playerId: 1,
           length: 4,
           orientation: 0,
           anchor: [0, 0],
@@ -247,7 +258,8 @@ describe('boardsSlice', () => {
       it('returns false', () => {
         const ship = {
           id: nanoid(),
-          player: 1,
+          boardId: 1,
+          playerId: 1,
           length: 4,
           orientation: 0,
           anchor: [0, 0],
@@ -268,7 +280,8 @@ describe('boardsSlice', () => {
       it('returns false', () => {
         const ship = {
           id: nanoid(),
-          player: 1,
+          boardId: 1,
+          playerId: 1,
           length: 4,
           orientation: 180,
           anchor: [-1, -1],

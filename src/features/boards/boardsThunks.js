@@ -5,6 +5,7 @@ import {
   selectBoardById,
   selectNextShip,
   selectShipsToBePlaced,
+  selectPlayerId,
 } from './boardsSlice';
 import { shipCoordinates } from '../ships/shipFactory';
 import { shipCreated, shipHit } from '../ships/shipsSlice';
@@ -27,33 +28,37 @@ export const shipPlaced = createThunk(
 const attackReceived = createThunk(
   'boards/attackRecievedStatus',
   (
-    { player, coordinate, coordinate: [x, y] },
+    { boardId, coordinate, coordinate: [x, y] },
     { dispatch, getState, rejectWithValue }
   ) => {
-    const board = selectBoardById(getState(), player);
+    const board = selectBoardById(getState(), boardId);
     if (outOfBounds(coordinate, board) || !board[y][x].occupied) {
       return rejectWithValue(`No ship on coordinates (${x}, ${y})`);
     } else {
       const { shipId, hitIndex } = board[y][x];
       dispatch(shipHit(shipId, hitIndex));
-      return { player, coordinate };
+      return { boardId, coordinate };
     }
   }
 );
 
-const prepareAttackReceived = (player, coordinate) =>
-  attackReceived({ player, coordinate });
+const prepareAttackReceived = (boardId, coordinate) =>
+  attackReceived({ boardId, coordinate });
 
 export { prepareAttackReceived as attackReceived };
 
 export const randomShipsPlaced = createThunk(
   'boards/randomShipsPlacedStatus',
-  async ({ player: { id } }, { dispatch, getState }) => {
-    while (selectShipsToBePlaced(getState(), id) > 0) {
-      const nextShip = selectNextShip(getState(), id);
-      const [anchor, orientation] = randomPlacement(getState(), id, nextShip);
+  async ({ player: { boardId } }, { dispatch, getState }) => {
+    while (selectShipsToBePlaced(getState(), boardId) > 0) {
+      const nextShip = selectNextShip(getState(), boardId);
+      const [anchor, orientation] = randomPlacement(
+        getState(),
+        boardId,
+        nextShip
+      );
 
-      await dispatch(nextShipPlaced({ id, anchor, orientation }));
+      await dispatch(nextShipPlaced({ boardId, anchor, orientation }));
     }
   },
   {
@@ -66,10 +71,11 @@ export const randomShipsPlaced = createThunk(
 const nextShipPlaced = createThunk(
   'boards/nextShipPlacedStatus',
   async (
-    { id, anchor, orientation },
+    { boardId, anchor, orientation },
     { dispatch, getState, rejectWithValue }
   ) => {
-    const nextShip = selectNextShip(getState(), id);
+    const nextShip = selectNextShip(getState(), boardId);
+    const playerId = selectPlayerId(getState(), boardId);
     if (nextShip.quantity <= 0) {
       return rejectWithValue('Not enough ships remaining');
     }
@@ -79,17 +85,18 @@ const nextShipPlaced = createThunk(
       length: nextShip.length,
       anchor,
       orientation,
-      player: id,
+      boardId,
+      playerId,
     };
 
     await dispatch(shipPlaced(ship));
 
-    return [nextShip, id];
+    return [nextShip, boardId];
   }
 );
 
-const prepareNextShipPlaced = (id, anchor, orientation) =>
-  nextShipPlaced({ id, anchor, orientation });
+const prepareNextShipPlaced = (boardId, anchor, orientation) =>
+  nextShipPlaced({ boardId, anchor, orientation });
 
 export { prepareNextShipPlaced as nextShipPlaced };
 
@@ -139,18 +146,18 @@ const placeShipOnBoard = (board, ship) => {
 const extraReducers = {
   [shipPlaced.fulfilled]: (state, action) => {
     const ship = action.payload;
-    const board = state.entities[ship.player].state;
+    const board = state.entities[ship.boardId].state;
 
     placeShipOnBoard(board, ship);
-    state.entities[ship.player].ships.push(ship.id);
+    state.entities[ship.boardId].ships.push(ship.id);
   },
   [attackReceived.fulfilled]: (state, action) => {
     const {
-      player,
+      boardId,
       coordinate: [x, y],
     } = action.payload;
 
-    const board = state.entities[player].state;
+    const board = state.entities[boardId].state;
 
     board[y][x].hit = true;
   },

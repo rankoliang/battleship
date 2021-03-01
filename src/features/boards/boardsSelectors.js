@@ -12,7 +12,7 @@ export const selectBoardIds = (state) => state.boards.ids;
 
 export const selectBoardById = createSelector(
   selectBoardEntityById,
-  ({ state }) => state
+  (entity) => entity.state
 );
 
 export const selectAllBoards = createSelector(
@@ -40,8 +40,8 @@ export const selectBoardPreviewCoordinates = createSelector(
 export const selectIsValidPlacement = (state, ship) => {
   if (ship === null || ship === undefined) return false;
 
-  const { player } = ship;
-  const board = selectBoardById(state, player);
+  const { boardId } = ship;
+  const board = selectBoardById(state, boardId);
 
   // true if none of the coordinates are out of bounds or occupied
   return !shipCoordinates(ship).some((coordinate) => {
@@ -66,7 +66,7 @@ export const makeSelectValidPlacements = (id, length) => (state) => {
       row.forEach((_, xIndex) => {
         const coordinate = [xIndex, yIndex];
         const ship = {
-          player: id,
+          boardId: id,
           length,
           orientation,
           anchor: coordinate,
@@ -109,4 +109,9 @@ export const selectShipsToBePlaced = createSelector(
       0
     );
   }
+);
+
+export const selectPlayerId = createSelector(
+  selectBoardEntityById,
+  ({ playerId }) => playerId
 );
