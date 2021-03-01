@@ -10,7 +10,6 @@ import {
   previewRemoved,
   selectBoardPreview,
   selectShipsToBePlaced,
-  selectOrientation,
   selectIsValidPlacement,
   selectNextShip,
 } from './boardsSlice';
@@ -96,15 +95,11 @@ const useShipPreview = (ship) => {
   );
 
   const setPreview = () => {
-    if (ship) {
-      dispatch(previewSet(ship));
-    }
+    ship && dispatch(previewSet(ship));
   };
 
   const removePreview = () => {
-    if (ship) {
-      dispatch(previewRemoved(id));
-    }
+    ship && dispatch(previewRemoved(id));
   };
 
   return { isPreviewValid, setPreview, removePreview };

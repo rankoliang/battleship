@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import PreviewableCoordinate from './PreviewableCoordinate';
+import classNames from 'classnames';
 import CoordinateContext, {
   withCoordinateContext,
 } from '../contexts/CoordinateContext';
@@ -7,12 +8,25 @@ import CoordinateContext, {
 const InteractableCoordinate = () => {
   const APIS = useContext(CoordinateContext);
 
-  const { isValidPlacement, placeShip } = APIS.ship;
+  const {
+    states: { occupied },
+  } = APIS.coordinate;
+  const { ship, isValidPlacement, placeShip } = APIS.ship;
 
-  if (isValidPlacement) {
-    return <PreviewableCoordinate onClick={placeShip} />;
+  if (ship) {
+    if (isValidPlacement) {
+      return <PreviewableCoordinate onClick={placeShip} />;
+    } else {
+      return <PreviewableCoordinate tabIndex="-1" />;
+    }
   } else {
-    return <PreviewableCoordinate tabIndex="-1" />;
+    return (
+      <button
+        className={classNames('coordinate', {
+          coordinate__occupied: occupied,
+        })}
+      />
+    );
   }
 };
 
