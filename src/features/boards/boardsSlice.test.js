@@ -7,7 +7,6 @@ import reducer, {
   previewRemoved,
   orientationUpdated,
   nextShipPlaced,
-  phaseAdvanced,
   selectOrientation,
   selectBoardById,
   selectAllBoards,
@@ -18,7 +17,6 @@ import reducer, {
   selectShipsToBePlaced,
   selectNextShip,
   makeSelectValidPlacements,
-  selectPhase,
 } from './boardsSlice';
 import shipsReducer, {
   selectShipTotal,
@@ -389,7 +387,7 @@ describe('boardsSlice', () => {
     });
 
     it('decrements the quantity by 1', async () => {
-      const { name, length, quantity } = selectNextShip(store.getState(), 1);
+      const { name, quantity } = selectNextShip(store.getState(), 1);
 
       expect(quantity).toEqual(1);
 
@@ -409,27 +407,13 @@ describe('boardsSlice', () => {
     });
 
     describe('when there are no next ships remaining', () => {
-      it('updates the nextShip', async () => {
+      it('updates the nextShip to null', async () => {
         while (selectShipsToBePlaced(store.getState(), 1) > 0) {
           await store.dispatch(nextShipPlaced(1, [0, 0], 0));
         }
 
         expect(selectNextShip(store.getState(), 1)).toBe(null);
       });
-    });
-  });
-
-  describe('selectPhase', () => {
-    it('returns the current phase', () => {
-      expect(selectPhase(store.getState(), 1)).toBe('placement');
-    });
-  });
-
-  describe('phaseAdvanced', () => {
-    it('advances to the next phase', () => {
-      store.dispatch(phaseAdvanced(1));
-
-      expect(selectPhase(store.getState(), 1)).toBe('started');
     });
   });
 });

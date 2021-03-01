@@ -23,7 +23,6 @@ const boardFactory = ({ player, size = 10 }) => {
       Destroyer: { name: 'Destroyer', length: 2, quantity: 1 },
     },
     selectedShip: 'Carrier',
-    phases: ['placement', 'started', 'ended'],
   };
 };
 

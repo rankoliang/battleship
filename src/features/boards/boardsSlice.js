@@ -21,7 +21,6 @@ export const {
   previewSet,
   previewRemoved,
   orientationUpdated,
-  phaseAdvanced,
 } = boardsSlice.actions;
 
 export * from './boardsThunks';
