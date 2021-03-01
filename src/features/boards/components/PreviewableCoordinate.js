@@ -1,11 +1,14 @@
+import { useContext } from 'react';
 import classNames from 'classnames';
+import CoordinateContext from '../contexts/CoordinateContext';
 
-const PreviewableCoordinate = ({ APIS, ...props }) => {
-  const {
-    states: { occupied, previewing },
-  } = APIS.coordinate;
+const PreviewableCoordinate = ({ ...props }) => {
+  const APIS = useContext(CoordinateContext);
+  const { states } = APIS.coordinate;
+  const { occupied, previewing } = states;
   const { isValidPlacement } = APIS.ship;
   const { isPreviewValid, setPreview, removePreview } = APIS.preview;
+
   return (
     <button
       onFocus={setPreview}

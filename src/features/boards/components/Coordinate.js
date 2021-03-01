@@ -4,9 +4,8 @@ import classNames from 'classnames';
 import InteractableCoordinate from './InteractableCoordinate';
 import './Coordinate.css';
 
-const Coordinate = (coordinateAPI) => {
+const Coordinate = ({ coordinate, states }) => {
   const player = useContext(PlayerContext);
-  const { states } = coordinateAPI;
 
   if (player.computer) {
     return (
@@ -18,7 +17,7 @@ const Coordinate = (coordinateAPI) => {
       />
     );
   } else {
-    return <InteractableCoordinate coordinateAPI={coordinateAPI} />;
+    return <InteractableCoordinate coordinateAPI={{ coordinate, states }} />;
   }
 };
 
