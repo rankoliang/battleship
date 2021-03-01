@@ -137,7 +137,8 @@ describe('shipsSlice', () => {
         const shipId = nanoid();
         store.dispatch(
           shipCreated({
-            player: 1,
+            boardId: 1,
+            playerId: 1,
             id: shipId,
             length: 3,
             orientation: 90,
@@ -158,7 +159,8 @@ describe('shipsSlice', () => {
         const shipId = nanoid();
         store.dispatch(
           shipCreated({
-            player: 1,
+            boardId: 1,
+            playerId: 1,
             id: shipId,
             length: 3,
             orientation: 180,

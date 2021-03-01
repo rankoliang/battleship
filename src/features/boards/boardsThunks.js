@@ -76,6 +76,7 @@ const nextShipPlaced = createThunk(
   ) => {
     const nextShip = selectNextShip(getState(), boardId);
     const playerId = selectPlayerId(getState(), boardId);
+
     if (nextShip.quantity <= 0) {
       return rejectWithValue('Not enough ships remaining');
     }

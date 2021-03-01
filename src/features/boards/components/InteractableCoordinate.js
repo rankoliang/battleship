@@ -13,20 +13,10 @@ const InteractableCoordinate = () => {
   } = APIS.coordinate;
   const { ship, isValidPlacement, placeShip } = APIS.ship;
 
-  if (ship) {
-    if (isValidPlacement) {
-      return <PreviewableCoordinate onClick={placeShip} />;
-    } else {
-      return <PreviewableCoordinate tabIndex="-1" />;
-    }
+  if (isValidPlacement) {
+    return <PreviewableCoordinate onClick={placeShip} />;
   } else {
-    return (
-      <button
-        className={classNames('coordinate', {
-          coordinate__occupied: occupied,
-        })}
-      />
-    );
+    return <PreviewableCoordinate tabIndex="-1" />;
   }
 };
 
