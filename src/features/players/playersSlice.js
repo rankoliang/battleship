@@ -17,7 +17,7 @@ export const playersSlice = createSlice({
         name: 'Player 2',
         computer: true,
         opponentId: 1,
-        boardId: 1,
+        boardId: 2,
       },
     },
   },

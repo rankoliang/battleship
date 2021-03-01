@@ -49,7 +49,7 @@ export { prepareAttackReceived as attackReceived };
 
 export const randomShipsPlaced = createThunk(
   'boards/randomShipsPlacedStatus',
-  async ({ player: { boardId } }, { dispatch, getState }) => {
+  async ({ boardId }, { dispatch, getState }) => {
     while (selectShipsToBePlaced(getState(), boardId) > 0) {
       const nextShip = selectNextShip(getState(), boardId);
       const [anchor, orientation] = randomPlacement(
@@ -62,8 +62,8 @@ export const randomShipsPlaced = createThunk(
     }
   },
   {
-    condition: ({ player: { id } }, { getState }) => {
-      return selectShipsToBePlaced(getState(), id) > 0;
+    condition: ({ boardId }, { getState }) => {
+      return selectShipsToBePlaced(getState(), boardId) > 0;
     },
   }
 );
