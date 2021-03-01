@@ -10,9 +10,11 @@ function App() {
   return (
     <div className="App">
       <h1>Battleship</h1>
-      {players.map((player) => (
-        <Board player={player} key={player.id} />
-      ))}
+      <div className="boards">
+        {players.map((player) => (
+          <Board player={player} key={player.id} />
+        ))}
+      </div>
     </div>
   );
 }

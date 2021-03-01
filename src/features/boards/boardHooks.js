@@ -20,11 +20,13 @@ const useRandomPlacement = (player, condition) => {
     selectShipsToBePlaced(state, player.id)
   );
 
+  /* eslint-disable */
   useEffect(() => {
     if (shipsRemaining > 0 && condition) {
       dispatch(randomShipsPlaced({ player }));
     }
   }, [dispatch, condition, player]);
+  /* eslint-enable */
 };
 
 const useRotation = (player) => {
