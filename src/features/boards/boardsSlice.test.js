@@ -7,6 +7,7 @@ import reducer, {
   previewRemoved,
   orientationUpdated,
   nextShipPlaced,
+  phaseAdvanced,
   selectOrientation,
   selectBoardById,
   selectAllBoards,
@@ -15,8 +16,9 @@ import reducer, {
   selectBoardPreview,
   selectRemainingShips,
   selectShipsToBePlaced,
-  makeSelectValidPlacements,
   selectNextShip,
+  makeSelectValidPlacements,
+  selectPhase,
 } from './boardsSlice';
 import shipsReducer, {
   selectShipTotal,
@@ -414,6 +416,20 @@ describe('boardsSlice', () => {
 
         expect(selectNextShip(store.getState(), 1)).toBe(null);
       });
+    });
+  });
+
+  describe('selectPhase', () => {
+    it('returns the current phase', () => {
+      expect(selectPhase(store.getState(), 1)).toBe('placement');
+    });
+  });
+
+  describe('phaseAdvanced', () => {
+    it('advances to the next phase', () => {
+      store.dispatch(phaseAdvanced(1));
+
+      expect(selectPhase(store.getState(), 1)).toBe('started');
     });
   });
 });

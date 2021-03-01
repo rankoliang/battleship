@@ -110,3 +110,8 @@ export const selectShipsToBePlaced = createSelector(
     );
   }
 );
+
+export const selectPhase = createSelector(
+  selectBoardEntityById,
+  ({ phases }) => phases[0]
+);

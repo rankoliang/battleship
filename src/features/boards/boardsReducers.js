@@ -72,6 +72,12 @@ const reducer = {
 
     boardEntity.orientation = nextRotation(orientation);
   },
+  phaseAdvanced: (state, action) => {
+    const id = action.payload;
+    const phases = state.entities[id].phases;
+
+    phases.shift();
+  },
 };
 
 export default reducer;
