@@ -100,6 +100,8 @@ const updateNextSelectedShip = (state, id) => {
 
   if (availableShips.length === 0) {
     state.entities[id].selectedShip = null;
+    state.entities[id].preview = null;
+    state.entities[id].previewCoordinates = null;
   } else {
     state.entities[id].selectedShip = availableShips[0].name;
   }
