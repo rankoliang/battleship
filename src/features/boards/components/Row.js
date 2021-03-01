@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Element from './Element';
+import Coordinate from './Coordinate';
 
 const StyledRow = styled.div`
   display: flex;
@@ -11,7 +11,11 @@ const Row = ({ row, yIndex }) => {
   return (
     <StyledRow>
       {row.map((states, xIndex) => (
-        <Element coordinate={[xIndex, yIndex]} states={states} key={xIndex} />
+        <Coordinate
+          coordinate={[xIndex, yIndex]}
+          states={states}
+          key={xIndex}
+        />
       ))}
     </StyledRow>
   );

@@ -1,30 +1,30 @@
 import { useContext } from 'react';
 import { useShip, useShipPreview } from '../boardHooks';
 import PlayerContext from '../../players/PlayerContext';
-import './Element.css';
+import './Coordinate.css';
 import classNames from 'classnames';
 
-const Element = ({ coordinate, states }) => {
+const Coordinate = ({ coordinate, states }) => {
   const player = useContext(PlayerContext);
   const { ship, isValidPlacement, placeShip } = useShip(player, coordinate);
 
-  const className = classNames('element', {
-    element__occupied: states.occupied,
-    'element--valid-placement': isValidPlacement,
+  const className = classNames('coordinate', {
+    coordinate__occupied: states.occupied,
+    'coordinate--valid-placement': isValidPlacement,
   });
 
   if (player.computer) {
     return (
       <button
-        className={classNames('element', {
-          element__occupied: states.occupied,
+        className={classNames('coordinate', {
+          coordinate__occupied: states.occupied,
         })}
         tabIndex="-1"
       />
     );
   } else if (isValidPlacement) {
     return (
-      <PreviewableElement
+      <PreviewableCoordinate
         className={className}
         states={states}
         ship={ship}
@@ -33,7 +33,7 @@ const Element = ({ coordinate, states }) => {
     );
   } else {
     return (
-      <PreviewableElement
+      <PreviewableCoordinate
         className={className}
         states={states}
         ship={ship}
@@ -43,7 +43,7 @@ const Element = ({ coordinate, states }) => {
   }
 };
 
-const PreviewableElement = ({ states, ship, className, ...props }) => {
+const PreviewableCoordinate = ({ states, ship, className, ...props }) => {
   const { isPreviewValid, setPreview, removePreview } = useShipPreview(ship);
   return (
     <button
@@ -52,12 +52,12 @@ const PreviewableElement = ({ states, ship, className, ...props }) => {
       onMouseEnter={setPreview}
       onMouseLeave={removePreview}
       className={classNames(className, {
-        element__previewing: states.previewing,
-        'element__previewing--invalid': states.previewing && !isPreviewValid,
+        coordinate__previewing: states.previewing,
+        'coordinate__previewing--invalid': states.previewing && !isPreviewValid,
       })}
       {...props}
     />
   );
 };
 
-export default Element;
+export default Coordinate;
