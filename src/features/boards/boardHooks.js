@@ -6,12 +6,13 @@ import {
   randomShipsPlaced,
   orientationUpdated,
   previewSet,
-  shipPlaced,
+  nextShipPlaced,
   previewRemoved,
   selectBoardPreview,
   selectShipsToBePlaced,
   selectOrientation,
   selectIsValidPlacement,
+  selectNextShip,
 } from './boardsSlice';
 
 const useRandomPlacement = (player, condition) => {
@@ -51,30 +52,30 @@ const useRotation = (player) => {
   };
 };
 
-const useShip = (player, [xIndex, yIndex]) => {
+const useShip = ({ id }, [xIndex, yIndex]) => {
   const dispatch = useDispatch();
 
-  const shipOrientation = useSelector((state) =>
-    selectOrientation(state, player.id)
-  );
+  const nextShip = useSelector((state) => selectNextShip(state, id));
 
   const [ship, setShip] = useState({
+    ...nextShip,
     id: nanoid(),
-    player: player.id,
-    length: 5,
-    orientation: shipOrientation,
+    player: id,
     anchor: [xIndex, yIndex],
   });
 
   useEffect(() => {
-    setShip((state) => ({
-      ...state,
-      orientation: shipOrientation,
-    }));
-  }, [shipOrientation]);
+    if (nextShip) {
+      setShip((state) => ({ ...state, ...nextShip }));
+    } else {
+      setShip(null);
+    }
+  }, [nextShip]);
 
   const placeShip = () => {
-    dispatch(shipPlaced(ship));
+    if (ship) {
+      dispatch(nextShipPlaced(id, ship.anchor, ship.orientation));
+    }
   };
 
   const isValidPlacement = useSelector((state) =>
@@ -86,21 +87,24 @@ const useShip = (player, [xIndex, yIndex]) => {
 
 const useShipPreview = (ship) => {
   const dispatch = useDispatch();
+  const id = ship?.player;
 
-  const previewShip = useSelector((state) =>
-    selectBoardPreview(state, ship.player)
-  );
+  const previewShip = useSelector((state) => selectBoardPreview(state, id));
 
   const isPreviewValid = useSelector((state) =>
     selectIsValidPlacement(state, previewShip)
   );
 
   const setPreview = () => {
-    dispatch(previewSet(ship));
+    if (ship) {
+      dispatch(previewSet(ship));
+    }
   };
 
   const removePreview = () => {
-    dispatch(previewRemoved(ship.player));
+    if (ship) {
+      dispatch(previewRemoved(id));
+    }
   };
 
   return { isPreviewValid, setPreview, removePreview };

@@ -5,7 +5,8 @@ import { outOfBounds } from '../../helpers';
 
 const selectBoardEntities = (state) => state.boards.entities;
 
-const selectBoardEntityById = (state, id) => state.boards.entities[id];
+const selectBoardEntityById = (state, id) =>
+  id ? state.boards.entities[id] : undefined;
 
 export const selectBoardIds = (state) => state.boards.ids;
 
@@ -28,16 +29,16 @@ export const selectBoardShips = (state, id) => {
 
 export const selectBoardPreview = createSelector(
   selectBoardEntityById,
-  (boardEntity) => boardEntity.preview
+  (boardEntity) => boardEntity?.preview
 );
 
 export const selectBoardPreviewCoordinates = createSelector(
   selectBoardEntityById,
-  (boardEntity) => boardEntity.previewCoordinates
+  (boardEntity) => boardEntity?.previewCoordinates
 );
 
 export const selectIsValidPlacement = (state, ship) => {
-  if (ship === null) return false;
+  if (ship === null || ship === undefined) return false;
 
   const { player } = ship;
   const board = selectBoardById(state, player);
@@ -51,7 +52,7 @@ export const selectIsValidPlacement = (state, ship) => {
 
 export const selectOrientation = createSelector(
   selectBoardEntityById,
-  (boardEntity) => boardEntity.orientation
+  (boardEntity) => boardEntity?.orientation
 );
 
 export const makeSelectValidPlacements = (id, length) => (state) => {
@@ -83,11 +84,12 @@ export const makeSelectValidPlacements = (id, length) => (state) => {
 
 export const selectNextShip = createSelector(
   selectBoardEntityById,
-  ({ selectedShip, shipsToPlace }) => {
+  selectOrientation,
+  ({ selectedShip, shipsToPlace }, orientation) => {
     if (selectedShip === null) {
       return null;
     } else {
-      return shipsToPlace[selectedShip];
+      return { ...shipsToPlace[selectedShip], orientation };
     }
   }
 );
