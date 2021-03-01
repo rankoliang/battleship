@@ -111,6 +111,21 @@ export const selectShipsToBePlaced = createSelector(
   }
 );
 
+const objectSum = (obj, callback) => {
+  return Object.values(obj).reduce((sum, value) => {
+    return sum + callback(value);
+  }, 0);
+};
+
+export const selectAllShipsRemianing = createSelector(
+  selectBoardEntities,
+  (entities) => {
+    return objectSum(entities, ({ shipsToPlace }) =>
+      objectSum(shipsToPlace, ({ quantity }) => quantity)
+    );
+  }
+);
+
 export const selectPlayerId = createSelector(
   selectBoardEntityById,
   ({ playerId }) => playerId

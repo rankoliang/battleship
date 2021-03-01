@@ -3,16 +3,20 @@ import reducer, {
   attackReceived,
   shipPlaced,
   nextShipPlaced,
+  previewSet,
   selectBoardById,
   selectBoardShips,
   selectRemainingShips,
   selectShipsToBePlaced,
   selectNextShip,
+  selectBoardPreview,
+  selectAllShipsRemianing,
 } from './boardsSlice';
 import shipsReducer, {
   selectShipTotal,
   selectShipById,
 } from '../ships/shipsSlice';
+import gameReducer, { selectPhase } from '../game/gameSlice';
 import { shipCoordinates } from '../ships/shipFactory';
 import playersReducer from '../players/playersSlice';
 
@@ -24,9 +28,11 @@ describe('boardsThunks', () => {
         boards: reducer,
         ships: shipsReducer,
         players: playersReducer,
+        game: gameReducer,
       },
     });
   });
+
   describe('attackReceived', () => {
     it('sets the tile to hit', async () => {
       const ship = {
@@ -166,6 +172,45 @@ describe('boardsThunks', () => {
         }
 
         expect(selectNextShip(store.getState(), 1)).toBe(null);
+      });
+
+      it('updates the preview to null', async () => {
+        const ship = {
+          id: nanoid(),
+          boardId: 1,
+          playerId: 1,
+          length: 3,
+          orientation: 0,
+          anchor: [0, 0],
+        };
+
+        store.dispatch(previewSet(ship));
+
+        while (selectShipsToBePlaced(store.getState(), 1) > 0) {
+          await store.dispatch(nextShipPlaced(1, [0, 0], 0));
+        }
+
+        expect(selectBoardPreview(store.getState(), 1)).toBe(null);
+      });
+
+      it('sets the phase to started', async () => {
+        const ship = {
+          id: nanoid(),
+          boardId: 1,
+          playerId: 1,
+          length: 3,
+          orientation: 0,
+          anchor: [0, 0],
+        };
+
+        expect(selectPhase(store.getState())).toBe('placement');
+
+        while (selectAllShipsRemianing(store.getState()) > 0) {
+          await store.dispatch(nextShipPlaced(1, [0, 0], 0));
+          await store.dispatch(nextShipPlaced(2, [0, 0], 0));
+        }
+
+        expect(selectPhase(store.getState())).toBe('started');
       });
     });
   });

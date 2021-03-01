@@ -5,10 +5,12 @@ import {
   selectBoardById,
   selectNextShip,
   selectShipsToBePlaced,
+  selectAllShipsRemianing,
   selectPlayerId,
 } from './boardsSlice';
 import { shipCoordinates } from '../ships/shipFactory';
 import { shipCreated, shipHit } from '../ships/shipsSlice';
+import { phaseAdvanced } from '../game/gameSlice';
 import shuffle from 'shuffle-array';
 import { nanoid } from '@reduxjs/toolkit';
 import { outOfBounds } from '../../helpers';
@@ -81,6 +83,8 @@ const nextShipPlaced = createThunk(
       return rejectWithValue('Not enough ships remaining');
     }
 
+    const shipsRemaining = selectAllShipsRemianing(getState()) - 1;
+
     const ship = {
       id: nanoid(),
       length: nextShip.length,
@@ -91,6 +95,10 @@ const nextShipPlaced = createThunk(
     };
 
     await dispatch(shipPlaced(ship));
+
+    if (shipsRemaining === 0) {
+      dispatch(phaseAdvanced());
+    }
 
     return [nextShip, boardId];
   }
