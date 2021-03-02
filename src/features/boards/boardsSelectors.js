@@ -117,7 +117,7 @@ const objectSum = (obj, callback) => {
   }, 0);
 };
 
-export const selectAllShipsRemianing = createSelector(
+export const selectAllShipsLeftToBePlaced = createSelector(
   selectBoardEntities,
   (entities) => {
     return objectSum(entities, ({ shipsToPlace }) =>

@@ -5,7 +5,7 @@ import {
   selectBoardById,
   selectNextShip,
   selectShipsToBePlaced,
-  selectAllShipsRemianing,
+  selectAllShipsLeftToBePlaced,
   selectPlayerId,
 } from './boardsSlice';
 import { shipCoordinates } from '../ships/shipFactory';
@@ -83,7 +83,7 @@ const nextShipPlaced = createThunk(
       return rejectWithValue('Not enough ships remaining');
     }
 
-    const shipsRemaining = selectAllShipsRemianing(getState()) - 1;
+    const shipsRemaining = selectAllShipsLeftToBePlaced(getState()) - 1;
 
     const ship = {
       id: nanoid(),
