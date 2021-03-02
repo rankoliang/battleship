@@ -4,7 +4,7 @@ import {
   createSelector,
 } from '@reduxjs/toolkit';
 import { updateArrayAtIndex } from '../../helpers';
-import shipFactory, { shipCoordinates } from './shipFactory';
+import shipFactory, { shipCoordinates, shipIsSunk } from './shipFactory';
 
 const shipsAdapter = createEntityAdapter();
 
@@ -50,13 +50,21 @@ export const {
   selectTotal: selectShipTotal,
 } = globalizedSelectors;
 
-export const selectShipIsSunk = createSelector(selectShipById, (ship) => {
-  return ship.hit.every((location) => location === true);
-});
+export const selectShipIsSunk = createSelector(selectShipById, shipIsSunk);
 
 export const selectShipCoordinates = createSelector(
   selectShipById,
   shipCoordinates
+);
+
+export const selectShipsLeftForPlayer = createSelector(
+  selectShips,
+  (_, playerId) => playerId,
+  (ships, playerId) => {
+    return ships.filter(
+      (ship) => ship.playerId === playerId && !shipIsSunk(ship)
+    ).length;
+  }
 );
 
 export default shipsSlice.reducer;

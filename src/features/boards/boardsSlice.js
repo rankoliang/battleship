@@ -8,8 +8,8 @@ export const boardsSlice = createSlice({
   initialState: {
     ids: [1, 2],
     entities: {
-      1: boardFactory({ player: 1, size: 10 }),
-      2: boardFactory({ player: 2, size: 10 }),
+      1: boardFactory({ id: 1, playerId: 1, size: 10 }),
+      2: boardFactory({ id: 1, playerId: 2, size: 10 }),
     },
   },
   reducers,

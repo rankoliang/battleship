@@ -4,6 +4,7 @@ import Row from './components/Row';
 import styled from 'styled-components';
 import PlayerContext from '../players/PlayerContext';
 import { useRandomPlacement, useRotation } from './boardHooks';
+import { selectShipsLeftForPlayer, selectShips } from '../ships/shipsSlice';
 import useKeypress from 'react-use-keypress';
 
 const StyledBoard = styled.div`
@@ -23,6 +24,11 @@ const Container = styled.div`
 
 const Board = ({ player }) => {
   const board = useSelector((state) => selectBoardById(state, player.boardId));
+  // const phase = useSelector(selectPhase);
+  const shipsRemaining = useSelector((state) =>
+    selectShipsLeftForPlayer(state, player.id)
+  );
+  const ships = useSelector(selectShips);
 
   useRandomPlacement(player.boardId, player.computer);
 
@@ -34,7 +40,7 @@ const Board = ({ player }) => {
     <PlayerContext.Provider value={player}>
       <Container>
         <h2>{player.name}</h2>
-        <p>Ships Remaining: </p>
+        <p>Ships Remaining: {shipsRemaining}</p>
         <StyledBoard tabIndex={player.computer ? '-1' : '0'}>
           {board.map((row, yIndex) => (
             <Row row={row} yIndex={yIndex} key={yIndex} />

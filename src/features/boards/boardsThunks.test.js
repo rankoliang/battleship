@@ -10,7 +10,7 @@ import reducer, {
   selectShipsToBePlaced,
   selectNextShip,
   selectBoardPreview,
-  selectAllShipsRemianing,
+  selectAllShipsLeftToBePlaced,
 } from './boardsSlice';
 import shipsReducer, {
   selectShipTotal,
@@ -194,18 +194,9 @@ describe('boardsThunks', () => {
       });
 
       it('sets the phase to started', async () => {
-        const ship = {
-          id: nanoid(),
-          boardId: 1,
-          playerId: 1,
-          length: 3,
-          orientation: 0,
-          anchor: [0, 0],
-        };
-
         expect(selectPhase(store.getState())).toBe('placement');
 
-        while (selectAllShipsRemianing(store.getState()) > 0) {
+        while (selectAllShipsLeftToBePlaced(store.getState()) > 0) {
           await store.dispatch(nextShipPlaced(1, [0, 0], 0));
           await store.dispatch(nextShipPlaced(2, [0, 0], 0));
         }

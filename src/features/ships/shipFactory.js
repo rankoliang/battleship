@@ -41,3 +41,7 @@ export const shipCoordinates = (ship) => {
 export const nextRotation = (orientation, offset = 90) => {
   return (orientation + offset) % 360;
 };
+
+export const shipIsSunk = (ship) => {
+  return ship.hit.every((location) => location === true);
+};
