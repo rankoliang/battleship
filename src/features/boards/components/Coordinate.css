@@ -25,3 +25,15 @@
 .coordinate--valid-placement {
   cursor: pointer;
 }
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.coordinate__hover:hover {
+  background-color: lightgray;
+}
+
+.coordinate__hit {
+  border: 2px solid red;
+}

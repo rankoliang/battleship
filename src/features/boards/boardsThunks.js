@@ -34,13 +34,13 @@ const attackReceived = createThunk(
     { dispatch, getState, rejectWithValue }
   ) => {
     const board = selectBoardById(getState(), boardId);
-    if (outOfBounds(coordinate, board) || !board[y][x].occupied) {
-      return rejectWithValue(`No ship on coordinates (${x}, ${y})`);
-    } else {
+    if (outOfBounds(coordinate, board)) {
+      return rejectWithValue(`The coordinates (${x}, ${y}) are out of bounds`);
+    } else if (board[y][x].occupied) {
       const { shipId, hitIndex } = board[y][x];
       dispatch(shipHit(shipId, hitIndex));
-      return { boardId, coordinate };
     }
+    return { boardId, coordinate };
   }
 );
 
