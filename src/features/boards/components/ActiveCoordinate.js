@@ -1,17 +1,16 @@
 import { useContext, useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { attackReceived } from '../boardsSlice';
+import { useSelector } from 'react-redux';
 import { shipIsSunk } from '../../ships/shipFactory';
 import { selectShipById } from '../../ships/shipsSlice';
 import PlayerContext from '../../players/PlayerContext';
 import classNames from 'classnames';
+import ActiveComputerCoordinate from './ActiveComputerCoordinate';
 
-const ActiveCoordinate = ({
-  states: { shipId, hit, occupied },
-  coordinate,
-}) => {
-  const dispatch = useDispatch();
-
+const ActiveCoordinate = (coordinateAPI) => {
+  const {
+    states: { shipId, occupied },
+  } = coordinateAPI;
+  const player = useContext(PlayerContext);
   const ship = useSelector((state) => selectShipById(state, shipId));
 
   const [sunk, setSunk] = useState(false);
@@ -22,36 +21,14 @@ const ActiveCoordinate = ({
     }
   }, [ship]);
 
-  const player = useContext(PlayerContext);
-  const attack = () => {
-    dispatch(attackReceived(player.boardId, coordinate));
-  };
-
   if (player.computer) {
-    if (hit) {
-      return (
-        <button
-          className={classNames('coordinate', 'coordinate__hit', {
-            coordinate__occupied: occupied,
-            coordinate__sunk: sunk,
-          })}
-        >
-          {occupied}
-        </button>
-      );
-    } else {
-      return (
-        <button
-          onClick={attack}
-          className={classNames('coordinate', 'cursor-pointer', {
-            coordinate__hover: !occupied,
-          })}
-        />
-      );
-    }
+    return (
+      <ActiveComputerCoordinate coordinateAPI={coordinateAPI} sunk={sunk} />
+    );
   } else {
     return (
       <button
+        tabIndex="-1"
         className={classNames('coordinate', {
           coordinate__occupied: occupied,
         })}

@@ -30,7 +30,8 @@
   cursor: pointer;
 }
 
-.coordinate__hover:hover {
+.coordinate__hover:hover,
+.coordinate__hover:focus {
   background-color: lightgray;
 }
 

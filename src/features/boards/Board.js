@@ -43,7 +43,7 @@ const Board = ({ player }) => {
     if (phase === 'started' && shipsRemaining <= 0) {
       dispatch(phaseAdvanced());
     }
-  }, [phase, shipsRemaining]);
+  }, [dispatch, phase, shipsRemaining]);
 
   return (
     <PlayerContext.Provider value={player}>
