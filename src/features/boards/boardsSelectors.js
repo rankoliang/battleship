@@ -130,3 +130,16 @@ export const selectPlayerId = createSelector(
   selectBoardEntityById,
   ({ playerId }) => playerId
 );
+
+export const selectHittableCoordinates = createSelector(
+  selectBoardById,
+  (board) => {
+    return board.flatMap((row, yIndex) => {
+      return row.reduce(
+        (coordinates, { hit }, xIndex) =>
+          !hit ? coordinates.concat([[xIndex, yIndex]]) : coordinates,
+        []
+      );
+    });
+  }
+);

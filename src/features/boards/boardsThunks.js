@@ -10,7 +10,7 @@ import {
 } from './boardsSlice';
 import { shipCoordinates } from '../ships/shipFactory';
 import { shipCreated, shipHit } from '../ships/shipsSlice';
-import { phaseAdvanced } from '../game/gameSlice';
+import { phaseAdvanced, selectPhase } from '../game/gameSlice';
 import shuffle from 'shuffle-array';
 import { nanoid } from '@reduxjs/toolkit';
 import { outOfBounds } from '../../helpers';
@@ -34,6 +34,10 @@ const attackReceived = createThunk(
     { dispatch, getState, rejectWithValue }
   ) => {
     const board = selectBoardById(getState(), boardId);
+    if (selectPhase(getState()) !== 'started') {
+      return rejectWithValue(`The game is not in the started state!`);
+    }
+
     if (outOfBounds(coordinate, board)) {
       return rejectWithValue(`The coordinates (${x}, ${y}) are out of bounds`);
     } else if (board[y][x].occupied) {

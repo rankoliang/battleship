@@ -8,7 +8,7 @@ import ActiveComputerCoordinate from './ActiveComputerCoordinate';
 
 const ActiveCoordinate = (coordinateAPI) => {
   const {
-    states: { shipId, occupied },
+    states: { shipId, occupied, hit },
   } = coordinateAPI;
   const player = useContext(PlayerContext);
   const ship = useSelector((state) => selectShipById(state, shipId));
@@ -31,6 +31,8 @@ const ActiveCoordinate = (coordinateAPI) => {
         tabIndex="-1"
         className={classNames('coordinate', {
           coordinate__occupied: occupied,
+          coordinate__hit: hit,
+          coordinate__sunk: sunk,
         })}
       />
     );
