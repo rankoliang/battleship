@@ -37,3 +37,7 @@
 .coordinate__hit {
   border: 2px solid red;
 }
+
+.coordinate__sunk {
+  background-color: red;
+}

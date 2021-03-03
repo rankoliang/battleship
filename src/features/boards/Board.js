@@ -1,10 +1,11 @@
+import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { selectBoardById } from './boardsSlice';
 import Row from './components/Row';
 import styled from 'styled-components';
 import PlayerContext from '../players/PlayerContext';
 import { useRandomPlacement, useRotation } from './boardHooks';
-import { selectShipsLeftForPlayer, selectShips } from '../ships/shipsSlice';
+import { makeSelectShipsLeftForPlayer } from '../ships/shipsSlice';
 import useKeypress from 'react-use-keypress';
 
 const StyledBoard = styled.div`
@@ -25,10 +26,12 @@ const Container = styled.div`
 const Board = ({ player }) => {
   const board = useSelector((state) => selectBoardById(state, player.boardId));
   // const phase = useSelector(selectPhase);
-  const shipsRemaining = useSelector((state) =>
-    selectShipsLeftForPlayer(state, player.id)
+  const selectShipsLeftForPlayer = useMemo(
+    () => makeSelectShipsLeftForPlayer(player.id),
+    [player]
   );
-  const ships = useSelector(selectShips);
+
+  const shipsRemaining = useSelector(selectShipsLeftForPlayer);
 
   useRandomPlacement(player.boardId, player.computer);
 

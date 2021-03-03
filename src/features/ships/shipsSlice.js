@@ -57,14 +57,11 @@ export const selectShipCoordinates = createSelector(
   shipCoordinates
 );
 
-export const selectShipsLeftForPlayer = createSelector(
-  selectShips,
-  (_, playerId) => playerId,
-  (ships, playerId) => {
+export const makeSelectShipsLeftForPlayer = (playerId) =>
+  createSelector(selectShips, (ships) => {
     return ships.filter(
       (ship) => ship.playerId === playerId && !shipIsSunk(ship)
     ).length;
-  }
-);
+  });
 
 export default shipsSlice.reducer;
