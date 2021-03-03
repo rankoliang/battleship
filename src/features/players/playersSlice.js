@@ -41,7 +41,15 @@ export const playersSlice = createSlice({
 export const { turnEnded, nameChanged } = playersSlice.actions;
 
 export const selectPlayers = (state) => Object.values(state.players.entities);
+
 export const selectCurrentPlayer = (state) =>
   state.players.entities[state.players.current];
+
+export const selectPlayerById = (state, id) => state.players.entities[id];
+
+export const selectOpponent = (state, id) => {
+  const player = state.players.entities[id];
+  return state.players.entities[player.opponentId];
+};
 
 export default playersSlice.reducer;

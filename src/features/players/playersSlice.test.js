@@ -4,7 +4,9 @@ import reducer, {
   nameChanged,
   turnEnded,
   selectPlayers,
+  selectPlayerById,
   selectCurrentPlayer,
+  selectOpponent,
 } from './playersSlice';
 
 describe('playersSlice', () => {
@@ -48,6 +50,14 @@ describe('playersSlice', () => {
       expect(selectCurrentPlayer(store.getState())).not.toBe(initialPlayer);
 
       expect(selectCurrentPlayer(store.getState())).toBe(nextPlayer);
+    });
+  });
+
+  describe('selectOpponent', () => {
+    it('selects the opponent', () => {
+      expect(selectOpponent(store.getState(), 1)).toBe(
+        selectPlayerById(store.getState(), 2)
+      );
     });
   });
 });
