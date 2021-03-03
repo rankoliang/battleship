@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import PlayerContext from '../players/PlayerContext';
 import { useRandomPlacement, useRotation } from './boardHooks';
 import { makeSelectShipsLeftForPlayer } from '../ships/shipsSlice';
-import useKeypress from 'react-use-keypress';
 
 const StyledBoard = styled.div`
   display: flex;
@@ -25,7 +24,6 @@ const Container = styled.div`
 
 const Board = ({ player }) => {
   const board = useSelector((state) => selectBoardById(state, player.boardId));
-  // const phase = useSelector(selectPhase);
   const selectShipsLeftForPlayer = useMemo(
     () => makeSelectShipsLeftForPlayer(player.id),
     [player]
@@ -35,9 +33,7 @@ const Board = ({ player }) => {
 
   useRandomPlacement(player.boardId, player.computer);
 
-  const rotate = useRotation(player.boardId);
-
-  useKeypress('r', () => rotate());
+  useRotation(player.boardId, 'r');
 
   return (
     <PlayerContext.Provider value={player}>

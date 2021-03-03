@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { nextRotation } from '../ships/shipFactory';
 import { nanoid } from '@reduxjs/toolkit';
+import useKeypress from 'react-use-keypress';
+import { selectPhase } from '../game/gameSlice';
 import {
   randomShipsPlaced,
   orientationUpdated,
@@ -29,8 +31,9 @@ const useRandomPlacement = (boardId, condition) => {
   /* eslint-enable */
 };
 
-const useRotation = (boardId) => {
+const useRotation = (boardId, key = 'r') => {
   const dispatch = useDispatch();
+  const phase = useSelector(selectPhase);
   const currentPreview = useSelector((state) =>
     selectBoardPreview(state, boardId)
   );
@@ -45,12 +48,14 @@ const useRotation = (boardId) => {
     nextPreview = currentPreview;
   }
 
-  return function rotate() {
-    if (nextPreview) {
+  const rotate = () => {
+    if (phase === 'placement' && nextPreview) {
       dispatch(orientationUpdated(1));
       dispatch(previewSet(nextPreview));
     }
   };
+
+  useKeypress(key, rotate);
 };
 
 const useShip = ({ boardId, id: playerId }, [xIndex, yIndex]) => {
