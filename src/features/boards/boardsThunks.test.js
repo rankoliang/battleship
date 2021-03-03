@@ -16,7 +16,7 @@ import shipsReducer, {
   selectShipTotal,
   selectShipById,
 } from '../ships/shipsSlice';
-import gameReducer, { phaseAdvanced, selectPhase } from '../game/gameSlice';
+import gameReducer, { selectPhase } from '../game/gameSlice';
 import { shipCoordinates } from '../ships/shipFactory';
 import playersReducer from '../players/playersSlice';
 
@@ -34,12 +34,9 @@ describe('boardsThunks', () => {
   });
 
   describe('attackReceived', () => {
-    beforeEach(() => {
-      store.dispatch(phaseAdvanced());
-    });
-
-    it('sets the tile to hit', async () => {
-      const ship = {
+    let ship;
+    beforeEach(async () => {
+      ship = {
         id: nanoid(),
         boardId: 1,
         playerId: 1,
@@ -49,50 +46,37 @@ describe('boardsThunks', () => {
       };
 
       await store.dispatch(shipPlaced(ship));
-
-      expect(selectBoardById(store.getState(), 1)[0][0].hit).toBe(false);
-
-      await store.dispatch(attackReceived(1, [0, 0]));
-
-      expect(selectBoardById(store.getState(), 1)[0][0].hit).toBe(true);
     });
 
-    it('hits the ship', async () => {
-      const ship = {
-        id: nanoid(),
-        boardId: 1,
-        playerId: 1,
-        length: 3,
-        orientation: 0,
-        anchor: [0, 0],
-      };
-
-      await store.dispatch(shipPlaced(ship));
-
-      expect(selectShipById(store.getState(), ship.id).hit[0]).toBe(false);
-
-      await store.dispatch(attackReceived(1, [0, 0]));
-
-      expect(selectShipById(store.getState(), ship.id).hit[0]).toBe(true);
-    });
-
-    describe('when it is not in the started state', () => {
-      it('is rejected', async () => {
-        store.dispatch(phaseAdvanced());
-
-        const ship = {
+    describe('when the opponent has ships left', () => {
+      beforeEach(async () => {
+        const opponentShip = {
           id: nanoid(),
-          boardId: 1,
-          playerId: 1,
+          boardId: 2,
+          playerId: 2,
           length: 3,
           orientation: 0,
           anchor: [0, 0],
         };
 
-        await store.dispatch(shipPlaced(ship));
+        await store.dispatch(shipPlaced(opponentShip));
+      });
 
-        expect(selectBoardById(store.getState(), 1)[0][0].hit).toBe(false);
+      it('sets the tile to hit', async () => {
+        await store.dispatch(attackReceived(1, [0, 0]));
 
+        expect(selectBoardById(store.getState(), 1)[0][0].hit).toBe(true);
+      });
+
+      it('hits the ship', async () => {
+        await store.dispatch(attackReceived(1, [0, 0]));
+
+        expect(selectShipById(store.getState(), ship.id).hit[0]).toBe(true);
+      });
+    });
+
+    describe('when the opponent has no ships left', () => {
+      it('is rejected', async () => {
         await store.dispatch(attackReceived(1, [0, 0]));
 
         expect(selectBoardById(store.getState(), 1)[0][0].hit).toBe(false);

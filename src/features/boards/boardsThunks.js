@@ -1,16 +1,21 @@
 import { createAsyncThunk as createThunk } from '@reduxjs/toolkit';
 import {
   makeSelectValidPlacements,
+  selectPlayerId,
   selectIsValidPlacement,
   selectBoardById,
   selectNextShip,
   selectShipsToBePlaced,
   selectAllShipsLeftToBePlaced,
-  selectPlayerId,
 } from './boardsSlice';
 import { shipCoordinates } from '../ships/shipFactory';
-import { shipCreated, shipHit } from '../ships/shipsSlice';
-import { phaseAdvanced, selectPhase } from '../game/gameSlice';
+import {
+  shipCreated,
+  shipHit,
+  makeSelectShipsLeftForPlayer,
+} from '../ships/shipsSlice';
+import { selectOpponent } from '../players/playersSlice';
+import { phaseAdvanced } from '../game/gameSlice';
 import shuffle from 'shuffle-array';
 import { nanoid } from '@reduxjs/toolkit';
 import { outOfBounds } from '../../helpers';
@@ -34,8 +39,8 @@ const attackReceived = createThunk(
     { dispatch, getState, rejectWithValue }
   ) => {
     const board = selectBoardById(getState(), boardId);
-    if (selectPhase(getState()) !== 'started') {
-      return rejectWithValue(`The game is not in the started state!`);
+    if (opponentShipsLeft(getState(), boardId) === 0) {
+      return rejectWithValue(`All ships have been placed!`);
     }
 
     if (outOfBounds(coordinate, board)) {
@@ -153,6 +158,13 @@ const placeShipOnBoard = (board, ship) => {
       occupied: true,
     };
   });
+};
+
+const opponentShipsLeft = (state, boardId) => {
+  const playerId = selectPlayerId(state, boardId);
+  const opponent = selectOpponent(state, playerId);
+  const selectShipsLeftForPlayer = makeSelectShipsLeftForPlayer(opponent.id);
+  return selectShipsLeftForPlayer(state);
 };
 
 // Default export
