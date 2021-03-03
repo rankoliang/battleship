@@ -1,10 +1,20 @@
 import classNames from 'classnames';
+import { useSunk } from '../../ships/shipHooks';
 
-const InertCoordinate = ({ states }) => {
+const InertCoordinate = (coordinateAPI) => {
+  const {
+    states: { shipId, occupied, hit },
+  } = coordinateAPI;
+
+  const sunk = useSunk(shipId);
+
   return (
     <button
+      tabIndex="-1"
       className={classNames('coordinate', {
-        coordinate__occupied: states.occupied,
+        coordinate__occupied: occupied,
+        coordinate__sunk: sunk,
+        coordinate__hit: hit,
       })}
     />
   );

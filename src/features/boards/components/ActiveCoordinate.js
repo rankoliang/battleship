@@ -1,25 +1,16 @@
-import { useContext, useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { shipIsSunk } from '../../ships/shipFactory';
-import { selectShipById } from '../../ships/shipsSlice';
+import { useContext } from 'react';
 import PlayerContext from '../../players/PlayerContext';
 import classNames from 'classnames';
 import ActiveComputerCoordinate from './ActiveComputerCoordinate';
+import { useSunk } from '../../ships/shipHooks';
 
 const ActiveCoordinate = (coordinateAPI) => {
   const {
     states: { shipId, occupied, hit },
   } = coordinateAPI;
   const player = useContext(PlayerContext);
-  const ship = useSelector((state) => selectShipById(state, shipId));
 
-  const [sunk, setSunk] = useState(false);
-
-  useEffect(() => {
-    if (ship) {
-      setSunk(shipIsSunk(ship));
-    }
-  }, [ship]);
+  const sunk = useSunk(shipId);
 
   if (player.computer) {
     return (
