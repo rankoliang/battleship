@@ -1,17 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
-import boardFactory from './boardFactory';
 import reducers from './boardsReducers';
 import extraReducers from './boardsThunks';
+import getInitialState from './boardsInitialState';
 
 export const boardsSlice = createSlice({
   name: 'boards',
-  initialState: {
-    ids: [1, 2],
-    entities: {
-      1: boardFactory({ id: 1, playerId: 1, size: 10 }),
-      2: boardFactory({ id: 1, playerId: 2, size: 10 }),
-    },
-  },
+  initialState: getInitialState(),
   reducers,
   extraReducers,
 });
@@ -21,6 +15,7 @@ export const {
   previewSet,
   previewRemoved,
   orientationUpdated,
+  boardsReset,
 } = boardsSlice.actions;
 
 export * from './boardsThunks';

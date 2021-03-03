@@ -1,26 +1,28 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-export const playersSlice = createSlice({
-  name: 'players',
-  initialState: {
-    current: 1,
-    entities: {
-      1: {
-        id: 1,
-        name: 'Player 1',
-        computer: false,
-        opponentId: 2,
-        boardId: 1,
-      },
-      2: {
-        id: 2,
-        name: 'Player 2',
-        computer: true,
-        opponentId: 1,
-        boardId: 2,
-      },
+const getInitialState = () => ({
+  current: 1,
+  entities: {
+    1: {
+      id: 1,
+      name: 'Player 1',
+      computer: false,
+      opponentId: 2,
+      boardId: 1,
+    },
+    2: {
+      id: 2,
+      name: 'Player 2',
+      computer: true,
+      opponentId: 1,
+      boardId: 2,
     },
   },
+});
+
+export const playersSlice = createSlice({
+  name: 'players',
+  initialState: getInitialState(),
   reducers: {
     nameChanged: {
       reducer: (state, action) => {
@@ -35,10 +37,11 @@ export const playersSlice = createSlice({
       state.current =
         (state.current % Object.entries(state.entities).length) + 1;
     },
+    playersReset: getInitialState,
   },
 });
 
-export const { turnEnded, nameChanged } = playersSlice.actions;
+export const { turnEnded, nameChanged, playersReset } = playersSlice.actions;
 
 export const selectPlayers = (state) => Object.values(state.players.entities);
 

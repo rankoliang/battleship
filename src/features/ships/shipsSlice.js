@@ -34,11 +34,11 @@ export const shipsSlice = createSlice({
       },
       prepare: (id, location) => ({ payload: { id, location } }),
     },
-    shipsReset: shipsAdapter.getInitialState,
+    shipsReset: () => shipsAdapter.getInitialState(),
   },
 });
 
-export const { shipCreated, shipHit } = shipsSlice.actions;
+export const { shipCreated, shipHit, shipsReset } = shipsSlice.actions;
 
 const shipsSelectors = shipsAdapter.getSelectors();
 

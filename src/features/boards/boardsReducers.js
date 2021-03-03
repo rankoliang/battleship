@@ -1,5 +1,6 @@
 import { shipCoordinates, nextRotation } from '../ships/shipFactory';
 import { outOfBounds } from '../../helpers';
+import getInitialState from './boardsInitialState';
 
 // Private functions
 const inBoundCoords = (ship, board) => {
@@ -72,6 +73,7 @@ const reducer = {
 
     boardEntity.orientation = nextRotation(orientation);
   },
+  boardsReset: getInitialState,
 };
 
 export default reducer;
