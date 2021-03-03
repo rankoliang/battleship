@@ -1,9 +1,10 @@
-import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { useEffect, useMemo } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { selectBoardById } from './boardsSlice';
 import Row from './components/Row';
 import styled from 'styled-components';
 import PlayerContext from '../players/PlayerContext';
+import { phaseAdvanced, selectPhase } from '../game/gameSlice';
 import { useRandomPlacement, useRotation } from './boardHooks';
 import { makeSelectShipsLeftForPlayer } from '../ships/shipsSlice';
 
@@ -23,17 +24,26 @@ const Container = styled.div`
 `;
 
 const Board = ({ player }) => {
+  const dispatch = useDispatch();
   const board = useSelector((state) => selectBoardById(state, player.boardId));
   const selectShipsLeftForPlayer = useMemo(
     () => makeSelectShipsLeftForPlayer(player.id),
     [player]
   );
 
+  const phase = useSelector(selectPhase);
+
   const shipsRemaining = useSelector(selectShipsLeftForPlayer);
 
   useRandomPlacement(player, ({ computer }) => computer);
 
   useRotation(player.boardId, 'r');
+
+  useEffect(() => {
+    if (phase === 'started' && shipsRemaining <= 0) {
+      dispatch(phaseAdvanced());
+    }
+  }, [phase, shipsRemaining]);
 
   return (
     <PlayerContext.Provider value={player}>
