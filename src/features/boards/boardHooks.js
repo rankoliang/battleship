@@ -16,7 +16,8 @@ import {
   selectNextShip,
 } from './boardsSlice';
 
-const useRandomPlacement = (boardId, condition) => {
+const useRandomPlacement = (player, callback) => {
+  const { boardId } = player;
   const dispatch = useDispatch();
   const shipsRemaining = useSelector((state) =>
     selectShipsToBePlaced(state, boardId)
@@ -24,10 +25,10 @@ const useRandomPlacement = (boardId, condition) => {
 
   /* eslint-disable */
   useEffect(() => {
-    if (shipsRemaining > 0 && condition) {
+    if (shipsRemaining > 0 && callback(player)) {
       dispatch(randomShipsPlaced({ boardId }));
     }
-  }, [dispatch, condition, boardId]);
+  }, [dispatch, player]);
   /* eslint-enable */
 };
 

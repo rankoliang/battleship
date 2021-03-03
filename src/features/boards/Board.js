@@ -31,7 +31,7 @@ const Board = ({ player }) => {
 
   const shipsRemaining = useSelector(selectShipsLeftForPlayer);
 
-  useRandomPlacement(player.boardId, player.computer);
+  useRandomPlacement(player, ({ computer }) => computer);
 
   useRotation(player.boardId, 'r');
 
