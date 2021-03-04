@@ -10,11 +10,13 @@ import {
   previewSet,
   nextShipPlaced,
   previewRemoved,
+  selectPlayerId,
   selectBoardPreview,
   selectShipsToBePlaced,
   selectIsValidPlacement,
   selectNextShip,
 } from './boardsSlice';
+import { selectPlayerById } from '../players/playersSlice';
 
 const useRandomPlacement = (player, callback) => {
   const { boardId } = player;
@@ -38,6 +40,8 @@ const useRotation = (boardId, key = 'r') => {
   const currentPreview = useSelector((state) =>
     selectBoardPreview(state, boardId)
   );
+  const playerId = useSelector((state) => selectPlayerId(state, boardId));
+  const player = useSelector((state) => selectPlayerById(state, playerId));
 
   let nextPreview;
   if (currentPreview) {
@@ -50,13 +54,16 @@ const useRotation = (boardId, key = 'r') => {
   }
 
   const rotate = () => {
-    if (phase === 'placement' && nextPreview) {
+    if (!player.computer && phase === 'placement') {
       dispatch(orientationUpdated(1));
-      dispatch(previewSet(nextPreview));
+      if (nextPreview) {
+        dispatch(previewSet(nextPreview));
+      }
     }
   };
 
   useKeypress(key, rotate);
+  return rotate;
 };
 
 const useShip = ({ boardId, id: playerId }, [xIndex, yIndex]) => {

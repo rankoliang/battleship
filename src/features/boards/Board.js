@@ -3,9 +3,9 @@ import { selectBoardById } from './boardsSlice';
 import Row from './components/Row';
 import styled from 'styled-components';
 import PlayerContext from '../players/PlayerContext';
-import { useRandomPlacement, useRotation } from './boardHooks';
-import { useRemainingShips } from '../ships/shipHooks';
+import { useRandomPlacement } from './boardHooks';
 import { useUpdateWinner } from '../game/gameHooks';
+import BoardInterface from './components/BoardInterface';
 
 const StyledBoard = styled.div`
   display: flex;
@@ -25,19 +25,15 @@ const Container = styled.div`
 const Board = ({ player }) => {
   const board = useSelector((state) => selectBoardById(state, player.boardId));
 
-  const shipsRemaining = useRemainingShips(player);
-
   useRandomPlacement(player, ({ computer }) => computer);
-
-  useRotation(player.boardId, 'r');
 
   useUpdateWinner(player);
 
   return (
     <PlayerContext.Provider value={player}>
       <Container>
-        <h2>{player.name}</h2>
-        {<p>Ships Remaining: {shipsRemaining}</p>}
+        <h2>{player.computer ? 'Computer' : 'Your'} Board</h2>
+        <BoardInterface />
         <StyledBoard tabIndex={player.computer ? '-1' : '0'}>
           {board.map((row, yIndex) => (
             <Row row={row} yIndex={yIndex} key={yIndex} />
