@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectPhase, gameReset, phaseAdvanced, winnerSet } from './gameSlice';
-import { selectOpponent } from '../players/playersSlice'
+import { selectOpponent } from '../players/playersSlice';
 import { useRemainingShips } from '../ships/shipHooks';
+import { animateScroll as scroll } from 'react-scroll';
 
 export const useReset = () => {
   const dispatch = useDispatch();
@@ -30,6 +31,7 @@ export const useUpdateWinner = (player) => {
     if (winnerDetermined) {
       dispatch(phaseAdvanced());
       dispatch(winnerSet(opponent));
+      scroll.scrollToTop();
     }
   }, [dispatch, winnerDetermined, opponent]);
 };
