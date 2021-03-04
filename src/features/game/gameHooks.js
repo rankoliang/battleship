@@ -14,30 +14,35 @@ export const useReset = () => {
   };
 };
 
-export const useWinnerDetermined = (player) => {
+export const useWinner = (player) => {
   const phase = useSelector(selectPhase);
   const shipsRemaining = useRemainingShips(player);
   const shipsRemainingToBePlaced = useSelector((state) =>
     selectShipsToBePlaced(state, player.boardId)
   );
+  const opponent = useSelector((state) => selectOpponent(state, player.id));
 
-  return (
+  const winnerDetermined =
     phase === 'started' &&
     shipsRemaining === 0 &&
-    shipsRemainingToBePlaced === 0
-  );
+    shipsRemainingToBePlaced === 0;
+
+  if (winnerDetermined) {
+    return opponent;
+  } else {
+    return null;
+  }
 };
 
 export const useUpdateWinner = (player) => {
   const dispatch = useDispatch();
-  const opponent = useSelector((state) => selectOpponent(state, player.id));
-  const winnerDetermined = useWinnerDetermined(player);
+  const winner = useWinner(player);
 
   useEffect(() => {
-    if (winnerDetermined) {
+    if (winner) {
       dispatch(phaseAdvanced());
-      dispatch(winnerSet(opponent));
+      dispatch(winnerSet(winner));
       scroll.scrollToTop();
     }
-  }, [dispatch, winnerDetermined, opponent]);
+  }, [dispatch, winner]);
 };
