@@ -18,6 +18,7 @@ export const gameReset = createThunk(
 
 const getInitialState = () => ({
   phases: ['placement', 'started', 'ended'],
+  winner: null,
 });
 
 export const gameSlice = createSlice({
@@ -25,9 +26,10 @@ export const gameSlice = createSlice({
   initialState: getInitialState(),
   reducers: {
     phaseAdvanced: (state) => {
-      const phases = state.phases;
-
-      phases.shift();
+      state.phases.shift();
+    },
+    winnerSet: (state, action) => {
+      state.winner = action.payload;
     },
   },
   extraReducers: {
@@ -35,10 +37,12 @@ export const gameSlice = createSlice({
   },
 });
 
-export const { phaseAdvanced } = gameSlice.actions;
+export const { phaseAdvanced, winnerSet } = gameSlice.actions;
 
 export const selectGame = (state) => state.game;
 
 export const selectPhase = createSelector(selectGame, (game) => game.phases[0]);
+
+export const selectWinner = createSelector(selectGame, (game) => game.winner);
 
 export default gameSlice.reducer;

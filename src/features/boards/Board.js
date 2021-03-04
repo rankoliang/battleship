@@ -4,7 +4,7 @@ import { selectBoardById } from './boardsSlice';
 import Row from './components/Row';
 import styled from 'styled-components';
 import PlayerContext from '../players/PlayerContext';
-import { phaseAdvanced, selectPhase } from '../game/gameSlice';
+import { phaseAdvanced, selectPhase, winnerSet } from '../game/gameSlice';
 import { useRandomPlacement, useRotation } from './boardHooks';
 import { makeSelectShipsLeftForPlayer } from '../ships/shipsSlice';
 
@@ -42,14 +42,15 @@ const Board = ({ player }) => {
   useEffect(() => {
     if (phase === 'started' && shipsRemaining <= 0) {
       dispatch(phaseAdvanced());
+      dispatch(winnerSet(player));
     }
-  }, [dispatch, phase, shipsRemaining]);
+  }, [dispatch, phase, shipsRemaining, player]);
 
   return (
     <PlayerContext.Provider value={player}>
       <Container>
         <h2>{player.name}</h2>
-        <p>Ships Remaining: {shipsRemaining}</p>
+        {<p>Ships Remaining: {shipsRemaining}</p>}
         <StyledBoard tabIndex={player.computer ? '-1' : '0'}>
           {board.map((row, yIndex) => (
             <Row row={row} yIndex={yIndex} key={yIndex} />
