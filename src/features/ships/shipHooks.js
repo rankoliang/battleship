@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useMemo, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectShipById } from './shipsSlice';
+import { selectShipById, makeSelectShipsLeftForPlayer } from './shipsSlice';
 import { shipIsSunk } from './shipFactory';
 
 export const useSunk = (shipId) => {
@@ -14,4 +14,12 @@ export const useSunk = (shipId) => {
   }, [ship]);
 
   return sunk;
+};
+
+export const useRemainingShips = (player) => {
+  const selectShipsLeftForPlayer = useMemo(
+    () => makeSelectShipsLeftForPlayer(player.id),
+    [player]
+  );
+  return useSelector(selectShipsLeftForPlayer);
 };

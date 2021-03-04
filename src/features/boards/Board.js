@@ -1,12 +1,11 @@
-import { useEffect, useMemo } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { selectBoardById } from './boardsSlice';
 import Row from './components/Row';
 import styled from 'styled-components';
 import PlayerContext from '../players/PlayerContext';
-import { phaseAdvanced, selectPhase, winnerSet } from '../game/gameSlice';
 import { useRandomPlacement, useRotation } from './boardHooks';
-import { makeSelectShipsLeftForPlayer } from '../ships/shipsSlice';
+import { useRemainingShips } from '../ships/shipHooks';
+import { useUpdateWinner } from '../game/gameHooks';
 
 const StyledBoard = styled.div`
   display: flex;
@@ -24,27 +23,15 @@ const Container = styled.div`
 `;
 
 const Board = ({ player }) => {
-  const dispatch = useDispatch();
   const board = useSelector((state) => selectBoardById(state, player.boardId));
-  const selectShipsLeftForPlayer = useMemo(
-    () => makeSelectShipsLeftForPlayer(player.id),
-    [player]
-  );
 
-  const phase = useSelector(selectPhase);
-
-  const shipsRemaining = useSelector(selectShipsLeftForPlayer);
+  const shipsRemaining = useRemainingShips(player);
 
   useRandomPlacement(player, ({ computer }) => computer);
 
   useRotation(player.boardId, 'r');
 
-  useEffect(() => {
-    if (phase === 'started' && shipsRemaining <= 0) {
-      dispatch(phaseAdvanced());
-      dispatch(winnerSet(player));
-    }
-  }, [dispatch, phase, shipsRemaining, player]);
+  useUpdateWinner(player);
 
   return (
     <PlayerContext.Provider value={player}>
