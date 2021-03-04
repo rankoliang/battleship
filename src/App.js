@@ -8,15 +8,12 @@ import './App.css';
 
 function App() {
   const players = useSelector(selectPlayers);
-  const phase = useSelector(selectPhase);
   const reset = useReset();
-  const winner = useSelector(selectWinner);
 
   return (
     <div className="App">
       <h1>Battleship</h1>
-      <p>Current phase: {phase}</p>
-      {phase === 'ended' && <p>Winner: {winner.name}</p>}
+      <PhaseMessage />
       <button onClick={reset}>Reset</button>
       <div className="boards">
         {players.map((player) => (
@@ -26,5 +23,39 @@ function App() {
     </div>
   );
 }
+
+const PhaseMessage = () => {
+  const phase = useSelector(selectPhase);
+
+  switch (phase) {
+    case 'placement':
+      return <PlacementMessage />;
+    case 'ended':
+      return <EndPhaseMessage />;
+    default:
+      return <p>Current phase: {phase}</p>;
+  }
+};
+
+const PlacementMessage = () => {
+  return (
+    <div>
+      <p>
+        To place your ship, hover over your board. Press r to rotate your ship
+        or click on the rotate button.
+      </p>
+    </div>
+  );
+};
+
+const EndPhaseMessage = () => {
+  const winner = useSelector(selectWinner);
+
+  if (winner.computer) {
+    return <p>The computer won. Try again?</p>;
+  } else {
+    return <p>You won! Play another round?</p>;
+  }
+};
 
 export default App;
