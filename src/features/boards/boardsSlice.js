@@ -16,6 +16,7 @@ export const {
   previewRemoved,
   orientationUpdated,
   boardsReset,
+  lastCoordinateHitUpdated,
 } = boardsSlice.actions;
 
 export * from './boardsThunks';

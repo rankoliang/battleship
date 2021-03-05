@@ -73,6 +73,19 @@ const reducer = {
 
     boardEntity.orientation = nextRotation(orientation);
   },
+  lastCoordinateHitUpdated: {
+    reducer: (state, action) => {
+      const { id, coordinate } = action.payload;
+      const boardEntity = state.entities[id];
+
+      boardEntity.lastCoordinateHit = coordinate;
+    },
+    prepare: (id, coordinate) => {
+      return {
+        payload: { id, coordinate },
+      };
+    },
+  },
   boardsReset: getInitialState,
 };
 

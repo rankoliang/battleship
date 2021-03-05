@@ -143,3 +143,8 @@ export const selectHittableCoordinates = createSelector(
     });
   }
 );
+
+export const selectLastCoordinateHit = createSelector(
+  selectBoardEntityById,
+  ({ lastCoordinateHit }) => lastCoordinateHit
+);

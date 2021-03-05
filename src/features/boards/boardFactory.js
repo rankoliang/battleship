@@ -16,6 +16,7 @@ const boardFactory = ({ id, playerId, size = 10 }) => {
     ships: [],
     preview: null,
     previewCoordinates: null,
+    lastCoordinateHit: null,
     shipsToPlace: {
       Carrier: { name: 'Carrier', length: 5, quantity: 1 },
       Battleship: { name: 'Battleship', length: 4, quantity: 1 },
