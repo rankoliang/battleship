@@ -1,9 +1,11 @@
 import { configureStore, nanoid } from '@reduxjs/toolkit';
 import reducer, {
   tileSet,
+  lastCoordinateHitUpdated,
   selectAllBoards,
   selectIsValidPlacement,
   selectBoardPreview,
+  selectLastCoordinateHitStatus,
   makeSelectValidPlacements,
 } from './boardsSlice';
 import shipsReducer from '../ships/shipsSlice';
@@ -137,6 +139,25 @@ describe('boardsSlice', () => {
         [[8, 9], 270],
         [[9, 9], 270],
       ]);
+    });
+  });
+
+  describe('selectLastCoordinateHitStatus', () => {
+    describe('when the tile is not occupied', () => {
+      it('return miss', () => {
+        store.dispatch(lastCoordinateHitUpdated(1, [0, 0]));
+
+        expect(selectLastCoordinateHitStatus(store.getState(), 1)).toBe('miss');
+      });
+    });
+
+    describe('when the tile is occupied', () => {
+      it('return hit', () => {
+        store.dispatch(tileSet(1, [0, 0], { occupied: true }));
+        store.dispatch(lastCoordinateHitUpdated(1, [0, 0]));
+
+        expect(selectLastCoordinateHitStatus(store.getState(), 1)).toBe('hit');
+      });
     });
   });
 });
