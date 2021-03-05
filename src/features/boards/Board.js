@@ -6,6 +6,7 @@ import PlayerContext from '../players/PlayerContext';
 import { useRandomPlacement } from './boardHooks';
 import { useUpdateWinner } from '../game/gameHooks';
 import BoardInterface from './components/BoardInterface';
+import './Board.css';
 
 const StyledBoard = styled.div`
   display: flex;
@@ -33,7 +34,9 @@ const Board = ({ player }) => {
     <PlayerContext.Provider value={player}>
       <Container>
         <h2>{player.computer ? 'Computer' : 'Your'} Board</h2>
-        <BoardInterface />
+        <div className="interface">
+          <BoardInterface />
+        </div>
         <StyledBoard tabIndex={player.computer ? '-1' : '0'}>
           {board.map((row, yIndex) => (
             <Row row={row} yIndex={yIndex} key={yIndex} />
