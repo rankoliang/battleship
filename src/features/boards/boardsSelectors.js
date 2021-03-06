@@ -153,6 +153,8 @@ export const selectLastCoordinateHitStatus = createSelector(
   selectLastCoordinateHit,
   selectBoardById,
   (lastCoordinateHit, board) => {
+    if (!lastCoordinateHit) return null;
+
     const [x, y] = lastCoordinateHit;
     const { occupied } = board[y][x];
 
@@ -163,3 +165,12 @@ export const selectLastCoordinateHitStatus = createSelector(
     }
   }
 );
+
+export const selectCoordinate = (state, boardId, coordinate) => {
+  if (!coordinate) return null;
+
+  const [x, y] = coordinate;
+  const board = selectBoardById(state, boardId);
+
+  return board[y][x];
+};

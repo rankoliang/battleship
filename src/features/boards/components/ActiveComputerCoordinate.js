@@ -1,6 +1,10 @@
 import { useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { attackReceived, selectHittableCoordinates } from '../boardsSlice';
+import {
+  attackReceived,
+  selectHittableCoordinates,
+  lastCoordinateHitUpdated,
+} from '../boardsSlice';
 import { selectPlayerById } from '../../players/playersSlice';
 import PlayerContext from '../../players/PlayerContext';
 import classNames from 'classnames';
@@ -21,7 +25,12 @@ const ActiveComputerCoordinate = ({ coordinateAPI, sunk }) => {
   const dispatch = useDispatch();
   const attack = () => {
     dispatch(attackReceived(player.boardId, coordinate));
-    dispatch(attackReceived(opponent.boardId, shuffle.pick(coordinateOptions)));
+    dispatch(lastCoordinateHitUpdated(player.boardId, coordinate));
+
+    const computerChoice = shuffle.pick(coordinateOptions);
+
+    dispatch(attackReceived(opponent.boardId, computerChoice));
+    dispatch(lastCoordinateHitUpdated(opponent.boardId, computerChoice));
   };
 
   if (hit) {
