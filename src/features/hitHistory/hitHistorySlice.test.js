@@ -15,9 +15,9 @@ describe('boardsSlice', () => {
 
   describe('hitRecorded', () => {
     it('pushes to the history', () => {
-      store.dispatch(hitRecorded(1, [0, 0]));
+      store.dispatch(hitRecorded(1, [0, 0], 'miss'));
 
-      expect(selectHitHistory(store.getState(), 1)).toEqual([[0, 0]]);
+      expect(selectHitHistory(store.getState(), 1)).toEqual([[[0, 0], 'miss']]);
     });
   });
 });
