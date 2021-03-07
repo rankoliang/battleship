@@ -144,28 +144,6 @@ export const selectHittableCoordinates = createSelector(
   }
 );
 
-export const selectLastCoordinateHit = createSelector(
-  selectBoardEntityById,
-  ({ lastCoordinateHit }) => lastCoordinateHit
-);
-
-export const selectLastCoordinateHitStatus = createSelector(
-  selectLastCoordinateHit,
-  selectBoardById,
-  (lastCoordinateHit, board) => {
-    if (!lastCoordinateHit) return null;
-
-    const [x, y] = lastCoordinateHit;
-    const { occupied } = board[y][x];
-
-    if (occupied) {
-      return 'hit';
-    } else {
-      return 'miss';
-    }
-  }
-);
-
 export const selectCoordinate = (state, boardId, coordinate) => {
   if (!coordinate) return null;
 

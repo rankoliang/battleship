@@ -4,11 +4,9 @@ import reducer, {
   orientationUpdated,
   previewSet,
   previewRemoved,
-  lastCoordinateHitUpdated,
   selectOrientation,
   selectBoardById,
   selectBoardPreview,
-  selectLastCoordinateHit,
 } from './boardsSlice';
 import { shipCoordinates } from '../ships/shipFactory';
 import shipsReducer from '../ships/shipsSlice';
@@ -152,14 +150,6 @@ describe('boardsReducer', () => {
       shipCoordinates(ship).forEach(([x, y]) => {
         expect(board[y][x].previewing).toEqual(false);
       });
-    });
-  });
-
-  describe('lastCoordinateHitUpdated', () => {
-    it('updates the last coordinate', () => {
-      store.dispatch(lastCoordinateHitUpdated(1, [0, 0]));
-
-      expect(selectLastCoordinateHit(store.getState(), 1)).toEqual([0, 0]);
     });
   });
 });
