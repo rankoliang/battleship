@@ -16,15 +16,8 @@ const StartedInterface = () => {
   );
 };
 
-const LastCoordinateHitStatus = () => {
-  const [player, opponent] = usePlayers();
-  const { boardId } = opponent;
-  const hitHistory = useSelector((state) =>
-    selectHitHistoryByBoardId(state, boardId)
-  );
-
-  const status =
-    hitHistory.length < 1 ? null : hitHistory[hitHistory.length - 1][1];
+const StatusMessage = ({ status }) => {
+  const player = usePlayer();
 
   switch (status) {
     case 'miss':
@@ -38,7 +31,35 @@ const LastCoordinateHitStatus = () => {
     case 'hit':
       return <InterfaceElement>{player.name} hit a ship!</InterfaceElement>;
     default:
-      return <InterfaceElement>No Moves Made yet.</InterfaceElement>;
+      return <InterfaceElement>Unknown Status!</InterfaceElement>;
+  }
+};
+
+const LastCoordinateHitStatus = () => {
+  const [_, opponent] = usePlayers();
+  const { boardId } = opponent;
+  const hitHistory = useSelector((state) =>
+    selectHitHistoryByBoardId(state, boardId)
+  );
+
+  const statuses = hitHistory
+    .slice(Math.max(0, hitHistory.length - 1))
+    .map(([_, status]) => status);
+
+  if (statuses.length > 0) {
+    return (
+      <ul>
+        {statuses.map((status, i) => {
+          return (
+            <li key={i}>
+              <StatusMessage status={status} />
+            </li>
+          );
+        })}
+      </ul>
+    );
+  } else {
+    return <InterfaceElement>No Moves Made yet.</InterfaceElement>;
   }
 };
 
