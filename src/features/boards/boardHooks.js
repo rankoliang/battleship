@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { nextRotation } from '../ships/shipFactory';
 import { nanoid } from '@reduxjs/toolkit';
 import useKeypress from 'react-use-keypress';
-import { selectPhase } from '../game/gameSlice';
+import shuffle from 'shuffle-array';
+import { selectPhase, selectComputerTurns } from '../game/gameSlice';
 import {
   randomShipsPlaced,
   orientationUpdated,
@@ -15,8 +15,12 @@ import {
   selectShipsToBePlaced,
   selectIsValidPlacement,
   selectNextShip,
+  attackReceived,
+  selectHittableCoordinates,
 } from './boardsSlice';
 import { selectPlayerById } from '../players/playersSlice';
+import { usePlayers } from '../players/playerHooks';
+import { nextRotation } from '../ships/shipFactory';
 
 const useRandomPlacement = (player, callback) => {
   const { boardId } = player;
@@ -123,4 +127,29 @@ const useShipPreview = (ship) => {
   return { isPreviewValid, setPreview, removePreview };
 };
 
-export { useRandomPlacement, useRotation, useShip, useShipPreview };
+const useAttack = (coordinate) => {
+  const dispatch = useDispatch();
+  const [player, opponent] = usePlayers();
+  const coordinateOptions = useSelector((state) =>
+    selectHittableCoordinates(state, opponent.boardId)
+  );
+  const computerTurns = useSelector(selectComputerTurns);
+
+  return () => {
+    dispatch(attackReceived(player.boardId, coordinate));
+
+    const computerChoice = shuffle.pick(coordinateOptions, {
+      picks: computerTurns,
+    });
+
+    if (computerTurns === 1) {
+      dispatch(attackReceived(opponent.boardId, computerChoice));
+    } else {
+      for (let turn = 0; turn < computerTurns; turn++) {
+        dispatch(attackReceived(opponent.boardId, computerChoice[turn]));
+      }
+    }
+  };
+};
+
+export { useRandomPlacement, useRotation, useShip, useShipPreview, useAttack };
