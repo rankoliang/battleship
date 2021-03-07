@@ -2,6 +2,7 @@ import { useRemainingShips } from '../../ships/shipHooks';
 import { usePlayer, usePlayers } from '../../players/playerHooks';
 import { useSelector } from 'react-redux';
 import { selectHitHistoryByBoardId } from '../../hitHistory/hitHistorySlice';
+import { selectComputerTurns } from '../../game/gameSlice';
 import InterfaceElement from './InterfaceElement';
 
 const StartedInterface = () => {
@@ -36,14 +37,18 @@ const StatusMessage = ({ status }) => {
 };
 
 const LastCoordinateHitStatus = () => {
-  const [_, opponent] = usePlayers();
+  const [player, opponent] = usePlayers();
   const { boardId } = opponent;
   const hitHistory = useSelector((state) =>
     selectHitHistoryByBoardId(state, boardId)
   );
 
+  const computerTurns = useSelector(selectComputerTurns);
+
+  const turnLookbehind = player.computer ? computerTurns : 1;
+
   const statuses = hitHistory
-    .slice(Math.max(0, hitHistory.length - 1))
+    .slice(Math.max(0, hitHistory.length - turnLookbehind))
     .map(([_, status]) => status);
 
   if (statuses.length > 0) {
