@@ -1,6 +1,7 @@
 import { createAsyncThunk as createThunk } from '@reduxjs/toolkit';
 import {
   makeSelectValidPlacements,
+  lastCoordinateHitUpdated,
   selectPlayerId,
   selectIsValidPlacement,
   selectBoardById,
@@ -49,6 +50,7 @@ const attackReceived = createThunk(
       const { shipId, hitIndex } = board[y][x];
       dispatch(shipHit(shipId, hitIndex));
     }
+    dispatch(lastCoordinateHitUpdated(boardId, coordinate));
     return { boardId, coordinate };
   }
 );

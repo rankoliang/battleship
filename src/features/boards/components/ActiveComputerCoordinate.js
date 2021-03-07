@@ -25,12 +25,10 @@ const ActiveComputerCoordinate = ({ coordinateAPI, sunk }) => {
   const dispatch = useDispatch();
   const attack = () => {
     dispatch(attackReceived(player.boardId, coordinate));
-    dispatch(lastCoordinateHitUpdated(player.boardId, coordinate));
 
     const computerChoice = shuffle.pick(coordinateOptions);
 
     dispatch(attackReceived(opponent.boardId, computerChoice));
-    dispatch(lastCoordinateHitUpdated(opponent.boardId, computerChoice));
   };
 
   if (hit) {
