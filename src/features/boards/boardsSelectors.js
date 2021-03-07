@@ -174,3 +174,8 @@ export const selectCoordinate = (state, boardId, coordinate) => {
 
   return board[y][x];
 };
+
+export const selectHitHistoryId = createSelector(
+  selectBoardEntityById,
+  ({ hitHistoryID }) => hitHistoryID
+);

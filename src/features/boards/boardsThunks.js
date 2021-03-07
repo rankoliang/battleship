@@ -1,20 +1,22 @@
 import { createAsyncThunk as createThunk } from '@reduxjs/toolkit';
 import {
   makeSelectValidPlacements,
-  lastCoordinateHitUpdated,
   selectPlayerId,
   selectIsValidPlacement,
   selectBoardById,
   selectNextShip,
   selectShipsToBePlaced,
   selectAllShipsLeftToBePlaced,
+  selectHitHistoryId,
 } from './boardsSlice';
+import { selectShipIsSunk } from '../ships/shipsSlice';
 import { shipCoordinates } from '../ships/shipFactory';
 import {
   shipCreated,
   shipHit,
   makeSelectShipsLeftForPlayer,
 } from '../ships/shipsSlice';
+import { hitRecorded } from '../hitHistory/hitHistorySlice';
 import { selectOpponent } from '../players/playersSlice';
 import { phaseAdvanced } from '../game/gameSlice';
 import shuffle from 'shuffle-array';
@@ -35,11 +37,12 @@ export const shipPlaced = createThunk(
 
 const attackReceived = createThunk(
   'boards/attackRecievedStatus',
-  (
+  async (
     { boardId, coordinate, coordinate: [x, y] },
     { dispatch, getState, rejectWithValue }
   ) => {
     const board = selectBoardById(getState(), boardId);
+    const hitHistoryID = selectHitHistoryId(getState(), boardId);
     if (opponentShipsLeft(getState(), boardId) === 0) {
       return rejectWithValue(`All ships have been placed!`);
     }
@@ -49,8 +52,11 @@ const attackReceived = createThunk(
     } else if (board[y][x].occupied) {
       const { shipId, hitIndex } = board[y][x];
       dispatch(shipHit(shipId, hitIndex));
+      const shipStatus = selectShipIsSunk(getState(), shipId) ? 'sunk' : 'hit';
+      dispatch(hitRecorded(hitHistoryID, coordinate, shipStatus));
+    } else {
+      dispatch(hitRecorded(hitHistoryID, coordinate, 'miss'));
     }
-    dispatch(lastCoordinateHitUpdated(boardId, coordinate));
     return { boardId, coordinate };
   }
 );
