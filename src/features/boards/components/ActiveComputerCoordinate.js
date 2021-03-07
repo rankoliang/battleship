@@ -1,10 +1,6 @@
 import { useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  attackReceived,
-  selectHittableCoordinates,
-  lastCoordinateHitUpdated,
-} from '../boardsSlice';
+import { attackReceived, selectHittableCoordinates } from '../boardsSlice';
 import { selectPlayerById } from '../../players/playersSlice';
 import PlayerContext from '../../players/PlayerContext';
 import classNames from 'classnames';
