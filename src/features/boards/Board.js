@@ -19,10 +19,6 @@ const StyledBoard = styled.div`
   }
 `;
 
-const Container = styled.div`
-  margin: 1em;
-`;
-
 const Board = ({ player }) => {
   const board = useSelector((state) => selectBoardById(state, player.boardId));
 
@@ -32,8 +28,8 @@ const Board = ({ player }) => {
 
   return (
     <PlayerContext.Provider value={player}>
-      <Container>
-        <h2>{player.computer ? 'Computer' : 'Your'} Board</h2>
+      <div className="container">
+        <h2 className="title is-2 my-3">{player.name}</h2>
         <div className="interface">
           <BoardInterface />
         </div>
@@ -42,7 +38,7 @@ const Board = ({ player }) => {
             <Row row={row} yIndex={yIndex} key={yIndex} />
           ))}
         </StyledBoard>
-      </Container>
+      </div>
     </PlayerContext.Provider>
   );
 };

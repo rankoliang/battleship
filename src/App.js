@@ -4,6 +4,7 @@ import { selectPlayers } from './features/players/playersSlice';
 import Board from './features/boards/Board';
 import { selectWinner, selectPhase } from './features/game/gameSlice';
 import { useReset } from './features/game/gameHooks';
+import 'bulma/css/bulma.css';
 import './App.css';
 
 function App() {
@@ -12,13 +13,19 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Battleship</h1>
-      <PhaseMessage />
-      <button onClick={reset}>Reset</button>
-      <div className="boards">
-        {players.map((player) => (
-          <Board player={player} key={player.id} />
-        ))}
+      <h1 className="title is-1 my-5">Battleship</h1>
+      <div className="container">
+        <div className="box mx-4">
+          <PhaseMessage />
+        </div>
+        <button className="button is-primary is-outlined" onClick={reset}>
+          Reset
+        </button>
+        <div className="boards">
+          {players.map((player) => (
+            <Board player={player} key={player.id} />
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -39,12 +46,10 @@ const PhaseMessage = () => {
 
 const PlacementMessage = () => {
   return (
-    <div>
-      <p>
-        To place your ship, hover over your board. Press r to rotate your ship
-        or click on the rotate button.
-      </p>
-    </div>
+    <p>
+      To place your ship, hover over your board. Press r to rotate your ship or
+      click on the rotate button.
+    </p>
   );
 };
 
