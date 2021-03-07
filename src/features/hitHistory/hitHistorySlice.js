@@ -1,11 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { selectHitHistoryId } from '../boards/boardsSlice';
+
+const getInitialState = () => {
+  return {
+    1: { id: 1, boardId: 1, state: [] },
+    2: { id: 2, boardId: 2, state: [] },
+  };
+};
 
 export const hitHistorySlice = createSlice({
   name: 'hitHistory',
-  initialState: {
-    1: { id: 1, boardId: 1, state: [] },
-    2: { id: 2, boardId: 2, state: [] },
-  },
+  initialState: getInitialState(),
   reducers: {
     hitRecorded: {
       reducer: (state, action) => {
@@ -20,11 +25,17 @@ export const hitHistorySlice = createSlice({
         };
       },
     },
+    hitHistoryReset: getInitialState,
   },
 });
 
-export const { hitRecorded } = hitHistorySlice.actions;
+export const { hitRecorded, hitHistoryReset } = hitHistorySlice.actions;
 
 export const selectHitHistory = (state, id) => state.hitHistory[id].state;
 
+export const selectHitHistoryByBoardId = (state, boardId) => {
+  const hitHistoryId = selectHitHistoryId(state, boardId);
+
+  return selectHitHistory(state, hitHistoryId);
+};
 export default hitHistorySlice.reducer;

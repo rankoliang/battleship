@@ -1,12 +1,7 @@
 import { useRemainingShips } from '../../ships/shipHooks';
 import { usePlayer, usePlayers } from '../../players/playerHooks';
 import { useSelector } from 'react-redux';
-import {
-  selectLastCoordinateHitStatus,
-  selectLastCoordinateHit,
-  selectCoordinate,
-} from '../boardsSlice';
-import { useSunk } from '../../ships/shipHooks';
+import { selectHitHistoryByBoardId } from '../../hitHistory/hitHistorySlice';
 import InterfaceElement from './InterfaceElement';
 
 const StartedInterface = () => {
@@ -24,37 +19,24 @@ const StartedInterface = () => {
 const LastCoordinateHitStatus = () => {
   const [player, opponent] = usePlayers();
   const { boardId } = opponent;
-  const lastCoordinateHitStatus = useSelector((state) =>
-    selectLastCoordinateHitStatus(state, boardId)
-  );
-  const lastCoordinateHit = useSelector((state) =>
-    selectLastCoordinateHit(state, boardId)
-  );
-  const lastCoordinateStates = useSelector((state) =>
-    selectCoordinate(state, boardId, lastCoordinateHit)
+  const hitHistory = useSelector((state) =>
+    selectHitHistoryByBoardId(state, boardId)
   );
 
-  let shipId;
-  let sunk;
-  if (lastCoordinateStates) {
-    shipId = lastCoordinateStates.shipId;
-  }
+  const status =
+    hitHistory.length < 1 ? null : hitHistory[hitHistory.length - 1][1];
 
-  sunk = useSunk(shipId);
-
-  switch (lastCoordinateHitStatus) {
+  switch (status) {
     case 'miss':
       return (
         <InterfaceElement>
           {player.name} took a shot and missed.
         </InterfaceElement>
       );
+    case 'sunk':
+      return <InterfaceElement>{player.name} sunk a ship!</InterfaceElement>;
     case 'hit':
-      if (sunk) {
-        return <InterfaceElement>{player.name} sunk a ship!</InterfaceElement>;
-      } else {
-        return <InterfaceElement>{player.name} hit a ship!</InterfaceElement>;
-      }
+      return <InterfaceElement>{player.name} hit a ship!</InterfaceElement>;
     default:
       return <InterfaceElement>No Moves Made yet.</InterfaceElement>;
   }
