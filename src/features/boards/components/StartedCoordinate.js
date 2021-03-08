@@ -2,7 +2,6 @@ import { useContext } from 'react';
 import PlayerContext from '../../players/PlayerContext';
 import StartedComputerCoordinate from './StartedComputerCoordinate';
 import StartedPlayerCoordinate from './StartedPlayerCoordinate';
-import { useSunk } from '../../ships/shipHooks';
 
 const StartedCoordinate = (coordinateAPI) => {
   const player = useContext(PlayerContext);

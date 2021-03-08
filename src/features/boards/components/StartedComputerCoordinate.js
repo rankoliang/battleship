@@ -1,4 +1,3 @@
-import classNames from 'classnames';
 import { useAttack } from '../boardHooks';
 import { HitCoordinate, DefaultCoordinate } from './StyledCoordinates';
 
@@ -19,17 +18,6 @@ const StartedComputerCoordinate = (props) => {
         {...props}
       />
     );
-    // return (
-    //   <button
-    //     tabIndex="0"
-    //     onClick={attack}
-    //     className={classNames(
-    //       'coordinate',
-    //       'cursor-pointer',
-    //       'coordinate__hover'
-    //     )}
-    //   />
-    // );
   }
 };
 

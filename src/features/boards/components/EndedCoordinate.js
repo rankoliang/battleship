@@ -1,23 +1,14 @@
-import classNames from 'classnames';
-import { useSunk } from '../../ships/shipHooks';
+import { HitCoordinate, UndisturbedCoordinate } from './StyledCoordinates';
 
-const EndedCoordinate = (coordinateAPI) => {
-  const {
-    states: { shipId, occupied, hit },
-  } = coordinateAPI;
+const EndedCoordinate = ({ coordinate, states, ...props }) => {
+  const coordinateAPI = { coordinate, states };
+  const { hit } = states;
 
-  const sunk = useSunk(shipId);
-
-  return (
-    <button
-      tabIndex="-1"
-      className={classNames('coordinate', {
-        coordinate__occupied: occupied,
-        coordinate__sunk: sunk,
-        coordinate__hit: hit,
-      })}
-    />
-  );
+  if (hit) {
+    return <HitCoordinate coordinateAPI={coordinateAPI} {...props} />;
+  } else {
+    return <UndisturbedCoordinate coordinateAPI={coordinateAPI} {...props} />;
+  }
 };
 
 export default EndedCoordinate;
