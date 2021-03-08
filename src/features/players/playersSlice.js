@@ -5,7 +5,7 @@ const getInitialState = () => ({
   entities: {
     1: {
       id: 1,
-      name: 'You',
+      name: 'Player',
       computer: false,
       opponentId: 2,
       boardId: 1,

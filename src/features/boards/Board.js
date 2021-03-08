@@ -29,7 +29,7 @@ const Board = ({ player }) => {
   return (
     <PlayerContext.Provider value={player}>
       <div className="container">
-        <h2 className="title is-2 my-3">{player.name}</h2>
+        <h2 className="title is-2 my-3 is-primary">{player.name}</h2>
         <BoardInterface />
         <StyledBoard tabIndex={player.computer ? '-1' : '0'}>
           {board.map((row, yIndex) => (

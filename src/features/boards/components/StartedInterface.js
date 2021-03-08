@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { selectHitHistoryByBoardId } from '../../hitHistory/hitHistorySlice';
 import { selectComputerTurns } from '../../game/gameSlice';
 import InterfaceElement from './InterfaceElement';
+import classNames from 'classnames';
 
 const StartedInterface = () => {
   const player = usePlayer();
@@ -11,6 +12,7 @@ const StartedInterface = () => {
 
   return (
     <div className="box tags is-justify-content-center is-flex-direction-column">
+      <StartedPrompt className="title is-4" />
       <InterfaceElement className="is-large is-info is-outlined">
         Ships Remaining: {shipsRemaining}
       </InterfaceElement>
@@ -19,6 +21,20 @@ const StartedInterface = () => {
       </div>
     </div>
   );
+};
+
+const StartedPrompt = ({ className }) => {
+  const opponent = usePlayers()[1];
+
+  if (opponent.computer) {
+    return <h3 className={className}>The computer is sinking your ships</h3>;
+  } else {
+    return (
+      <h3 className={classNames(className, 'has-text-success')}>
+        Click on the board to sink your opponent's ships!
+      </h3>
+    );
+  }
 };
 
 const StatusMessage = ({ status }) => {

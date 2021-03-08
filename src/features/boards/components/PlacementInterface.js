@@ -16,17 +16,21 @@ const PlacementInterface = () => {
 
   if (player.computer) {
     return (
-      <div className="box tags is-justify-content-center">
-        <InterfaceElement className="is-warning is-large">
-          Waiting for you to place your pieces...
-        </InterfaceElement>
+      <div className="box">
+        <h2 className="title is-3 mb-3">Waiting...</h2>
+        <div className="tags is-justify-content-center">
+          <InterfaceElement className="is-warning is-large is-light">
+            Waiting for you to place your pieces...
+          </InterfaceElement>
+        </div>
       </div>
     );
   } else {
     return (
       <div className="box">
+        <h2 className="title is-3 has-text-success mb-3">Place your pieces</h2>
         <div className="tags is-justify-content-center is-align-items-baseline">
-          <InterfaceElement className="is-info is-large">
+          <InterfaceElement className="is-info is-large is-light">
             Ships left to place: {shipsRemaining}
           </InterfaceElement>
           <button
