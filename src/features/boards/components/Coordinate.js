@@ -1,8 +1,8 @@
 import { useSelector } from 'react-redux';
 import PlacementCoordinate from './PlacementCoordinate';
-import InertCoordinate from './InertCoordinate';
-import { selectPhase } from '../../game/gameSlice';
 import StartedCoordinate from './StartedCoordinate';
+import EndedCoordinate from './EndedCoordinate';
+import { selectPhase } from '../../game/gameSlice';
 import './Coordinate.scss';
 
 const Coordinate = (props) => {
@@ -14,7 +14,7 @@ const Coordinate = (props) => {
     case 'started':
       return <StartedCoordinate {...props} />;
     default:
-      return <InertCoordinate {...props} />;
+      return <EndedCoordinate {...props} />;
   }
 };
 

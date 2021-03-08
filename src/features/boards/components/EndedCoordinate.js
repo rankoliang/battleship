@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { useSunk } from '../../ships/shipHooks';
 
-const InertCoordinate = (coordinateAPI) => {
+const EndedCoordinate = (coordinateAPI) => {
   const {
     states: { shipId, occupied, hit },
   } = coordinateAPI;
@@ -20,4 +20,4 @@ const InertCoordinate = (coordinateAPI) => {
   );
 };
 
-export default InertCoordinate;
+export default EndedCoordinate;
