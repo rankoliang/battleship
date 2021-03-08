@@ -1,7 +1,9 @@
+import classNames from 'classnames';
 import { useSunk } from '../../ships/shipHooks';
 import { GiCrossMark } from 'react-icons/gi';
 import { BiWater } from 'react-icons/bi';
 import { FaSkull } from 'react-icons/fa';
+import './Coordinate.scss';
 
 export const UndisturbedCoordinate = (props) => {
   const { coordinateAPI } = props;
@@ -70,8 +72,8 @@ export const SunkCoordinate = (props) => {
   );
 };
 
-export const DefaultCoordinate = (props) => {
-  return <button className="coordinate" {...props} />;
+export const DefaultCoordinate = ({ className, ...props }) => {
+  return <button className={classNames(className, 'coordinate')} {...props} />;
 };
 
 export const OccupiedCoordinate = (props) => {

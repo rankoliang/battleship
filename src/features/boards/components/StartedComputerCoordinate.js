@@ -1,37 +1,35 @@
 import classNames from 'classnames';
 import { useAttack } from '../boardHooks';
-import { GiCrossMark } from 'react-icons/gi';
+import { HitCoordinate, DefaultCoordinate } from './StyledCoordinates';
 
-const StartedComputerCoordinate = ({ coordinateAPI, sunk }) => {
+const StartedComputerCoordinate = (props) => {
+  const { coordinateAPI } = props;
   const { states, coordinate } = coordinateAPI;
-  const { hit, occupied } = states;
+  const { hit } = states;
 
   const attack = useAttack(coordinate);
 
   if (hit) {
-    return (
-      <button
-        tabIndex="-1"
-        className={classNames('coordinate', 'coordinate__hit', {
-          coordinate__occupied: occupied,
-          coordinate__sunk: sunk,
-        })}
-      >
-        {hit && <GiCrossMark />}
-      </button>
-    );
+    return <HitCoordinate tabIndex="-1" {...props} />;
   } else {
     return (
-      <button
-        tabIndex="0"
+      <DefaultCoordinate
+        className="cursor-pointer coordinate__hover"
         onClick={attack}
-        className={classNames(
-          'coordinate',
-          'cursor-pointer',
-          'coordinate__hover'
-        )}
+        {...props}
       />
     );
+    // return (
+    //   <button
+    //     tabIndex="0"
+    //     onClick={attack}
+    //     className={classNames(
+    //       'coordinate',
+    //       'cursor-pointer',
+    //       'coordinate__hover'
+    //     )}
+    //   />
+    // );
   }
 };
 
