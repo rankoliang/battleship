@@ -16,21 +16,27 @@ const PlacementInterface = () => {
 
   if (player.computer) {
     return (
-      <>
-        <InterfaceElement>
+      <div className="box tags is-justify-content-center">
+        <InterfaceElement className="is-warning is-large">
           Waiting for you to place your pieces...
         </InterfaceElement>
-      </>
+      </div>
     );
   } else {
     return (
-      <>
-        <InterfaceElement>
-          Ships left to place: {shipsRemaining}
-        </InterfaceElement>
-        <InterfaceElement>Current Orientation: {orientation}</InterfaceElement>
-        <button onClick={rotate}>Rotate</button>
-      </>
+      <div className="box">
+        <div className="tags is-justify-content-center is-align-items-baseline">
+          <InterfaceElement className="is-info is-large">
+            Ships left to place: {shipsRemaining}
+          </InterfaceElement>
+          <button
+            className="tag button is-large is-outlined  is-info"
+            onClick={rotate}
+          >
+            Rotate: <span className="orientation">{orientation}&deg;</span>
+          </button>
+        </div>
+      </div>
     );
   }
 };

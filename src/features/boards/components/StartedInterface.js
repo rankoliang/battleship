@@ -10,10 +10,14 @@ const StartedInterface = () => {
   const shipsRemaining = useRemainingShips(player);
 
   return (
-    <>
-      <LastCoordinateHitStatus />
-      <InterfaceElement>Ships Remaining: {shipsRemaining}</InterfaceElement>
-    </>
+    <div className="box tags is-justify-content-center is-flex-direction-column">
+      <InterfaceElement className="is-large is-info is-outlined">
+        Ships Remaining: {shipsRemaining}
+      </InterfaceElement>
+      <div className="tags">
+        <LastCoordinateHitStatus />
+      </div>
+    </div>
   );
 };
 
@@ -23,14 +27,22 @@ const StatusMessage = ({ status }) => {
   switch (status) {
     case 'miss':
       return (
-        <InterfaceElement>
+        <InterfaceElement className="is-danger">
           {player.name} took a shot and missed.
         </InterfaceElement>
       );
     case 'sunk':
-      return <InterfaceElement>{player.name} sunk a ship!</InterfaceElement>;
+      return (
+        <InterfaceElement className="is-success">
+          {player.name} sunk a ship!
+        </InterfaceElement>
+      );
     case 'hit':
-      return <InterfaceElement>{player.name} hit a ship!</InterfaceElement>;
+      return (
+        <InterfaceElement className="is-info">
+          {player.name} hit a ship!
+        </InterfaceElement>
+      );
     default:
       return <InterfaceElement>Unknown Status!</InterfaceElement>;
   }
@@ -52,20 +64,16 @@ const LastCoordinateHitStatus = () => {
     .map(([_, status]) => status);
 
   if (statuses.length > 0) {
-    return (
-      <ul>
-        {statuses.map((status, i) => {
-          return (
-            <li key={i}>
-              <StatusMessage status={status} />
-            </li>
-          );
-        })}
-      </ul>
-    );
+    return <Statuses statuses={statuses} />;
   } else {
     return <InterfaceElement>No Moves Made yet.</InterfaceElement>;
   }
+};
+
+const Statuses = ({ statuses }) => {
+  return statuses.map((status, i) => {
+    return <StatusMessage status={status} key={i} />;
+  });
 };
 
 export default StartedInterface;

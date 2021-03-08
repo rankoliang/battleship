@@ -1,10 +1,11 @@
-import styled from 'styled-components';
+import classNames from 'classnames';
 
-const InterfaceElement = styled.p`
-  padding: 0.25em;
-  border: 1px solid;
-
-  border-color: black;
-`;
+const InterfaceElement = ({ children, className, ...props }) => {
+  return (
+    <span className={classNames('tag', className)} {...props}>
+      {children}
+    </span>
+  );
+};
 
 export default InterfaceElement;

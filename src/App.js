@@ -14,8 +14,8 @@ function App() {
   return (
     <div className="App">
       <h1 className="title is-1 my-5">Battleship</h1>
-      <div className="container">
-        <div className="box mx-4">
+      <div className="container is-fluid">
+        <div className="box">
           <PhaseMessage />
         </div>
         <button className="button is-primary is-outlined" onClick={reset}>
