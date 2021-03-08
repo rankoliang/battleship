@@ -1,10 +1,10 @@
 import { useContext } from 'react';
 import PlayerContext from '../../players/PlayerContext';
-import ActiveComputerCoordinate from './ActiveComputerCoordinate';
-import { useSunk } from '../../ships/shipHooks';
+import StartedComputerCoordinate from './StartedComputerCoordinate';
 import StartedPlayerCoordinate from './StartedPlayerCoordinate';
+import { useSunk } from '../../ships/shipHooks';
 
-const ActiveCoordinate = (coordinateAPI) => {
+const StartedCoordinate = (coordinateAPI) => {
   const {
     states: { shipId },
   } = coordinateAPI;
@@ -14,7 +14,7 @@ const ActiveCoordinate = (coordinateAPI) => {
 
   if (player.computer) {
     return (
-      <ActiveComputerCoordinate coordinateAPI={coordinateAPI} sunk={sunk} />
+      <StartedComputerCoordinate coordinateAPI={coordinateAPI} sunk={sunk} />
     );
   } else {
     return (
@@ -23,4 +23,4 @@ const ActiveCoordinate = (coordinateAPI) => {
   }
 };
 
-export default ActiveCoordinate;
+export default StartedCoordinate;
