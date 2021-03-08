@@ -37,6 +37,8 @@ const PhaseMessage = () => {
   switch (phase) {
     case 'placement':
       return <PlacementMessage />;
+    case 'started':
+      return <StartPhaseMessage />;
     case 'ended':
       return <EndPhaseMessage />;
     default:
@@ -47,8 +49,23 @@ const PhaseMessage = () => {
 const PlacementMessage = () => {
   return (
     <p>
-      To place your ship, hover over your board. Press r to rotate your ship or
-      click on the rotate button.
+      To place your ship, hover over your board and click on a coordinate.
+      <br />
+      Press r to rotate your ship or click on the rotate button.
+      <br />
+      Press tab on desktop to cycle over any valid placements.
+    </p>
+  );
+};
+
+const StartPhaseMessage = () => {
+  return (
+    <p>
+      Start sinking ships by clicking on coordinates on your opponent's board.
+      <br />
+      Press tab on desktop to cycle over each valid coordinate.
+      <br />
+      Sink all 5 ships before your opponent to win!
     </p>
   );
 };

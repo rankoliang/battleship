@@ -25,9 +25,15 @@ const StartedInterface = () => {
 
 const StartedPrompt = ({ className }) => {
   const opponent = usePlayers()[1];
+  const computerSinksPerTurn = useSelector(selectComputerTurns);
 
   if (opponent.computer) {
-    return <h3 className={className}>The computer is sinking your ships</h3>;
+    return (
+      <h3 className={className}>
+        The computer is sinking {computerSinksPerTurn}{' '}
+        {computerSinksPerTurn === 1 ? 'ship' : 'ships'} per turn
+      </h3>
+    );
   } else {
     return (
       <h3 className={classNames(className, 'has-text-success')}>
