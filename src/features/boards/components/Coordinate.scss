@@ -21,10 +21,6 @@
   @extend .has-background-grey-light;
 }
 
-.coordinate__previewing--invalid {
-  border: 3px solid red;
-}
-
 .App .coordinate__occupied {
   @extend .has-background-grey-darker;
 }
@@ -37,6 +33,8 @@
   cursor: pointer;
 }
 
+.coordinate__previewing--invalid,
+.coordinate__sunk,
 .coordinate__hit {
   color: #f14668;
 }
