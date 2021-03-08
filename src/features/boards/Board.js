@@ -9,10 +9,13 @@ import BoardInterface from './components/BoardInterface';
 import './Board.css';
 
 const StyledBoard = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  width: 95%;
+  margin: 0 auto;
+  padding: 1em;
+  grid-gap: 2px;
 
   &:focus {
     outline: none;
@@ -28,7 +31,7 @@ const Board = ({ player }) => {
 
   return (
     <PlayerContext.Provider value={player}>
-      <div className="container">
+      <div className="board">
         <h2 className="title is-2 my-3 is-primary">{player.name}</h2>
         <BoardInterface />
         <StyledBoard tabIndex={player.computer ? '-1' : '0'}>

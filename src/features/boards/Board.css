@@ -1,9 +1,5 @@
-.interface {
-  height: 5em;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5em;
+.board {
+  flex: 1;
 }
 
 p {
@@ -14,4 +10,10 @@ p {
 .orientation {
   width: 2.5em;
   text-align: right;
+}
+
+@media screen and (max-width: 1200px) {
+  .board {
+    flex: initial;
+  }
 }

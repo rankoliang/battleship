@@ -1,23 +1,17 @@
 import styled from 'styled-components';
 import Coordinate from './Coordinate';
-
-const StyledRow = styled.div`
-  display: flex;
-  margin: 0;
-  padding: 0;
-`;
+import { AspectRatio } from 'react-aspect-ratio';
+import 'react-aspect-ratio/aspect-ratio.css';
 
 const Row = ({ row, yIndex }) => {
   return (
-    <StyledRow>
+    <>
       {row.map((states, xIndex) => (
-        <Coordinate
-          coordinate={[xIndex, yIndex]}
-          states={states}
-          key={xIndex}
-        />
+        <AspectRatio ratio="1" key={xIndex}>
+          <Coordinate coordinate={[xIndex, yIndex]} states={states} />
+        </AspectRatio>
       ))}
-    </StyledRow>
+    </>
   );
 };
 

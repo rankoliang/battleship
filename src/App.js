@@ -12,10 +12,10 @@ function App() {
   const reset = useReset();
 
   return (
-    <div className="App">
+    <div className="App mb-5">
       <h1 className="title is-1 my-5">Battleship</h1>
       <div className="container is-fluid">
-        <div className="box">
+        <div className="box phase-message">
           <PhaseMessage />
         </div>
         <button className="button is-primary is-outlined" onClick={reset}>
