@@ -3,7 +3,7 @@ import PlacementCoordinate from './PlacementCoordinate';
 import InertCoordinate from './InertCoordinate';
 import { selectPhase } from '../../game/gameSlice';
 import ActiveCoordinate from './ActiveCoordinate';
-import './Coordinate.css';
+import './Coordinate.scss';
 
 const Coordinate = (props) => {
   const phase = useSelector(selectPhase);

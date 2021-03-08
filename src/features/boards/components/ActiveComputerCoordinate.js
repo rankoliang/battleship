@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import { useAttack } from '../boardHooks';
+import { GiCrossMark } from 'react-icons/gi';
 
 const ActiveComputerCoordinate = ({ coordinateAPI, sunk }) => {
   const { states, coordinate } = coordinateAPI;
@@ -15,7 +16,9 @@ const ActiveComputerCoordinate = ({ coordinateAPI, sunk }) => {
           coordinate__occupied: occupied,
           coordinate__sunk: sunk,
         })}
-      />
+      >
+        {hit && <GiCrossMark />}
+      </button>
     );
   } else {
     return (

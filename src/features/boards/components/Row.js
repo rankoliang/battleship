@@ -1,4 +1,3 @@
-import styled from 'styled-components';
 import Coordinate from './Coordinate';
 import { AspectRatio } from 'react-aspect-ratio';
 import 'react-aspect-ratio/aspect-ratio.css';

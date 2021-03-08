@@ -1,0 +1,50 @@
+@import 'bulma/bulma.sass';
+
+.coordinate {
+  background-color: white;
+  border: 1px solid black;
+  margin: 1px;
+  border-radius: 0.25em;
+  font-size: 2em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.coordinate:focus {
+  outline: none;
+}
+
+.coordinate__previewing,
+.coordinate__hover:hover,
+.coordinate__hover:focus {
+  @extend .has-background-grey-light;
+}
+
+.coordinate__previewing--invalid {
+  border: 3px solid red;
+}
+
+.App .coordinate__occupied {
+  @extend .has-background-grey-darker;
+}
+
+.coordinate--valid-placement {
+  cursor: pointer;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.coordinate__hit {
+  color: #f14668;
+}
+
+.coordinate__sunk {
+  color: #f14668;
+}
+
+.coordinate__miss {
+  color: #3298dc;
+}
