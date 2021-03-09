@@ -20,13 +20,13 @@ export const huntAiTurn = createThunk(
 
     switch (selectAiMode(getState())) {
       case 'hunting':
-        await dispatch(huntAiHunted({ boardId }));
+        dispatch(huntAiHunted({ boardId }));
         break;
       case 'targeting':
-        await dispatch(huntAiTargeted({ boardId }));
+        dispatch(huntAiTargeted({ boardId }));
         break;
       default:
-        await dispatch(huntAiHunted({ boardId }));
+        dispatch(huntAiHunted({ boardId }));
     }
   }
 );
@@ -34,7 +34,7 @@ export const huntAiTurn = createThunk(
 const huntAiHunted = createThunk(
   'huntAiHunted',
   async ({ boardId }, { dispatch }) => {
-    await dispatch(randomAiTurn({ boardId }));
+    dispatch(randomAiTurn({ boardId }));
 
     dispatch(
       adjacentTargetsAdded({
@@ -52,7 +52,7 @@ const huntAiTargeted = createThunk(
   async ({ boardId }, { dispatch, getState }) => {
     const target = selectNextTarget(getState());
 
-    await dispatch(attackReceived(boardId, target));
+    dispatch(attackReceived(boardId, target));
 
     dispatch(adjacentTargetsAdded({ boardId }));
 
@@ -63,7 +63,7 @@ const huntAiTargeted = createThunk(
 const adjacentTargetsAdded = createThunk(
   'adjacentTargetsAdded',
   async ({ boardId, onHit = () => {} }, { dispatch, getState }) => {
-    const [lastCoordinate, status] = selectLastHitByBoardId(
+    const [lastCoordinate, { status }] = selectLastHitByBoardId(
       getState(),
       boardId
     );

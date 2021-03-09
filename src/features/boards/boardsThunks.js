@@ -9,7 +9,7 @@ import {
   selectAllShipsLeftToBePlaced,
   selectHitHistoryId,
 } from './boardsSlice';
-import { selectShipIsSunk } from '../ships/shipsSlice';
+import { selectShipById, selectShipIsSunk } from '../ships/shipsSlice';
 import { shipCoordinates } from '../ships/shipFactory';
 import {
   shipCreated,
@@ -52,10 +52,13 @@ const attackReceived = createThunk(
     } else if (board[y][x].occupied) {
       const { shipId, hitIndex } = board[y][x];
       dispatch(shipHit(shipId, hitIndex));
-      const shipStatus = selectShipIsSunk(getState(), shipId) ? 'sunk' : 'hit';
+      const ship = selectShipById(getState(), shipId);
+      const shipStatus = selectShipIsSunk(getState(), shipId)
+        ? { status: 'sunk', length: ship.length }
+        : { status: 'hit' };
       dispatch(hitRecorded(hitHistoryID, coordinate, shipStatus));
     } else {
-      dispatch(hitRecorded(hitHistoryID, coordinate, 'miss'));
+      dispatch(hitRecorded(hitHistoryID, coordinate, { status: 'miss' }));
     }
     return { boardId, coordinate };
   }

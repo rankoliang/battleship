@@ -14,14 +14,14 @@ export const hitHistorySlice = createSlice({
   reducers: {
     hitRecorded: {
       reducer: (state, action) => {
-        const { id, coordinate, status } = action.payload;
+        const { id, coordinate, info } = action.payload;
         const history = state[id].state;
 
-        history.push([coordinate, status]);
+        history.push([coordinate, info]);
       },
-      prepare: (id, coordinate, status = null) => {
+      prepare: (id, coordinate, info) => {
         return {
-          payload: { id, coordinate, status },
+          payload: { id, coordinate, info },
         };
       },
     },

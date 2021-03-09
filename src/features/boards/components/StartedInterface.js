@@ -83,7 +83,7 @@ const LastCoordinateHitStatus = () => {
 
   const statuses = hitHistory
     .slice(Math.max(0, hitHistory.length - turnLookbehind))
-    .map(([_, status]) => status);
+    .map(([_, { status }]) => status);
 
   if (statuses.length > 0) {
     return <Statuses statuses={statuses} />;

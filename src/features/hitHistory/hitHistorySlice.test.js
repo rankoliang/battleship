@@ -19,18 +19,23 @@ describe('boardsSlice', () => {
 
   describe('hitRecorded', () => {
     it('pushes to the history', () => {
-      store.dispatch(hitRecorded(1, [0, 0], 'miss'));
+      store.dispatch(hitRecorded(1, [0, 0], { status: 'miss' }));
 
-      expect(selectHitHistory(store.getState(), 1)).toEqual([[[0, 0], 'miss']]);
+      expect(selectHitHistory(store.getState(), 1)).toEqual([
+        [[0, 0], { status: 'miss' }],
+      ]);
     });
   });
 
   describe('selectLastHit', () => {
     it('returns the last hit', () => {
-      store.dispatch(hitRecorded(1, [0, 0], 'miss'));
-      store.dispatch(hitRecorded(1, [1, 0], 'hit'));
+      store.dispatch(hitRecorded(1, [0, 0], { status: 'miss' }));
+      store.dispatch(hitRecorded(1, [1, 0], { status: 'hit' }));
 
-      expect(selectLastHit(store.getState(), 1)).toEqual([[1, 0], 'hit']);
+      expect(selectLastHit(store.getState(), 1)).toEqual([
+        [1, 0],
+        { status: 'hit' },
+      ]);
     });
   });
 });
