@@ -1,4 +1,4 @@
-import { arrayWith, outOfBounds } from './helpers';
+import { arrayWith, outOfBounds, adjacentCoordinates } from './helpers';
 
 describe('helpers', () => {
   describe('outOfBounds', () => {
@@ -49,6 +49,24 @@ describe('helpers', () => {
         [null, null],
         [null, null],
       ]);
+    });
+  });
+
+  describe('adjacentCoordinates', () => {
+    let board;
+    beforeEach(() => {
+      board = arrayWith(10, () => arrayWith(10));
+    });
+
+    it('returns adjacentCoordinates', () => {
+      expect(adjacentCoordinates([1, 1], board).sort()).toEqual(
+        [
+          [0, 1],
+          [1, 0],
+          [2, 1],
+          [1, 2],
+        ].sort()
+      );
     });
   });
 });

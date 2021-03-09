@@ -1,4 +1,4 @@
-const arrayWith = (size, callback = () => null) => {
+export const arrayWith = (size, callback = () => null) => {
   const arr = Array(size);
 
   for (let i = 0; i < arr.length; i++) {
@@ -9,15 +9,15 @@ const arrayWith = (size, callback = () => null) => {
 };
 
 // returns an array with its value updated at arr[index]
-const updateArrayAtIndex = (arr, index, value) => {
+export const updateArrayAtIndex = (arr, index, value) => {
   return [...arr.slice(0, index), value, ...arr.slice(index + 1)];
 };
 
-const toRads = (degrees) => {
+export const toRads = (degrees) => {
   return (Math.PI * degrees) / 180;
 };
 
-const outOfBounds = (coordinate, board) => {
+export const outOfBounds = (coordinate, board) => {
   const board_length = board[0].length;
   const board_height = board.length;
 
@@ -26,8 +26,15 @@ const outOfBounds = (coordinate, board) => {
   return x < 0 || x >= board_length || y < 0 || y >= board_height;
 };
 
-const randomFromArray = (arr) => {
+export const randomFromArray = (arr) => {
   return arr[Math.floor(Math.random() * arr.length)];
 };
 
-export { updateArrayAtIndex, toRads, outOfBounds, arrayWith, randomFromArray };
+export const adjacentCoordinates = ([x, y], board) => {
+  return [
+    [x + 1, y],
+    [x - 1, y],
+    [x, y + 1],
+    [x, y - 1],
+  ];
+};
