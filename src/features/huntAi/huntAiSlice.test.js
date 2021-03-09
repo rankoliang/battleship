@@ -3,7 +3,7 @@ import reducer, {
   targetsAdded,
   selectAiMode,
   aiModeSet,
-} from './aiSlice';
+} from './huntAiSlice';
 import boardsReducer from '../boards/boardsSlice';
 import hitHistoryReducer from '../hitHistory/hitHistorySlice';
 import { configureStore } from '@reduxjs/toolkit';
@@ -13,7 +13,7 @@ describe('boardsSlice', () => {
   beforeEach(() => {
     store = configureStore({
       reducer: {
-        ai: reducer,
+        huntAi: reducer,
         board: boardsReducer,
         hitHistory: hitHistoryReducer,
       },

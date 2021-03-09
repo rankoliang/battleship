@@ -5,6 +5,7 @@ import shipsReducer from '../features/ships/shipsSlice';
 import gameReducer from '../features/game/gameSlice';
 import hitHistoryReducer from '../features/hitHistory/hitHistorySlice';
 import aiReducer from '../features/ai/aiSlice';
+import huntAiReducer from '../features/huntAi/huntAiSlice';
 
 export default configureStore({
   reducer: {
@@ -14,5 +15,6 @@ export default configureStore({
     ships: shipsReducer,
     hitHistory: hitHistoryReducer,
     ai: aiReducer,
+    huntAi: huntAiReducer,
   },
 });
