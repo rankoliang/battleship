@@ -33,20 +33,17 @@ export const huntAiTurn = createThunk(
 
 const huntAiHunted = createThunk(
   'huntAiHunted',
-  async ({ boardId }, { dispatch, getState }) => {
+  async ({ boardId }, { dispatch }) => {
     await dispatch(randomAiTurn({ boardId }));
-    const [lastCoordinate, status] = selectLastHitByBoardId(
-      getState(),
-      boardId
+
+    dispatch(
+      adjacentTargetsAdded({
+        boardId,
+        onHit: () => {
+          dispatch(aiModeSet('targeting'));
+        },
+      })
     );
-
-    if (status !== 'miss') {
-      dispatch(aiModeSet('targeting'));
-      const board = selectBoardById(getState(), boardId);
-      const targets = adjacentTargets(lastCoordinate, board);
-
-      dispatch(targetsAdded(targets));
-    }
   }
 );
 
@@ -56,19 +53,28 @@ const huntAiTargeted = createThunk(
     const target = selectNextTarget(getState());
 
     await dispatch(attackReceived(boardId, target));
+
+    dispatch(adjacentTargetsAdded({ boardId }));
+
+    return target;
+  }
+);
+
+const adjacentTargetsAdded = createThunk(
+  'adjacentTargetsAdded',
+  async ({ boardId, onHit = () => {} }, { dispatch, getState }) => {
     const [lastCoordinate, status] = selectLastHitByBoardId(
       getState(),
       boardId
     );
 
     if (status !== 'miss') {
+      onHit();
       const board = selectBoardById(getState(), boardId);
       const targets = adjacentTargets(lastCoordinate, board);
 
       dispatch(targetsAdded(targets));
     }
-
-    return target;
   }
 );
 
@@ -117,6 +123,7 @@ export const selectNextTarget = createSelector(
 );
 
 // private
+
 const coordinatesEqual = (a, b) => {
   return a[0] === b[0] && a[1] === b[1];
 };
