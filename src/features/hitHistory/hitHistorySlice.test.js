@@ -1,4 +1,8 @@
-import reducer, { hitRecorded, selectHitHistory } from './hitHistorySlice';
+import reducer, {
+  hitRecorded,
+  selectHitHistory,
+  selectLastHit,
+} from './hitHistorySlice';
 import { configureStore } from '@reduxjs/toolkit';
 
 describe('boardsSlice', () => {
@@ -18,6 +22,15 @@ describe('boardsSlice', () => {
       store.dispatch(hitRecorded(1, [0, 0], 'miss'));
 
       expect(selectHitHistory(store.getState(), 1)).toEqual([[[0, 0], 'miss']]);
+    });
+  });
+
+  describe('selectLastHit', () => {
+    it('returns the last hit', () => {
+      store.dispatch(hitRecorded(1, [0, 0], 'miss'));
+      store.dispatch(hitRecorded(1, [1, 0], 'hit'));
+
+      expect(selectLastHit(store.getState(), 1)).toEqual([[1, 0], 'hit']);
     });
   });
 });

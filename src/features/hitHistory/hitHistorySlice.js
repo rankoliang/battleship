@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createSelector } from '@reduxjs/toolkit';
 import { selectHitHistoryId } from '../boards/boardsSlice';
 
 const getInitialState = () => {
@@ -38,4 +38,16 @@ export const selectHitHistoryByBoardId = (state, boardId) => {
 
   return selectHitHistory(state, hitHistoryId);
 };
+
+export const selectLastHit = createSelector(
+  selectHitHistory,
+  (history) => history[history.length - 1]
+);
+
+export const selectLastHitByBoardId = (state, boardId) => {
+  const hitHistoryId = selectHitHistoryId(state, boardId);
+
+  return selectLastHit(state, hitHistoryId);
+};
+
 export default hitHistorySlice.reducer;
