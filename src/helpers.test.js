@@ -1,4 +1,9 @@
-import { arrayWith, outOfBounds, adjacentCoordinates } from './helpers';
+import {
+  arrayWith,
+  outOfBounds,
+  adjacentCoordinates,
+  adjacentTargets,
+} from './helpers';
 
 describe('helpers', () => {
   describe('outOfBounds', () => {
@@ -74,6 +79,40 @@ describe('helpers', () => {
         [
           [1, 0],
           [0, 1],
+        ].sort()
+      );
+    });
+  });
+
+  describe('adjacentTargets', () => {
+    let board;
+    beforeEach(() => {
+      board = arrayWith(10, () => arrayWith(10, () => ({ hit: false })));
+    });
+
+    it('filters hit coordinates', () => {
+      const coordinates = [1, 0];
+      const [x, y] = coordinates;
+      board[y][x].hit = true;
+
+      expect(adjacentTargets([1, 1], board)).not.toContain([[1, 0]]);
+
+      expect(adjacentTargets([1, 1], board).sort()).toEqual(
+        [
+          [0, 1],
+          [2, 1],
+          [1, 2],
+        ].sort()
+      );
+    });
+
+    it('does not filter coordinates that are not hit ', () => {
+      expect(adjacentTargets([1, 1], board).sort()).toEqual(
+        [
+          [0, 1],
+          [1, 0],
+          [2, 1],
+          [1, 2],
         ].sort()
       );
     });

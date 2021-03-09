@@ -30,7 +30,7 @@ export const randomFromArray = (arr) => {
   return arr[Math.floor(Math.random() * arr.length)];
 };
 
-export const adjacentCoordinates = ([x, y], board) => {
+export const adjacentCoordinates = ([x, y], board, callback = () => true) => {
   const adjacent = [
     [x + 1, y],
     [x - 1, y],
@@ -38,5 +38,17 @@ export const adjacentCoordinates = ([x, y], board) => {
     [x, y - 1],
   ];
 
-  return adjacent.filter((coordinate) => !outOfBounds(coordinate, board));
+  return adjacent.filter((coordinate) => {
+    const [x, y] = coordinate;
+
+    if (outOfBounds(coordinate, board)) {
+      return false;
+    } else {
+      return callback(board[y][x]);
+    }
+  });
+};
+
+export const adjacentTargets = (coordinates, board) => {
+  return adjacentCoordinates(coordinates, board, ({ hit }) => !hit);
 };
