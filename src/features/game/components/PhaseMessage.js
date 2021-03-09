@@ -1,5 +1,7 @@
 import { useSelector } from 'react-redux';
 import { selectWinner, selectPhase } from '../gameSlice';
+import { AiFillRobot } from 'react-icons/ai';
+import { GiCaptainHatProfile } from 'react-icons/gi';
 
 const PhaseMessage = () => {
   const phase = useSelector(selectPhase);
@@ -44,9 +46,21 @@ const EndPhaseMessage = () => {
   const winner = useSelector(selectWinner);
 
   if (winner.computer) {
-    return <p>The computer won. Try again?</p>;
+    return (
+      <div className="winner-container">
+        <AiFillRobot className="winner-icon has-text-info" />
+        <h3 className="title is-3 mb-3">The computer won.</h3>
+        <p>Try again?</p>
+      </div>
+    );
   } else {
-    return <p>You won! Play another round?</p>;
+    return (
+      <div className="winner-container">
+        <GiCaptainHatProfile className="winner-icon has-text-info" />
+        <h3 className="title is-3 mb-3">You win!</h3>
+        <p>Try again?</p>
+      </div>
+    );
   }
 };
 

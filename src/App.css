@@ -21,6 +21,17 @@
   white-space: nowrap;
 }
 
+.winner-container {
+  position: relative;
+}
+
+.winner-icon {
+  position: absolute;
+  left: 0em;
+  height: 100%;
+  font-size: 4em;
+}
+
 @media screen and (max-width: 800px) {
   .boards {
     flex-direction: column;

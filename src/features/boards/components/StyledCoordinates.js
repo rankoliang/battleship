@@ -17,7 +17,7 @@ export const UndisturbedCoordinate = (props) => {
   }
 };
 
-export const DamagedShipCoordinate = (props) => {
+export const DamagedShipCoordinate = ({ coordinateAPI, ...props }) => {
   return (
     <button
       className="coordinate coordinate__hit coordinate__occupied"
@@ -53,7 +53,7 @@ export const SuccessfulHitCoordinate = (props) => {
   }
 };
 
-export const MissedCoordinate = (props) => {
+export const MissedCoordinate = ({ coordinateAPI, ...props }) => {
   return (
     <button className="coordinate coordinate__miss" {...props}>
       <BiWater />
@@ -61,7 +61,7 @@ export const MissedCoordinate = (props) => {
   );
 };
 
-export const SunkCoordinate = (props) => {
+export const SunkCoordinate = ({ coordinateAPI, ...props }) => {
   return (
     <button
       className="coordinate coordinate__occupied coordinate__sunk"
@@ -72,10 +72,10 @@ export const SunkCoordinate = (props) => {
   );
 };
 
-export const DefaultCoordinate = ({ className, ...props }) => {
+export const DefaultCoordinate = ({ coordinateAPI, className, ...props }) => {
   return <button className={classNames(className, 'coordinate')} {...props} />;
 };
 
-export const OccupiedCoordinate = (props) => {
+export const OccupiedCoordinate = ({ coordinateAPI, ...props }) => {
   return <button className="coordinate coordinate__occupied" {...props} />;
 };
