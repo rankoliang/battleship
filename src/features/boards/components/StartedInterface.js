@@ -30,14 +30,14 @@ const StartedPrompt = ({ className }) => {
   if (opponent.computer) {
     return (
       <h3 className={className}>
-        The computer is sinking {computerSinksPerTurn}{' '}
+        The computer sinks {computerSinksPerTurn}{' '}
         {computerSinksPerTurn === 1 ? 'ship' : 'ships'} per turn
       </h3>
     );
   } else {
     return (
       <h3 className={classNames(className, 'has-text-success')}>
-        Click on the board to sink your opponent's ships!
+        Click on this board to sink their ships!
       </h3>
     );
   }
