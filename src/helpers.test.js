@@ -68,5 +68,14 @@ describe('helpers', () => {
         ].sort()
       );
     });
+
+    it('filters out of bound elements', () => {
+      expect(adjacentCoordinates([0, 0], board).sort()).toEqual(
+        [
+          [1, 0],
+          [0, 1],
+        ].sort()
+      );
+    });
   });
 });

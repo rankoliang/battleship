@@ -31,10 +31,12 @@ export const randomFromArray = (arr) => {
 };
 
 export const adjacentCoordinates = ([x, y], board) => {
-  return [
+  const adjacent = [
     [x + 1, y],
     [x - 1, y],
     [x, y + 1],
     [x, y - 1],
   ];
+
+  return adjacent.filter((coordinate) => !outOfBounds(coordinate, board));
 };
