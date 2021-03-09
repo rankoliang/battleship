@@ -1,4 +1,9 @@
-import reducer, { selectAiMode, aiModeSet } from './aiSlice';
+import reducer, {
+  selectTargets,
+  targetsAdded,
+  selectAiMode,
+  aiModeSet,
+} from './aiSlice';
 import boardsReducer from '../boards/boardsSlice';
 import hitHistoryReducer from '../hitHistory/hitHistorySlice';
 import { configureStore } from '@reduxjs/toolkit';
@@ -22,6 +27,24 @@ describe('boardsSlice', () => {
       store.dispatch(aiModeSet('targeting'));
 
       expect(selectAiMode(store.getState())).toBe('targeting');
+    });
+  });
+
+  describe('targetsAdded', () => {
+    it('pushes to the targets array', () => {
+      expect(selectTargets(store.getState())).toEqual([]);
+
+      store.dispatch(
+        targetsAdded([
+          [0, 0],
+          [0, 1],
+        ])
+      );
+
+      expect(selectTargets(store.getState())).toEqual([
+        [0, 0],
+        [0, 1],
+      ]);
     });
   });
 });

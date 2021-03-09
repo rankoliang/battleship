@@ -27,6 +27,7 @@ export const aiTurn = createThunk(
 const getInitialState = () => ({
   turns: 2,
   mode: 'hunting',
+  targets: [],
 });
 
 export const aiSlice = createSlice({
@@ -36,16 +37,21 @@ export const aiSlice = createSlice({
     aiModeSet: (state, action) => {
       state.mode = action.payload;
     },
+    targetsAdded: (state, action) => {
+      state.targets.push(...action.payload);
+    },
   },
 });
 
-export const { aiModeSet } = aiSlice.actions;
+export const { aiModeSet, targetsAdded } = aiSlice.actions;
 
 export const selectAiTurns = (state) => state.ai.turns;
 
 export default aiSlice.reducer;
 
 export const selectAiMode = (state) => state.ai.mode;
+
+export const selectTargets = (state) => state.ai.targets;
 
 // private
 const randomAttackChoice = (state, boardId) => {
