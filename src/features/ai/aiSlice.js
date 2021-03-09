@@ -8,27 +8,19 @@ import shuffle from 'shuffle-array';
 export const randomAiTurn = createThunk(
   'randomAiTurnStatus',
   ({ boardId }, { dispatch, getState }) => {
-    const coordinateOptions = selectHittableCoordinates(getState(), boardId);
-    const aiTurns = selectAiTurns(getState());
-
-    const computerChoice = shuffle.pick(coordinateOptions, {
-      picks: aiTurns,
-    });
-
-    if (aiTurns === 1) {
-      dispatch(attackReceived(boardId, computerChoice));
-    } else {
-      for (let turn = 0; turn < aiTurns; turn++) {
-        dispatch(attackReceived(boardId, computerChoice[turn]));
-      }
-    }
+    const attacks = randomAttackChoice(getState(), boardId);
+    dispatch(attackReceived(boardId, attacks));
   }
 );
 
 export const aiTurn = createThunk(
   'aiTurnStatus',
-  ({ boardId }, { dispatch }) => {
-    dispatch(randomAiTurn({ boardId }));
+  async (payload, { dispatch, getState }) => {
+    const aiTurns = selectAiTurns(getState());
+
+    for (let turn = 0; turn < aiTurns; turn++) {
+      await dispatch(randomAiTurn(payload));
+    }
   }
 );
 
@@ -46,3 +38,10 @@ export const {} = aiSlice.actions;
 export const selectAiTurns = (state) => state.ai.turns;
 
 export default aiSlice.reducer;
+
+// private
+const randomAttackChoice = (state, boardId) => {
+  const coordinateOptions = selectHittableCoordinates(state, boardId);
+
+  return shuffle.pick(coordinateOptions);
+};
