@@ -1,3 +1,5 @@
+import shuffle from 'shuffle-array';
+
 export const arrayWith = (size, callback = () => null) => {
   const arr = Array(size);
 
@@ -50,5 +52,5 @@ export const adjacentCoordinates = ([x, y], board, callback = () => true) => {
 };
 
 export const adjacentTargets = (coordinates, board) => {
-  return adjacentCoordinates(coordinates, board, ({ hit }) => !hit);
+  return shuffle(adjacentCoordinates(coordinates, board, ({ hit }) => !hit));
 };

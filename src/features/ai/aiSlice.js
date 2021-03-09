@@ -123,9 +123,8 @@ export const aiSlice = createSlice({
   },
   extraReducers: {
     [huntAiTargeted.fulfilled]: (state, action) => {
-      state.targets = state.targets.filter(([x, y]) => {
-        console.log(x);
-        return !(x === action.payload[0] && y === action.payload[1]);
+      state.targets = state.targets.filter((target) => {
+        return !coordinatesEqual(target, action.payload);
       });
     },
   },
@@ -158,4 +157,8 @@ const randomAttackChoice = (state, boardId) => {
   const coordinateOptions = selectHittableCoordinates(state, boardId);
 
   return shuffle.pick(coordinateOptions);
+};
+
+const coordinatesEqual = (a, b) => {
+  return a[0] === b[0] && a[1] === b[1];
 };
