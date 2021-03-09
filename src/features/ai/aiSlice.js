@@ -36,6 +36,7 @@ export const aiSlice = createSlice({
   reducers: {
     aiModeSet: (state, action) => {
       state.mode = action.payload;
+      state.targets = [];
     },
     targetsAdded: (state, action) => {
       state.targets.push(...action.payload);

@@ -28,6 +28,18 @@ describe('boardsSlice', () => {
 
       expect(selectAiMode(store.getState())).toBe('targeting');
     });
+
+    it('resets the target array', () => {
+      store.dispatch(
+        targetsAdded([
+          [0, 0],
+          [0, 1],
+        ])
+      );
+      store.dispatch(aiModeSet('hunting'));
+
+      expect(selectTargets(store.getState())).toEqual([]);
+    });
   });
 
   describe('targetsAdded', () => {
