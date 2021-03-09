@@ -4,9 +4,8 @@ import CoordinateContext, {
   withCoordinateContext,
 } from '../contexts/CoordinateContext';
 
-const InteractableCoordinate = () => {
+const PlacementPlayerCoordinate = () => {
   const APIS = useContext(CoordinateContext);
-
   const { isValidPlacement, placeShip } = APIS.ship;
 
   if (isValidPlacement) {
@@ -16,4 +15,4 @@ const InteractableCoordinate = () => {
   }
 };
 
-export default withCoordinateContext(InteractableCoordinate);
+export default withCoordinateContext(PlacementPlayerCoordinate);

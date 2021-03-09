@@ -3,68 +3,75 @@ import classNames from 'classnames';
 import CoordinateContext from '../contexts/CoordinateContext';
 import { ImBlocked } from 'react-icons/im';
 
+// Decides whether the coordinate goes into the preview state or not
 const PreviewableCoordinate = (props) => {
   const APIS = useContext(CoordinateContext);
   const { states } = APIS.coordinate;
-  const { occupied, previewing } = states;
-  const { isValidPlacement } = APIS.ship;
-  const { isPreviewValid, setPreview, removePreview } = APIS.preview;
+  const { previewing } = states;
 
   if (previewing) {
-    if (isPreviewValid) {
-      return (
-        <button
-          onFocus={setPreview}
-          onMouseEnter={setPreview}
-          onBlur={removePreview}
-          onMouseLeave={removePreview}
-          className={classNames('coordinate', 'coordinate__previewing', {
-            coordinate__occupied: occupied,
-            'coordinate--valid-placement': isValidPlacement,
-          })}
-          {...props}
-        />
-      );
-    } else {
-      return (
-        <InvalidPreviewPlacementCoordinate
-          onFocus={setPreview}
-          onMouseEnter={setPreview}
-          onBlur={removePreview}
-          onMouseLeave={removePreview}
-          className={classNames('coordinate', 'coordinate__previewing', {
-            coordinate__occupied: occupied,
-            'coordinate--valid-placement': isValidPlacement,
-          })}
-          {...props}
-        />
-      );
-    }
+    return <PreviewingCoordinate {...props} />;
+  } else {
+    return <PreviewControllingCoordinate className="coordinate" {...props} />;
+  }
+};
+
+// A coordinate that has the coordinate__previewing style.
+// Two states: Blocked or Unblocked
+const PreviewingCoordinate = (props) => {
+  const APIS = useContext(CoordinateContext);
+  const { isPreviewValid } = APIS.preview;
+
+  if (isPreviewValid) {
+    return (
+      <PreviewControllingCoordinate
+        className="coordinate coordinate__previewing"
+        {...props}
+      />
+    );
   } else {
     return (
-      <button
-        onFocus={setPreview}
-        onMouseEnter={setPreview}
-        onBlur={removePreview}
-        onMouseLeave={removePreview}
-        className={classNames('coordinate', {
-          coordinate__occupied: occupied,
-          'coordinate--valid-placement': isValidPlacement,
-        })}
+      <BlockedPreviewingCoordinate
+        className="coordinate coordinate__previewing"
         {...props}
       />
     );
   }
 };
 
-const InvalidPreviewPlacementCoordinate = ({ className, ...props }) => {
+// Shows a red cross icon in the center
+const BlockedPreviewingCoordinate = ({ className, ...props }) => {
   return (
-    <button
+    <PreviewControllingCoordinate
       className={classNames(className, 'coordinate__previewing--invalid')}
       {...props}
     >
       <ImBlocked />
-    </button>
+    </PreviewControllingCoordinate>
+  );
+};
+
+// A Coordinate that controls the preview state based on mouse movements
+// or toggling focus
+const PreviewControllingCoordinate = ({ className, ...props }) => {
+  const APIS = useContext(CoordinateContext);
+  const { states } = APIS.coordinate;
+  const { occupied } = states;
+  const { isValidPlacement } = APIS.ship;
+  const { setPreview, removePreview } = APIS.preview;
+
+  return (
+    <button
+      onFocus={setPreview}
+      onMouseEnter={setPreview}
+      onBlur={removePreview}
+      onMouseLeave={removePreview}
+      className={classNames(className, {
+        coordinate__occupied: occupied,
+        'coordinate--valid-placement': isValidPlacement,
+      })}
+      {...props}
+    ></button>
   );
 };
 

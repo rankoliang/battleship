@@ -1,7 +1,6 @@
 import { useContext } from 'react';
 import PlayerContext from '../../players/PlayerContext';
-import InteractableCoordinate from './InteractableCoordinate';
-import classNames from 'classnames';
+import PlacementPlayerCoordinate from './PlacementPlayerCoordinate';
 import { DefaultCoordinate } from './StyledCoordinates';
 
 const PlacementCoordinate = ({ coordinate, states }) => {
@@ -10,7 +9,7 @@ const PlacementCoordinate = ({ coordinate, states }) => {
   if (player.computer) {
     return <DefaultCoordinate tabIndex="-1" />;
   } else {
-    return <InteractableCoordinate coordinateAPI={{ coordinate, states }} />;
+    return <PlacementPlayerCoordinate coordinateAPI={{ coordinate, states }} />;
   }
 };
 
