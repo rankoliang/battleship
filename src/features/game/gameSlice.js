@@ -21,7 +21,6 @@ export const gameReset = createThunk(
 const getInitialState = () => ({
   phases: ['placement', 'started', 'ended'],
   winner: null,
-  computerTurns: 2,
 });
 
 export const gameSlice = createSlice({
@@ -47,7 +46,5 @@ export const selectGame = (state) => state.game;
 export const selectPhase = createSelector(selectGame, (game) => game.phases[0]);
 
 export const selectWinner = createSelector(selectGame, (game) => game.winner);
-
-export const selectComputerTurns = (state) => state.game.computerTurns;
 
 export default gameSlice.reducer;
