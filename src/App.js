@@ -1,9 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { selectPlayers } from './features/players/playersSlice';
-import Board from './features/boards/Board';
-import { useReset } from './features/game/gameHooks';
 import { selectBegun } from './features/game/gameSlice';
+import BegunGame from './features/game/components/BegunGame';
 import PhaseMessage from './features/game/components/PhaseMessage';
 import DifficultyButtons from './features/ai/components/DifficultyButtons';
 import 'bulma/css/bulma.css';
@@ -24,23 +22,5 @@ function App() {
     </div>
   );
 }
-
-const BegunGame = () => {
-  const players = useSelector(selectPlayers);
-  const reset = useReset();
-
-  return (
-    <div>
-      <button className="button is-primary is-outlined" onClick={reset}>
-        Reset
-      </button>
-      <div className="boards">
-        {players.map((player) => (
-          <Board player={player} key={player.id} />
-        ))}
-      </div>
-    </div>
-  );
-};
 
 export default App;

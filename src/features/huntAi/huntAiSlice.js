@@ -89,6 +89,7 @@ const adjacentTargetsAdded = createThunk(
           dispatch(setTargetingHits(selectTargetingHits()));
         }
         break;
+      default:
     }
   }
 );
