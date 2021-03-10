@@ -40,7 +40,29 @@ const getInitialState = () => ({
 export const aiSlice = createSlice({
   name: 'ai',
   initialState: getInitialState(),
+  reducers: {
+    difficultyChosen: (state, action) => {
+      const { difficulty, strategy } = action.payload;
+
+      state.strategy = strategy;
+
+      switch (difficulty) {
+        case 'easy':
+          state.turns = 1;
+          break;
+        case 'hard':
+          state.turns = 3;
+          break;
+        case 'medium':
+        default:
+          state.turns = 2;
+          break;
+      }
+    },
+  },
 });
+
+export const { difficultyChosen } = aiSlice.actions;
 
 export const selectAiTurns = (state) => state.ai.turns;
 

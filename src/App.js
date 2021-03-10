@@ -4,6 +4,7 @@ import { selectPlayers } from './features/players/playersSlice';
 import Board from './features/boards/Board';
 import { useReset } from './features/game/gameHooks';
 import PhaseMessage from './features/game/components/PhaseMessage';
+import DifficultyButtons from './features/ai/components/DifficultyButtons';
 import 'bulma/css/bulma.css';
 import './App.css';
 
@@ -21,6 +22,7 @@ function App() {
         <button className="button is-primary is-outlined" onClick={reset}>
           Reset
         </button>
+        <DifficultyButtons />
         <div className="boards">
           {players.map((player) => (
             <Board player={player} key={player.id} />
