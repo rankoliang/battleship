@@ -23,7 +23,7 @@ const PlacementPhaseMessage = () => {
     <p>
       To place your ship, hover over your board and click on a coordinate.
       <br />
-      Press r to rotate your ship or click on the rotate button.
+      Press t to rotate your ship or click on the rotate button.
       <br />
       Press tab on desktop to cycle over any valid placements.
     </p>

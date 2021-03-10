@@ -15,7 +15,7 @@ function App() {
       <h1 className="title is-1 my-5">Battleship</h1>
       <div className="container is-fluid">
         <div className="box phase-message">
-          <PhaseMessage />
+          {gameBegun ? <PhaseMessage /> : <p>Choose a difficulty to begin!</p>}
         </div>
         {!gameBegun ? <DifficultyButtons /> : <BegunGame />}
       </div>
