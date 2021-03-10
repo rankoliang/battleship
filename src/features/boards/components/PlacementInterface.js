@@ -6,7 +6,7 @@ import InterfaceElement from './InterfaceElement';
 
 const PlacementInterface = () => {
   const player = usePlayer();
-  const rotate = useRotation(player.boardId, 't');
+  const rotate = useRotation(player.boardId, 'z');
   const orientation = useSelector((state) =>
     selectOrientation(state, player.boardId)
   );
