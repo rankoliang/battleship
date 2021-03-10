@@ -12,13 +12,17 @@ const StyledBoard = styled.div`
   box-sizing: border-box;
   display: grid;
   grid-template-columns: repeat(10, 1fr);
-  width: 75%;
+  width: 85%;
   margin: 0 auto;
   padding: 1em;
   grid-gap: 2px;
 
   &:focus {
     outline: none;
+  }
+
+  @media screen and (max-width: 800px) {
+    width: 100%;
   }
 `;
 

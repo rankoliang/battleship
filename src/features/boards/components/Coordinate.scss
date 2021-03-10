@@ -46,3 +46,9 @@
 .coordinate__miss {
   color: #3298dc;
 }
+
+@media screen and (max-width: 800px) {
+  .coordinate {
+    border-radius: 2px;
+  }
+}
