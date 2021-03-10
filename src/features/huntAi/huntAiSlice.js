@@ -63,17 +63,32 @@ const huntAiTargeted = createThunk(
 const adjacentTargetsAdded = createThunk(
   'adjacentTargetsAdded',
   async ({ boardId, onHit = () => {} }, { dispatch, getState }) => {
-    const [lastCoordinate, { status }] = selectLastHitByBoardId(
+    const [lastCoordinate, { status, length }] = selectLastHitByBoardId(
       getState(),
       boardId
     );
 
     if (status !== 'miss') {
       onHit();
+
       const board = selectBoardById(getState(), boardId);
       const targets = adjacentTargets(lastCoordinate, board);
 
       dispatch(targetsAdded(targets));
+    }
+
+    switch (status) {
+      case 'hit':
+        dispatch(targetHit());
+        break;
+      case 'sunk':
+        const hits = selectTargetingHits(getState()) - length + 1;
+        if (hits === 0) {
+          dispatch(aiModeSet('hunting'));
+        } else {
+          dispatch(setTargetingHits(selectTargetingHits()));
+        }
+        break;
     }
   }
 );
@@ -81,6 +96,7 @@ const adjacentTargetsAdded = createThunk(
 const getInitialState = () => ({
   mode: 'hunting',
   targets: [],
+  targetingHits: 0,
 });
 
 export const huntAiSlice = createSlice({
@@ -90,21 +106,35 @@ export const huntAiSlice = createSlice({
     aiModeSet: (state, action) => {
       state.mode = action.payload;
       state.targets = [];
+      state.targetingHits = 0;
     },
     targetsAdded: (state, action) => {
       state.targets.push(...action.payload);
     },
+    targetHit: (state) => {
+      state.targetingHits++;
+    },
+    setTargetingHits: (state, action) => {
+      state.targetingHits = action.payload;
+    },
   },
   extraReducers: {
     [huntAiTargeted.fulfilled]: (state, action) => {
-      state.targets = state.targets.filter((target) => {
-        return !coordinatesEqual(target, action.payload);
-      });
+      if (state.mode === 'targeting') {
+        state.targets = state.targets.filter((target) => {
+          return !coordinatesEqual(target, action.payload);
+        });
+      }
     },
   },
 });
 
-export const { aiModeSet, targetsAdded } = huntAiSlice.actions;
+export const {
+  aiModeSet,
+  targetsAdded,
+  targetHit,
+  setTargetingHits,
+} = huntAiSlice.actions;
 
 export default huntAiSlice.reducer;
 
@@ -121,6 +151,8 @@ export const selectNextTarget = createSelector(
   selectTargets,
   (targets) => targets[targets.length - 1]
 );
+
+const selectTargetingHits = (state) => state.huntAi.targetingHits;
 
 // private
 
