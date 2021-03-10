@@ -17,9 +17,9 @@ const PlacementInterface = () => {
   if (player.computer) {
     return (
       <div className="box mx-3">
-        <h2 className="title is-3 mb-3">Waiting...</h2>
+        <h2 className="title is-5 mb-3">Waiting...</h2>
         <div className="tags is-justify-content-center">
-          <InterfaceElement className="is-warning is-large is-light">
+          <InterfaceElement className="is-warning is-medium is-light">
             Waiting for you to place your pieces...
           </InterfaceElement>
         </div>
@@ -28,17 +28,17 @@ const PlacementInterface = () => {
   } else {
     return (
       <div className="box mx-3">
-        <h2 className="title is-3 has-text-success mb-3 has-white-space-nowrap">
+        <h2 className="title is-5 has-text-success mb-3 has-white-space-nowrap">
           Place your pieces
         </h2>
         <div className="tags is-justify-content-center is-align-items-baseline is-flex-wrap-nowrap">
           <button
-            className="tag button is-large is-outlined is-info"
+            className="tag button is-medium is-outlined is-info"
             onClick={rotate}
           >
             Rotate: <span className="orientation">{orientation}&deg;</span>
           </button>
-          <InterfaceElement className="is-info is-large is-light">
+          <InterfaceElement className="is-info is-medium is-light">
             {shipsRemaining} {shipsRemaining === 1 ? 'ship' : 'ships'} left to
             place
           </InterfaceElement>

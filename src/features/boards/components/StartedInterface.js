@@ -12,8 +12,8 @@ const StartedInterface = () => {
 
   return (
     <div className="box mx-5 interface tags is-justify-content-center is-flex-direction-column">
-      <StartedPrompt className="title is-4" />
-      <InterfaceElement className="is-large is-info is-outlined">
+      <StartedPrompt className="title is-5" />
+      <InterfaceElement className="is-medium is-info is-outlined">
         Ships Remaining: {shipsRemaining}
       </InterfaceElement>
       <div className="tags">

@@ -9,7 +9,6 @@ import './App.css';
 
 function App() {
   const gameBegun = useSelector(selectBegun);
-
   return (
     <div className="App mb-5">
       <h1 className="title is-1 my-5">Battleship</h1>

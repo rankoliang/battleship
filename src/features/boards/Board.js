@@ -12,7 +12,7 @@ const StyledBoard = styled.div`
   box-sizing: border-box;
   display: grid;
   grid-template-columns: repeat(10, 1fr);
-  width: 95%;
+  width: 75%;
   margin: 0 auto;
   padding: 1em;
   grid-gap: 2px;
@@ -32,7 +32,7 @@ const Board = ({ player }) => {
   return (
     <PlayerContext.Provider value={player}>
       <div className="board">
-        <h2 className="title is-2 my-3 is-primary">{player.name}</h2>
+        <h2 className="title is-3 my-3 is-primary">{player.name}</h2>
         <BoardInterface />
         <StyledBoard tabIndex={player.computer ? '-1' : '0'}>
           {board.map((row, yIndex) => (
