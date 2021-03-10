@@ -57,6 +57,7 @@ const DifficultyButtons = () => {
 
 const DifficultyButton = ({ difficulty, strategy, className, children }) => {
   const dispatch = useDispatch();
+
   return (
     <button
       className={classNames('button', className, 'm-1')}

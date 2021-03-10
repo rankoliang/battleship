@@ -3,6 +3,7 @@ import {
   attackReceived,
   selectHittableCoordinates,
 } from '../boards/boardsSlice';
+import { gameReset, gameBegun } from '../game/gameSlice';
 import shuffle from 'shuffle-array';
 import { huntAiTurn } from '../huntAi/huntAiSlice';
 
@@ -32,6 +33,16 @@ export const aiTurn = createThunk(
   }
 );
 
+export const difficultyChosen = createThunk(
+  'difficultyChosenStatus',
+  async (payload, { dispatch }) => {
+    await dispatch(gameReset());
+    dispatch(gameBegun());
+
+    return payload;
+  }
+);
+
 const getInitialState = () => ({
   turns: 1,
   strategy: 'hunt',
@@ -40,8 +51,8 @@ const getInitialState = () => ({
 export const aiSlice = createSlice({
   name: 'ai',
   initialState: getInitialState(),
-  reducers: {
-    difficultyChosen: (state, action) => {
+  extraReducers: {
+    [difficultyChosen.fulfilled]: (state, action) => {
       const { difficulty, strategy } = action.payload;
 
       state.strategy = strategy;
@@ -62,7 +73,7 @@ export const aiSlice = createSlice({
   },
 });
 
-export const { difficultyChosen } = aiSlice.actions;
+// export const { difficultyChosen } = aiSlice.actions;
 
 export const selectAiTurns = (state) => state.ai.turns;
 

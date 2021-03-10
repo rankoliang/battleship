@@ -33,7 +33,7 @@ const useRandomPlacement = (player, callback) => {
     if (shipsRemaining > 0 && callback(player)) {
       dispatch(randomShipsPlaced({ boardId }));
     }
-  }, [dispatch, player]);
+  }, [dispatch]);
   /* eslint-enable */
 };
 
