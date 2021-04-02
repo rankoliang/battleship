@@ -1,6 +1,6 @@
 {
   "name": "battleship",
-  "homepage": "https://rankoliang.github.io/battleship",
+  "homepage": "https://battleship.rankoliang.com",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

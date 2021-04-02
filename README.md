@@ -1,6 +1,6 @@
 # Battleship
 
-This is a recreation of the classic Battleship board game. You can play a live version at https://rankoliang.github.io/battleship/
+This is a recreation of the classic Battleship board game. You can play a live version at https://battleship.rankoliang.com/
 
 The major libraries and frameworks used in this app are:
 
